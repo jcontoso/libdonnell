@@ -38,6 +38,7 @@ clean:
 uninstall:
 	rm -f /usr/share/pkgconfig/$(PCTARGET)
 	rm -f $(PREFIX)/include/donnell.h
+	rm -f $(PREFIX)/lib/$(LIBTARGET)
 
 install: all
 	install -Dm0644 $(PCTARGET) /usr/share/pkgconfig/$(PCTARGET)
