@@ -38,11 +38,18 @@ Cflags: -I$${includedir}
 Libs: -L$${libdir} -ldonnell
 endef
 
+# EXAMPLES
+EXAMPLE_SOURCES = $(wildcard examples/*.c)
+EXAMPLES = $(basename $(EXAMPLE_SOURCES))
+EXAMPLE_CFLAGS = $(shell $(PKGCONFIG) --cflags $(NAME))
+EXAMPLE_LIBS = $(shell $(PKGCONFIG) --libs $(NAME))
+
 # RULES
 all: $(LIBTARGET) $(PCTARGET) 
 
 clean:
 	rm -f $(OBJECTS) $(LIBTARGET) $(PCTARGET)
+	rm -f $(EXAMPLES)
 
 uninstall:
 	rm -f $(word 1,$(PKGCONFIG_PATHS_LIST))/$(PCTARGET)
@@ -54,10 +61,15 @@ install: all
 	install -Dm0644 include/donnell.h $(PREFIX)/include/donnell.h
 	install -Dm0644 $(LIBTARGET) $(PREFIX)/lib/$(LIBTARGET)
 	
+examples: $(EXAMPLES)
+	
 $(LIBTARGET) : $(OBJECTS)
 	$(CC) $(CFLAGS) -o $(LIBTARGET) $(OBJECTS) ${LIBS} 
 
 $(PCTARGET):
 	$(file > $@,$(PCFILE))
     
-.PHONY: clean uninstall install
+$(EXAMPLES): %: %.c
+	$(CC) $< -o $@ ${EXAMPLE_CFLAGS} ${EXAMPLE_LIBS}
+        
+.PHONY: clean uninstall install examples
