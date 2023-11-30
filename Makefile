@@ -13,10 +13,9 @@ PCTARGET = $(NAME).pc
 # FILES
 SOURCES = $(wildcard src/*.c)
 HEADERS = $(wildcard include/*.h)
-OBJECTS = $(SOURCES:.c=.o)
 
 # PATHS
-PREFIX = /usr/local
+PREFIX = /usr
 PKGCONFIG_PATHS = $(shell  $(PKGCONFIG) --variable pc_path pkg-config)
 PKGCONFIG_PATHS_LIST := $(subst :, ,$(PKGCONFIG_PATHS:v%=%))
 
@@ -63,8 +62,8 @@ install: all
 	
 examples: $(EXAMPLES)
 	
-$(LIBTARGET) : $(OBJECTS)
-	$(CC) $(CFLAGS) -o $(LIBTARGET) $(OBJECTS) ${LIBS} 
+$(LIBTARGET): $(SOURCES)
+	$(CC) $(^) -o ${LIBTARGET} ${CFLAGS} ${LIBS}
 
 $(PCTARGET):
 	$(file > $@,$(PCFILE))
