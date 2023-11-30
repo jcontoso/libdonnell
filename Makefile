@@ -1,21 +1,28 @@
+# COMPILER OPTIONS
 CC ?= cc
 PKGCONFIG = $(shell which pkg-config)
-
 DEPS = fribidi fontconfig freetype2
 CFLAGS = $(shell $(PKGCONFIG) --cflags $(DEPS)) -fvisibility=hidden -fPIC -shared -Iinclude
 LIBS = $(shell $(PKGCONFIG) --libs $(DEPS)) -ldl
 
+# FILE AND PROJECT NAMES
 NAME = donnell
 LIBTARGET = lib$(NAME).so 
 PCTARGET = $(NAME).pc
+
+# FILES
 SOURCES = $(wildcard src/*.c)
 HEADERS = $(wildcard include/*.h)
 OBJECTS = $(SOURCES:.c=.o)
 
+# PREFIX
 PREFIX = /usr
+
+# VERSION INFORMATION
 MAJOR_VERSION = 0
 MINOR_VERSION = 0
 
+# PKGCONFIG FILE
 define PCFILE
 prefix=$(PREFIX)
 exec_prefix=$${prefix}
@@ -30,6 +37,7 @@ Cflags: -I$${includedir}
 Libs: -L$${libdir} -ldonnell
 endef
 
+# RULES
 all: $(LIBTARGET) $(PCTARGET)
 
 clean:
