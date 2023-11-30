@@ -16,7 +16,7 @@ HEADERS = $(wildcard include/*.h)
 OBJECTS = $(SOURCES:.c=.o)
 
 # PATHS
-PREFIX = /usr
+PREFIX = /usr/local
 PKGCONFIG_PATHS = $(shell  $(PKGCONFIG) --variable pc_path pkg-config)
 PKGCONFIG_PATHS_LIST := $(subst :, ,$(PKGCONFIG_PATHS:v%=%))
 
@@ -34,7 +34,6 @@ libdir=$${prefix}/lib
 Name: $(TARGET)
 Description: A simple C library for drawing graphics
 Version: $(MAJOR_VERSION).$(MINOR_VERSION)
-Requires: $(DEPS)
 Cflags: -I$${includedir}
 Libs: -L$${libdir} -ldonnell
 endef
@@ -56,7 +55,7 @@ install: all
 	install -Dm0644 $(LIBTARGET) $(PREFIX)/lib/$(LIBTARGET)
 	
 $(LIBTARGET) : $(OBJECTS)
-	$(CC) $(CFLAGS) ${LIBS} -o $(LIBTARGET) $(OBJECTS)
+	$(CC) $(CFLAGS) -o $(LIBTARGET) $(OBJECTS) ${LIBS} 
 
 $(PCTARGET):
 	$(file > $@,$(PCFILE))
