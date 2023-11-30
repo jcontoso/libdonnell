@@ -1,5 +1,5 @@
 #ifndef DONNELL_EXPORT
 
-#define DONNELL_EXPORT __attribute__ ((visibility ("default")))
+#define DONNELL_EXPORT __attribute__((visibility("default")))
 
 #endif

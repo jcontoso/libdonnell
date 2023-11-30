@@ -1,15 +1,16 @@
 #include <stdlib.h>
 #include <string.h>
+
 #include "misc.h"
 
-void* Misc_MemDup(void* mem, size_t size) { 
-   void* dmem;
-   
-   dmem = malloc(size);
+void *Misc_MemDup(void *mem, size_t size) {
+    void *dmem;
 
-   if(dmem) {
-       memcpy(dmem, mem, size); 
-   }
+    dmem = malloc(size);
 
-   return dmem;
+    if (dmem) {
+        memcpy(dmem, mem, size);
+    }
+
+    return dmem;
 }

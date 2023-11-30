@@ -4,7 +4,7 @@
 
 #ifndef DONNELL_MISC
 #define DONNELL_MISC
-                
-void* Misc_MemDup(void* mem, size_t size);
+
+void *Misc_MemDup(void *mem, size_t size);
 
 #endif
