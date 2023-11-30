@@ -15,8 +15,10 @@ SOURCES = $(wildcard src/*.c)
 HEADERS = $(wildcard include/*.h)
 OBJECTS = $(SOURCES:.c=.o)
 
-# PREFIX
+# PATHS
 PREFIX = /usr
+PKGCONFIG_PATHS = $(shell  $(PKGCONFIG) --variable pc_path pkg-config)
+PKGCONFIG_PATHS_LIST := $(subst :, ,$(PKGCONFIG_PATHS:v%=%))
 
 # VERSION INFORMATION
 MAJOR_VERSION = 0
@@ -38,18 +40,18 @@ Libs: -L$${libdir} -ldonnell
 endef
 
 # RULES
-all: $(LIBTARGET) $(PCTARGET)
+all: $(LIBTARGET) $(PCTARGET) 
 
 clean:
 	rm -f $(OBJECTS) $(LIBTARGET) $(PCTARGET)
 
 uninstall:
-	rm -f /usr/share/pkgconfig/$(PCTARGET)
+	rm -f $(word 1,$(PKGCONFIG_PATHS_LIST))/$(PCTARGET)
 	rm -f $(PREFIX)/include/donnell.h
 	rm -f $(PREFIX)/lib/$(LIBTARGET)
 
 install: all
-	install -Dm0644 $(PCTARGET) /usr/share/pkgconfig/$(PCTARGET)
+	install -Dm0644 $(PCTARGET)  $(word 1,$(PKGCONFIG_PATHS_LIST))/$(PCTARGET)
 	install -Dm0644 include/donnell.h $(PREFIX)/include/donnell.h
 	install -Dm0644 $(LIBTARGET) $(PREFIX)/lib/$(LIBTARGET)
 	
