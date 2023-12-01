@@ -15,7 +15,7 @@ SOURCES = $(wildcard src/*.c)
 HEADERS = $(wildcard include/*.h)
 
 # PATHS
-PREFIX = /usr/local
+PREFIX = /usr
 PKGCONFIG_PATHS = $(shell  $(PKGCONFIG) --variable pc_path pkg-config)
 PKGCONFIG_PATHS_LIST := $(subst :, ,$(PKGCONFIG_PATHS:v%=%))
 

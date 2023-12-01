@@ -7,10 +7,10 @@
 #include "symvis.h"
 
 uint8_t Pixel_Blend(uint8_t alpha, uint8_t value1, uint8_t value2) {
-    uint16_t unscaled;
+    int ret;
 
-    unscaled = (255 - alpha) * value1 + alpha * value2;
-    return unscaled / 255;
+    ret = (255 - alpha) * value1 + alpha * value2;
+    return ret / 255;
 }
 
 DONNELL_EXPORT DonnellPixel *Donnell_Pixel_Create() {
