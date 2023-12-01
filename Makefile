@@ -49,6 +49,8 @@ all: $(LIBTARGET) $(PCTARGET)
 clean:
 	rm -f $(OBJECTS) $(LIBTARGET) $(PCTARGET)
 	rm -f $(EXAMPLES)
+	rm -f examples/test.bmp
+	rm -f donnell.pc
 
 uninstall:
 	rm -f $(word 1,$(PKGCONFIG_PATHS_LIST))/$(PCTARGET)
