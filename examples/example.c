@@ -17,10 +17,7 @@ int main() {
 	buffer = Donnell_ImageBuffer_Create(300, 300);
 	Donnell_ImageBuffer_Clear(buffer, cpixel);
 
-	Donnell_GraphicsPrimitives_DrawText(buffer, pixel, "simple\nmulti\nline", 0, 0, 40, DONNELL_FONT_SANS_SERIF);
-	Donnell_GraphicsPrimitives_MeasureText(&rect, "simple\nmulti\nline", 40, DONNELL_FONT_SANS_SERIF);
-
-	printf("%d %d\n", rect.w, rect.h);
+	Donnell_GraphicsPrimitives_DrawText(buffer, pixel, "test test test test test test \ntest test test test test test \ntest test test test test test \ntest test test test test test \ntest test test test test test \ntest test test test test test \ntest test test test test test \ntest test test test test test \ntest test test test test test \ntest test test test test test \ntest test test test test test \ntest test test test test test \n", 0, 0, 32, DONNELL_FONT_SANS_SERIF);
 
 	Donnell_ImageBuffer_DumpAsBitmap(buffer, "test.bmp");
 	Donnell_ImageBuffer_Free(buffer);
