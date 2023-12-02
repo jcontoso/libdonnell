@@ -45,7 +45,7 @@ EXAMPLE_CFLAGS = $(shell $(PKGCONFIG) --cflags $(NAME))
 EXAMPLE_LIBS = $(shell $(PKGCONFIG) --libs $(NAME))
 
 # RULES
-all: $(LIBTARGET) $(PCTARGET) $(PKGCONFIG_PATH)
+all: $(LIBTARGET) $(PCTARGET) 
 
 clean:
 	rm -f $(OBJECTS) $(LIBTARGET) $(PCTARGET)
@@ -59,7 +59,7 @@ uninstall:
 	rm -f $(PREFIX)/include/donnell.h
 	rm -f $(PREFIX)/lib/$(LIBTARGET)
 
-install: all
+install: all $(PKGCONFIG_PATH)
 	install $(PCTARGET) $(PKGCONFIG_PATH)/$(PCTARGET)
 	install include/donnell.h $(PREFIX)/include/donnell.h
 	install $(LIBTARGET) $(PREFIX)/lib/$(LIBTARGET)
