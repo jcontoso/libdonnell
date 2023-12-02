@@ -37,6 +37,12 @@ typedef enum
     DONNELL_FONT_MONOSPACE,
 } DonnellFont;
 
+typedef enum
+{
+    DONNELL_FONT_STYLE_BOLD = 1 << 0,
+    DONNELL_FONT_STYLE_ITALIC = 1 << 1
+} DonnellFontStyle;
+
 void Donnell_Init(void);
 void Donnell_Cleanup(void);
 
@@ -50,9 +56,9 @@ void Donnell_ImageBuffer_Clear(DonnellImageBuffer *buffer, DonnellPixel *pixel);
 void Donnell_ImageBuffer_DumpAsBitmap(DonnellImageBuffer *buffer, char *name);
 void Donnell_ImageBuffer_Free(DonnellImageBuffer *buffer);
 
-void Donnell_GraphicsPrimitives_DrawTextLine(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font);
-void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFont req_font);
-void Donnell_GraphicsPrimitives_DrawText(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font);
-void Donnell_GraphicsPrimitives_MeasureText(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFont req_font);
+void Donnell_GraphicsPrimitives_DrawTextLine(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style);
+void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size, char *utf8string, unsigned int pixel_size,DonnellFont req_font, DonnellFontStyle font_style);
+void Donnell_GraphicsPrimitives_DrawText(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style);
+void Donnell_GraphicsPrimitives_MeasureText(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style);
 
 #endif

@@ -5,7 +5,7 @@
 
 #include "bidi.h"
 #include "donnell.h"
-#include "fontpicker.h"
+#include "fontconfig.h"
 #include "freetype.h"
 #include "pixel.h"
 #include "textutils.h"
@@ -70,7 +70,7 @@ void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_B
  * If size is NULL, this function will render text to the buffer.
  */
 
-int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, bool return_max_asc) {
+int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, bool return_max_asc, DonnellFontStyle font_style) {
     FT_Face face;
     FT_Int32 flags;
     char *font_file;
@@ -88,7 +88,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
         flags = FT_LOAD_RENDER | FT_LOAD_TARGET_LCD;
     }
 
-    font_file = FontPicker_SelectFont(req_font);
+    font_file = FontConfig_SelectFont(req_font, string, font_style);
     FT_New_Face(freetype, font_file, 0, &face);
     free(font_file);
 
@@ -104,7 +104,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     if (!size) {
         DonnellSize csize;
 
-        FreeType_MeasureAndRender(NULL, &csize, NULL, string, x, y, pixel_size, req_font, true);
+        FreeType_MeasureAndRender(NULL, &csize, NULL, string, x, y, pixel_size, req_font, true, font_style);
         for (i = 0; i < string->len; i++) {
             FT_UInt glyph_index;
 
@@ -112,7 +112,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
                 continue;
             }
 
-            glyph_index = FT_Get_Char_Index(face, string->str[i]);
+            glyph_index = FontConfig_CharIndex(face, string->str[i]);
 
             freetype_error = FT_Load_Glyph(face, glyph_index, flags);
             if (freetype_error) {
@@ -140,7 +140,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
             FT_UInt glyph_index;
             unsigned int calc_height;
 
-            glyph_index = FT_Get_Char_Index(face, string->str[i]);
+            glyph_index = FontConfig_CharIndex(face, string->str[i]);
             freetype_error = FT_Load_Glyph(face, glyph_index, FT_LOAD_NO_BITMAP);
             if (freetype_error) {
                 continue;
@@ -149,7 +149,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
             if (i == 0) {
                 size->w += face->glyph->advance.x >> 6;
             } else {
-                FT_Get_Kerning(face, FT_Get_Char_Index(face, string->str[i - 1]), glyph_index, FT_KERNING_DEFAULT, &kerning);
+                FT_Get_Kerning(face, FontConfig_CharIndex(face, string->str[i - 1]), glyph_index, FT_KERNING_DEFAULT, &kerning);
                 size->w += (face->glyph->advance.x - kerning.x) >> 6;
             }
 

@@ -9,7 +9,7 @@
 #include "symvis.h"
 #include "textutils.h"
 
-DONNELL_EXPORT void Donnell_GraphicsPrimitives_DrawTextLine(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font) {
+DONNELL_EXPORT void Donnell_GraphicsPrimitives_DrawTextLine(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style) {
     FriBidiString *string;
 
     if ((!buffer) || (!color) || (!utf8string) || (x < 0) || (y < 0) || (pixel_size < 0)) {
@@ -18,11 +18,11 @@ DONNELL_EXPORT void Donnell_GraphicsPrimitives_DrawTextLine(DonnellImageBuffer *
 
     string = FriBidiString_ConvertFromUTF8(utf8string);
     FriBidiString_Handle(string);
-    FreeType_MeasureAndRender(buffer, NULL, color, string, x, y, pixel_size, req_font, false);
+    FreeType_MeasureAndRender(buffer, NULL, color, string, x, y, pixel_size, req_font, false, font_style);
     FriBidiString_Free(string);
 }
 
-DONNELL_EXPORT void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFont req_font) {
+DONNELL_EXPORT void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style) {
     FriBidiString *string;
 
     if ((!size) || (!utf8string) || (pixel_size < 0)) {
@@ -31,11 +31,11 @@ DONNELL_EXPORT void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size
 
     string = FriBidiString_ConvertFromUTF8(utf8string);
     FriBidiString_Handle(string);
-    FreeType_MeasureAndRender(NULL, size, NULL, string, 0, 0, pixel_size, req_font, false);
+    FreeType_MeasureAndRender(NULL, size, NULL, string, 0, 0, pixel_size, req_font, false, font_style);
     FriBidiString_Free(string);
 }
 
-unsigned int GetLongestWidth(FriBidiParagraphs *fribidi_paragraphs, unsigned int pixel_size, DonnellFont req_font, FriBidiParType dir) {
+unsigned int GetLongestWidth(FriBidiParagraphs *fribidi_paragraphs, unsigned int pixel_size, DonnellFont req_font, FriBidiParType dir, DonnellFontStyle font_style) {
     DonnellSize size;
     unsigned int longest;
     unsigned int i;
@@ -48,7 +48,7 @@ unsigned int GetLongestWidth(FriBidiParagraphs *fribidi_paragraphs, unsigned int
         string = fribidi_paragraphs->str[i];
 
         if (string->direction == dir) {
-            FreeType_MeasureAndRender(NULL, &size, NULL, string, 0, 0, pixel_size, req_font, false);
+            FreeType_MeasureAndRender(NULL, &size, NULL, string, 0, 0, pixel_size, req_font, false, font_style);
 
             if (longest < size.w) {
                 longest = size.w;
@@ -75,7 +75,7 @@ int GetFirstNDNParagraph(FriBidiParagraphs *fribidi_paragraphs) {
     return -1;
 }
 
-void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font) {
+void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style) {
     Paragraphs *paragraphs;
     FriBidiParagraphs *fribidi_paragraphs;
     DonnellSize size;
@@ -92,14 +92,14 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
 
     longest_rtl_width = 0;
 
-    line_height = FreeType_MeasureAndRender(NULL, NULL, NULL, NULL, 0, 0, pixel_size, req_font, false);
+    line_height = FreeType_MeasureAndRender(NULL, NULL, NULL, NULL, 0, 0, pixel_size, req_font, false, font_style);
 
     paragraphs = TextUtils_Paragraphs_Create(utf8string);
     fribidi_paragraphs = FriBidiParagraphs_ConvertFromParagraphs(paragraphs);
 
-    longest_rtl_width = GetLongestWidth(fribidi_paragraphs, pixel_size, req_font, FRIBIDI_PAR_RTL);
-    longest_ltr_width = GetLongestWidth(fribidi_paragraphs, pixel_size, req_font, FRIBIDI_PAR_LTR);
-    longest_on_width = GetLongestWidth(fribidi_paragraphs, pixel_size, req_font, FRIBIDI_PAR_ON);
+    longest_rtl_width = GetLongestWidth(fribidi_paragraphs, pixel_size, req_font, FRIBIDI_PAR_RTL, font_style);
+    longest_ltr_width = GetLongestWidth(fribidi_paragraphs, pixel_size, req_font, FRIBIDI_PAR_LTR, font_style);
+    longest_on_width = GetLongestWidth(fribidi_paragraphs, pixel_size, req_font, FRIBIDI_PAR_ON, font_style);
 
     if (longest_rtl_width > longest_ltr_width) {
         longest_ndn_width = longest_rtl_width;
@@ -147,14 +147,14 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
                 break;
             case FRIBIDI_PAR_RTL:
             RTL_RENDER:
-                FreeType_MeasureAndRender(NULL, &size, NULL, string, 0, 0, pixel_size, req_font, false);
-                FreeType_MeasureAndRender(buffer, NULL, color, fribidi_paragraphs->str[i], longest_width - size.w + x, y, pixel_size, req_font, false);
+                FreeType_MeasureAndRender(NULL, &size, NULL, string, 0, 0, pixel_size, req_font, false, font_style);
+                FreeType_MeasureAndRender(buffer, NULL, color, fribidi_paragraphs->str[i], longest_width - size.w + x, y, pixel_size, req_font, false, font_style);
                 last_ndn_paragraph = i;
                 break;
             default:
             LTR_RENDER:
-                FreeType_MeasureAndRender(buffer, NULL, color, fribidi_paragraphs->str[i], x, y, pixel_size, req_font, false);
-                FreeType_MeasureAndRender(NULL, &size, NULL, string, 0, 0, pixel_size, req_font, false);
+                FreeType_MeasureAndRender(buffer, NULL, color, fribidi_paragraphs->str[i], x, y, pixel_size, req_font, false, font_style);
+                FreeType_MeasureAndRender(NULL, &size, NULL, string, 0, 0, pixel_size, req_font, false, font_style);
                 last_ndn_paragraph = i;
             }
         }
@@ -163,7 +163,7 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
     }
     
 	if (csize) {
-        FreeType_MeasureAndRender(NULL, &size, NULL, fribidi_paragraphs->str[i-1], 0, 0, pixel_size, req_font, false);
+        FreeType_MeasureAndRender(NULL, &size, NULL, fribidi_paragraphs->str[i-1], 0, 0, pixel_size, req_font, false, font_style);
 		csize->h = y - line_height + size.h;
 	}
 		
@@ -171,20 +171,20 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
     TextUtils_Paragraphs_Free(paragraphs);
 }
 
-DONNELL_EXPORT void Donnell_GraphicsPrimitives_DrawText(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font) {
+DONNELL_EXPORT void Donnell_GraphicsPrimitives_DrawText(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style) {
     if ((!buffer) || (!color) || (!utf8string) || (x < 0) || (y < 0) || (pixel_size < 0)) {
         return;
     }
 
-    MeasureAndRender(buffer, NULL, color, utf8string, x, y, pixel_size, req_font);
+    MeasureAndRender(buffer, NULL, color, utf8string, x, y, pixel_size, req_font, font_style);
 }
 
 
-DONNELL_EXPORT void Donnell_GraphicsPrimitives_MeasureText(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFont req_font) {
+DONNELL_EXPORT void Donnell_GraphicsPrimitives_MeasureText(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style) {
     if ((!size) || (!utf8string) || (pixel_size < 0)) {
         return;
     }
 
-    MeasureAndRender(NULL, size, NULL, utf8string, 0, 0, pixel_size, req_font);
+    MeasureAndRender(NULL, size, NULL, utf8string, 0, 0, pixel_size, req_font, font_style);
 }
 
