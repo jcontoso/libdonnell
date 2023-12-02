@@ -16,8 +16,7 @@ FT_Error lcd_error;
 
 void FreeType_Init(void) {
     FT_Init_FreeType(&freetype);
-    // lcd_error = FT_Library_SetLcdFilter(freetype, FT_LCD_FILTER_DEFAULT);
-    lcd_error = 1;
+   lcd_error = 1;
 }
 
 void FreeType_Cleanup(void) {
