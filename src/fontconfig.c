@@ -54,11 +54,10 @@ char *FontConfig_SelectFont(DonnellFont req_font, FriBidiString *string, Donnell
     }
 
     if (font_style & DONNELL_FONT_STYLE_BOLD) {
-		pattern = FcPatternBuild(0, FC_FAMILY, FcTypeString, font_name, FC_CHARSET, FcTypeCharSet, char_set, FC_SLANT, FcTypeInteger, slant, FC_WEIGHT, FcTypeInteger, FC_WEIGHT_BOLD, (char *)0);
+        pattern = FcPatternBuild(0, FC_FAMILY, FcTypeString, font_name, FC_CHARSET, FcTypeCharSet, char_set, FC_SLANT, FcTypeInteger, slant, FC_WEIGHT, FcTypeInteger, FC_WEIGHT_BOLD, (char *)0);
     } else {
-		pattern = FcPatternBuild(0, FC_FAMILY, FcTypeString, font_name, FC_CHARSET, FcTypeCharSet, char_set, FC_SLANT, FcTypeInteger, slant, (char *)0);		
-	}
-    
+        pattern = FcPatternBuild(0, FC_FAMILY, FcTypeString, font_name, FC_CHARSET, FcTypeCharSet, char_set, FC_SLANT, FcTypeInteger, slant, (char *)0);
+    }
 
     FcConfigSubstitute(fontconfig, pattern, FcMatchPattern);
     FcDefaultSubstitute(pattern);
@@ -70,7 +69,7 @@ char *FontConfig_SelectFont(DonnellFont req_font, FriBidiString *string, Donnell
     FcPatternDestroy(font);
     FcPatternDestroy(pattern);
     FcCharSetDestroy(char_set);
-	puts(ret);
+    puts(ret);
     return ret;
 }
 
