@@ -1,8 +1,8 @@
 #include <fribidi.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 #include "textutils.h"
 
@@ -23,33 +23,33 @@ Paragraphs *TextUtils_Paragraphs_Create(char *string) {
     unsigned int i;
 
     i = 0;
-	start = end = string; 
-    
+    start = end = string;
+
     paragraphs = malloc(sizeof(Paragraphs));
     if (!paragraphs) {
         return NULL;
     }
 
-	while(end = strpbrk(start, "\n\r\f\v")){
-		i++;
+    while (end = strpbrk(start, "\n\r\f\v")) {
+        i++;
 
-		if (i == 1) {
-			paragraphs->str = malloc(sizeof(char*));
-			if (!paragraphs->str) {
-				free(paragraphs);
-				return NULL;
-			}
-		} else {
-			paragraphs->str = realloc(paragraphs->str, i * sizeof(char*));
-			if (!paragraphs->str) {
-				free(paragraphs);
-				return NULL;
-			}			
-		}
-		
-		paragraphs->str[i-1] = strndup(start, (size_t)(end - start));			
-		start = end + 1;
-	}
+        if (i == 1) {
+            paragraphs->str = malloc(sizeof(char *));
+            if (!paragraphs->str) {
+                free(paragraphs);
+                return NULL;
+            }
+        } else {
+            paragraphs->str = realloc(paragraphs->str, i * sizeof(char *));
+            if (!paragraphs->str) {
+                free(paragraphs);
+                return NULL;
+            }
+        }
+
+        paragraphs->str[i - 1] = strndup(start, (size_t)(end - start));
+        start = end + 1;
+    }
     paragraphs->count = i;
 
     return paragraphs;
