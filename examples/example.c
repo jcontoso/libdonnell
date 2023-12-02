@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "donnell.h"
+#include <donnell.h>
 
-
+char* sentences = "\nHello, this is some sample text\n"
+                        "This is the second sentence\n"
+                        "\n"
+                        "The sentence above is just a new line\n"
+                        "This is the last sentence.\n";
+                        
 int main() {	
 	DonnellImageBuffer* buffer;
 	DonnellPixel* pixel;
@@ -18,10 +23,10 @@ int main() {
 	buffer = Donnell_ImageBuffer_Create(300, 300);
 	Donnell_ImageBuffer_Clear(buffer, cpixel);
 
-	Donnell_GraphicsPrimitives_DrawTextLine(buffer, pixel, "اللغة الفارسية", 0, 0, 34, DONNELL_FONT_SANS_SERIF);
-	Donnell_GraphicsPrimitives_GetTextLineExtents(&rect, "اللغة الفارسية", 34, DONNELL_FONT_SANS_SERIF);
+	Donnell_GraphicsPrimitives_DrawText(buffer, pixel, sentences, 0, 0, 16, DONNELL_FONT_SANS_SERIF);
+	//Donnell_GraphicsPrimitives_GetTextLineExtents(&rect, "abc", 64, DONNELL_FONT_SANS_SERIF);
 
-	printf("%d %d\n", rect.w, rect.h);
+	//printf("%d %d\n", rect.w, rect.h);
 
 	Donnell_ImageBuffer_DumpAsBitmap(buffer, "test.bmp");
 	Donnell_ImageBuffer_Free(buffer);

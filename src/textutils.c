@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "textutils.h"
 
@@ -11,42 +12,45 @@ bool TextUtils_IsNewLine(FriBidiChar chr) {
     return chr == '\n' || chr == '\r' || chr == '\f' || chr == '\v';
 }
 
+bool TextUtils_IsNewLineChar(char chr) {
+    return chr == '\n' || chr == '\r' || chr == '\f' || chr == '\v';
+}
+
 Paragraphs *TextUtils_Paragraphs_Create(char *string) {
     Paragraphs *paragraphs;
-    char *dup_string;
-    char *paragraph;
+    char *start;
+    char *end;
     unsigned int i;
 
     i = 0;
+	start = end = string; 
+    
     paragraphs = malloc(sizeof(Paragraphs));
     if (!paragraphs) {
         return NULL;
     }
 
-    paragraphs->count = 0;
-    dup_string = strdup(string);
-    paragraph = strtok(dup_string, "\n\r\f\v");
-    while (paragraph != NULL) {
-        paragraphs->count++;
-        paragraph = strtok(NULL, "\n\r\f\v");
-    }
-    free(dup_string);
+	while(end = strpbrk(start, "\n\r\f\v")){
+		i++;
 
-    paragraphs->str = calloc(paragraphs->count, sizeof(char *));
-    if (!paragraphs->str) {
-        free(paragraphs);
-        return NULL;
-    }
-
-    dup_string = strdup(string);
-    paragraph = strtok(dup_string, "\n\r\f\v");
-    while (paragraph != NULL) {
-        paragraphs->str[i] = malloc(strlen(paragraph) + 1);
-        strcpy(paragraphs->str[i], paragraph);
-        paragraph = strtok(NULL, "\n\r\f\v");
-        i++;
-    }
-    free(dup_string);
+		if (i == 1) {
+			paragraphs->str = malloc(sizeof(char*));
+			if (!paragraphs->str) {
+				free(paragraphs);
+				return NULL;
+			}
+		} else {
+			paragraphs->str = realloc(paragraphs->str, i * sizeof(char*));
+			if (!paragraphs->str) {
+				free(paragraphs);
+				return NULL;
+			}			
+		}
+		
+		paragraphs->str[i-1] = strndup(start, (size_t)(end - start));			
+		start = end + 1;
+	}
+    paragraphs->count = i;
 
     return paragraphs;
 }

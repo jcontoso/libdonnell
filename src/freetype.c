@@ -41,7 +41,7 @@ void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_B
  * If size is NULL, this function will render text to the buffer.
  */
 
-int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font) {
+int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, bool return_max_asc) {
     FT_Face face;
     char *font_file;
     unsigned int i;
@@ -68,7 +68,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     if (!size) {
         DonnellSize csize;
 
-        FreeType_MeasureAndRender(NULL, &csize, NULL, string, x, y, pixel_size, req_font);
+        FreeType_MeasureAndRender(NULL, &csize, NULL, string, x, y, pixel_size, req_font, true);
         for (i = 0; i < string->len; i++) {
             FT_UInt glyph_index;
 
@@ -82,19 +82,26 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
             if (freetype_error) {
                 continue;
             }
-
+            
             FreeType_CopyToBuffer(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left, csize.h + y - face->glyph->bitmap_top);
-
+			
             x += face->glyph->advance.x >> 6;
             y += face->glyph->advance.y >> 6;
         }
     } else {
+        unsigned int max_ascent;
+        unsigned int max_descent;
+        
+        max_ascent = 0;
+        max_descent = 0;
+
         for (i = 0; i < string->len; i++) {
             FT_Vector kerning;
             FT_UInt glyph_index;
-
+			unsigned int calc_height;
+			
             glyph_index = FT_Get_Char_Index(face, string->str[i]);
-            freetype_error = FT_Load_Glyph(face, glyph_index, FT_LOAD_DEFAULT);
+            freetype_error = FT_Load_Glyph(face, glyph_index, FT_LOAD_NO_BITMAP);
             if (freetype_error) {
                 continue;
             }
@@ -103,13 +110,23 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
                 size->w += face->glyph->advance.x >> 6;
             } else {
                 FT_Get_Kerning(face, FT_Get_Char_Index(face, string->str[i - 1]), glyph_index, FT_KERNING_DEFAULT, &kerning);
-                size->w += (face->glyph->advance.x + kerning.x) >> 6;
+                size->w += (face->glyph->advance.x - kerning.x) >> 6;
             }
 
-            if (size->h < ((face->glyph->metrics.height + face->glyph->advance.y) >> 6)) {
-                size->h = (face->glyph->metrics.height + face->glyph->advance.y) >> 6;
+			if ((face->glyph->metrics.height >> 6) - face->glyph->bitmap_top > max_descent) {
+				max_descent = (face->glyph->metrics.height >> 6) - face->glyph->bitmap_top;
+			}
+
+            if (face->glyph->bitmap_top > max_ascent) {
+                max_ascent = face->glyph->bitmap_top;
             }
         }
+        
+        if (return_max_asc) {
+			size->h = max_ascent;
+		} else {
+			size->h = max_ascent + max_descent;
+		}
     }
 
     FT_Done_Face(face);

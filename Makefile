@@ -2,7 +2,7 @@
 CC ?= cc
 PKGCONFIG = $(shell which pkg-config)
 DEPS = fribidi fontconfig freetype2
-CFLAGS = $(shell $(PKGCONFIG) --cflags $(DEPS)) -fvisibility=hidden -fPIC -shared -Iinclude
+CFLAGS = -g $(shell $(PKGCONFIG) --cflags $(DEPS)) -fvisibility=hidden -fPIC -shared -Iinclude
 LIBS = $(shell $(PKGCONFIG) --libs $(DEPS)) -ldl
 
 # FILE AND PROJECT NAMES
@@ -51,6 +51,7 @@ clean:
 	rm -f $(EXAMPLES)
 	rm -f examples/test.bmp
 	rm -f donnell.pc
+	rm -f test.bmp
 
 uninstall:
 	rm -f $(word 1,$(PKGCONFIG_PATHS_LIST))/$(PCTARGET)
