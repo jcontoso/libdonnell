@@ -57,7 +57,7 @@ void Donnell_ImageBuffer_DumpAsBitmap(DonnellImageBuffer *buffer, char *name);
 void Donnell_ImageBuffer_Free(DonnellImageBuffer *buffer);
 
 void Donnell_GraphicsPrimitives_DrawTextLine(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style);
-void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size, char *utf8string, unsigned int pixel_size,DonnellFont req_font, DonnellFontStyle font_style);
+void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style);
 void Donnell_GraphicsPrimitives_DrawText(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style);
 void Donnell_GraphicsPrimitives_MeasureText(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style);
 

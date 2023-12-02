@@ -1,6 +1,6 @@
-#include <stdbool.h>
 #include "bidi.h"
 #include "donnell.h"
+#include <stdbool.h>
 
 /* Internal functions for FreeType text rendering */
 

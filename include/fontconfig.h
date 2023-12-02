@@ -1,5 +1,5 @@
-#include <fontconfig/fontconfig.h>
 #include <fontconfig/fcfreetype.h>
+#include <fontconfig/fontconfig.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -12,7 +12,7 @@
 #define DONNELL_FONTCONFIG
 
 void FontConfig_Init(void);
-char *FontConfig_SelectFont(DonnellFont req_font, FriBidiString* string, DonnellFontStyle font_style);
+char *FontConfig_SelectFont(DonnellFont req_font, FriBidiString *string, DonnellFontStyle font_style);
 FT_UInt FontConfig_CharIndex(FT_Face face, FcChar32 chr);
 void FontConfig_Cleanup(void);
 
