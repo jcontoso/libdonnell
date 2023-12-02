@@ -76,6 +76,6 @@ $(EXAMPLES): %: %.c
 	$(CC) $< -o $@ ${EXAMPLE_CFLAGS} ${EXAMPLE_LIBS}
         
 $(PKGCONFIG_PATH):
-        mkdir -p $(PKGCONFIG_PATH)
+	mkdir -p $(PKGCONFIG_PATH)
         
 .PHONY: clean uninstall install examples
