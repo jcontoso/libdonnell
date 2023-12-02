@@ -1,20 +1,49 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include FT_BITMAP_H
+#include FT_LCD_FILTER_H
+
 #include "bidi.h"
 #include "donnell.h"
 #include "fontpicker.h"
 #include "freetype.h"
+#include "pixel.h"
 #include "textutils.h"
 
 FT_Library freetype;
 FT_Error freetype_error;
+FT_Error lcd_error;
 
 void FreeType_Init(void) {
     FT_Init_FreeType(&freetype);
+    // lcd_error = FT_Library_SetLcdFilter(freetype, FT_LCD_FILTER_DEFAULT);
+    lcd_error = 1;
 }
 
 void FreeType_Cleanup(void) {
     FT_Done_FreeType(freetype);
+}
+
+void FreeType_CopyToBufferLCD(DonnellImageBuffer *buffer, DonnellPixel *color, FT_Bitmap *bitmap, unsigned int a, unsigned int b) {
+    FT_Bitmap *c_bitmap;
+
+    FT_Bitmap_Convert(freetype, bitmap, c_bitmap, 4);
+    for (int y = 0; y < bitmap->rows; y++) {
+        for (int x = 0; x < bitmap->width; x++) {
+            DonnellPixel *pixel;
+
+            pixel = Donnell_Pixel_Create();
+            pixel->alpha = 255;
+            pixel->red = bitmap->buffer[y * bitmap->pitch + x * 3];
+            pixel->green = bitmap->buffer[y * bitmap->pitch + x * 3 + 1];
+            pixel->blue = bitmap->buffer[y * bitmap->pitch + x * 3 + 2];
+
+            Donnell_ImageBuffer_BlendPixel(buffer, x + a, y + b, pixel);
+
+            free(pixel);
+        }
+    }
+    FT_Bitmap_Done(freetype, c_bitmap);
 }
 
 void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_Bitmap *bitmap, unsigned int a, unsigned int b) {
@@ -43,6 +72,7 @@ void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_B
 
 int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, bool return_max_asc) {
     FT_Face face;
+    FT_Int32 flags;
     char *font_file;
     unsigned int i;
     int val;
@@ -50,6 +80,12 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     if (size) {
         size->h = 0;
         size->w = 0;
+    }
+
+    if (lcd_error) {
+        flags = FT_LOAD_RENDER;
+    } else {
+        flags = FT_LOAD_RENDER | FT_LOAD_TARGET_LCD;
     }
 
     font_file = FontPicker_SelectFont(req_font);
@@ -78,12 +114,16 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
 
             glyph_index = FT_Get_Char_Index(face, string->str[i]);
 
-            freetype_error = FT_Load_Glyph(face, glyph_index, FT_LOAD_RENDER);
+            freetype_error = FT_Load_Glyph(face, glyph_index, flags);
             if (freetype_error) {
                 continue;
             }
 
-            FreeType_CopyToBuffer(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left, csize.h + y - face->glyph->bitmap_top);
+            if (lcd_error) {
+                FreeType_CopyToBuffer(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left, csize.h + y - face->glyph->bitmap_top);
+            } else {
+                FreeType_CopyToBufferLCD(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left, csize.h + y - face->glyph->bitmap_top);
+            }
 
             x += face->glyph->advance.x >> 6;
             y += face->glyph->advance.y >> 6;

@@ -75,7 +75,11 @@ DONNELL_EXPORT void Donnell_ImageBuffer_Free(DonnellImageBuffer *buffer) {
 }
 
 DONNELL_EXPORT void Donnell_ImageBuffer_SetPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellPixel *pixel) {
-    if ((y < 0) || (x < 0) || (y >= buffer->height) || (x >= buffer->width) || (!pixel) || (!buffer)) {
+    if ((y < 0) || (x < 0) || (!pixel) || (!buffer)) {
+        return;
+    }
+
+    if ((y >= buffer->height) || (x >= buffer->width)) {
         return;
     }
 
@@ -87,7 +91,11 @@ DONNELL_EXPORT void Donnell_ImageBuffer_SetPixel(DonnellImageBuffer *buffer, uns
 }
 
 DONNELL_EXPORT void Donnell_ImageBuffer_BlendPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellPixel *pixel) {
-    if ((y < 0) || (x < 0) || (y >= buffer->height) || (x >= buffer->width) || (!pixel) || (!buffer)) {
+    if ((y < 0) || (x < 0) || (!pixel) || (!buffer)) {
+        return;
+    }
+
+    if ((y >= buffer->height) || (x >= buffer->width)) {
         return;
     }
 
