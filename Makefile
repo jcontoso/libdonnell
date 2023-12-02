@@ -18,6 +18,7 @@ HEADERS = $(wildcard include/*.h)
 PREFIX = /usr
 PKGCONFIG_PATHS = $(shell  $(PKGCONFIG) --variable pc_path pkg-config)
 PKGCONFIG_PATHS_LIST := $(subst :, ,$(PKGCONFIG_PATHS:v%=%))
+PKGCONFIG_PATH = $(word 1,$(PKGCONFIG_PATHS_LIST))
 
 # VERSION INFORMATION
 MAJOR_VERSION = 0
@@ -59,7 +60,7 @@ uninstall:
 	rm -f $(PREFIX)/lib/$(LIBTARGET)
 
 install: all
-	install $(PCTARGET)  $(word 1,$(PKGCONFIG_PATHS_LIST))/$(PCTARGET)
+	install $(PCTARGET) $(PKGCONFIG_PATH)/$(PCTARGET)
 	install include/donnell.h $(PREFIX)/include/donnell.h
 	install $(LIBTARGET) $(PREFIX)/lib/$(LIBTARGET)
 	
@@ -73,5 +74,8 @@ $(PCTARGET):
     
 $(EXAMPLES): %: %.c
 	$(CC) $< -o $@ ${EXAMPLE_CFLAGS} ${EXAMPLE_LIBS}
+        
+$(PKGCONFIG_PATH):
+        mkdir -p $(PKGCONFIG_PATH)
         
 .PHONY: clean uninstall install examples
