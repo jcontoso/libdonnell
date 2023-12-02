@@ -1,7 +1,7 @@
-#include <fontconfig/fcfreetype.h>
 #include <fontconfig/fontconfig.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include <fontconfig/fcfreetype.h>
 
 #include "bidi.h"
 #include "donnell.h"
