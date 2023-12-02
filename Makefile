@@ -45,7 +45,7 @@ EXAMPLE_CFLAGS = $(shell $(PKGCONFIG) --cflags $(NAME))
 EXAMPLE_LIBS = $(shell $(PKGCONFIG) --libs $(NAME))
 
 # RULES
-all: $(LIBTARGET) $(PCTARGET) 
+all: $(LIBTARGET) $(PCTARGET) $(PKGCONFIG_PATH)
 
 clean:
 	rm -f $(OBJECTS) $(LIBTARGET) $(PCTARGET)
