@@ -69,7 +69,6 @@ char *FontConfig_SelectFont(DonnellFont req_font, FriBidiString *string, Donnell
     FcPatternDestroy(font);
     FcPatternDestroy(pattern);
     FcCharSetDestroy(char_set);
-    puts(ret);
     return ret;
 }
 
