@@ -59,9 +59,9 @@ uninstall:
 	rm -f $(PREFIX)/lib/$(LIBTARGET)
 
 install: all
-	install -Dm0644 $(PCTARGET)  $(word 1,$(PKGCONFIG_PATHS_LIST))/$(PCTARGET)
-	install -Dm0644 include/donnell.h $(PREFIX)/include/donnell.h
-	install -Dm0644 $(LIBTARGET) $(PREFIX)/lib/$(LIBTARGET)
+	install $(PCTARGET)  $(word 1,$(PKGCONFIG_PATHS_LIST))/$(PCTARGET)
+	install include/donnell.h $(PREFIX)/include/donnell.h
+	install $(LIBTARGET) $(PREFIX)/lib/$(LIBTARGET)
 	
 examples: $(EXAMPLES)
 	
