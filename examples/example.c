@@ -19,9 +19,10 @@ int main() {
 	Donnell_GraphicsPrimitives_DrawText(buffer, pixel, "This is the journey into sound\n阳光灿烂\nВиняткова технологія\n\nמימין לשמאל.\nحتى أطول من اليمين إلى اليسار\n", 5,5, 16, DONNELL_FONT_SANS_SERIF, 0);
 
 	Donnell_ImageBuffer_DumpAsBitmap(buffer, "test.bmp");
+	
 	Donnell_ImageBuffer_Free(buffer);
-	free(pixel);
-	free(cpixel);
+	Donnell_Pixel_Free(pixel);
+	Donnell_Pixel_Free(cpixel);
 
 	Donnell_Cleanup();
 	return 0;

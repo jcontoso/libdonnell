@@ -38,3 +38,9 @@ DONNELL_EXPORT DonnellPixel *Donnell_Pixel_CreateEasy(DonnellUInt8 red, DonnellU
 
     return pixel;
 }
+
+DONNELL_EXPORT void Donnell_Pixel_Free(DonnellPixel *pixel) {
+    if (pixel) {
+        free(pixel);
+    }
+}
