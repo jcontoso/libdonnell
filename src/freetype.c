@@ -16,7 +16,7 @@ FT_Error lcd_error;
 
 void FreeType_Init(void) {
     FT_Init_FreeType(&freetype);
-   lcd_error = 1;
+    lcd_error = 1;
 }
 
 void FreeType_Cleanup(void) {
@@ -25,9 +25,9 @@ void FreeType_Cleanup(void) {
 
 void FreeType_CopyToBufferLCD(DonnellImageBuffer *buffer, DonnellPixel *color, FT_Bitmap *bitmap, unsigned int a, unsigned int b) {
     FT_Bitmap *c_bitmap;
-	int x;
-	int y;
-	
+    int x;
+    int y;
+
     FT_Bitmap_Convert(freetype, bitmap, c_bitmap, 4);
     for (y = 0; y < bitmap->rows; y++) {
         for (x = 0; x < bitmap->width; x++) {
@@ -48,10 +48,10 @@ void FreeType_CopyToBufferLCD(DonnellImageBuffer *buffer, DonnellPixel *color, F
 }
 
 void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_Bitmap *bitmap, unsigned int a, unsigned int b) {
-	int x;
-	int y;
-	
-	for (y = 0; y < bitmap->rows; y++) {
+    int x;
+    int y;
+
+    for (y = 0; y < bitmap->rows; y++) {
         for (x = 0; x < bitmap->width; x++) {
             DonnellPixel *pixel;
 
@@ -142,7 +142,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
             FT_Vector kerning;
             FT_UInt glyph_index;
             int calc_height;
-            
+
             glyph_index = FontConfig_CharIndex(face, string->str[i]);
             freetype_error = FT_Load_Glyph(face, glyph_index, FT_LOAD_NO_BITMAP);
             if (freetype_error) {
@@ -160,11 +160,11 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
                 max_descent = (face->glyph->metrics.height >> 6) - face->glyph->bitmap_top;
             }
 
-			calc_height = face->glyph->bitmap_top;
-			if (calc_height < 0) {
-				calc_height = 0;
-			}
-			
+            calc_height = face->glyph->bitmap_top;
+            if (calc_height < 0) {
+                calc_height = 0;
+            }
+
             if (calc_height > max_ascent) {
                 max_ascent = calc_height;
             }
