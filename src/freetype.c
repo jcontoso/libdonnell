@@ -23,6 +23,14 @@ void FreeType_Cleanup(void) {
     FT_Done_FreeType(freetype);
 }
 
+FT_Library *FreeType_GetLibrary(void) {
+    return &freetype;
+}
+
+FT_Error FreeType_GetLCDError(void) {
+    return lcd_error;
+}
+
 void FreeType_CopyToBufferLCD(DonnellImageBuffer *buffer, DonnellPixel *color, FT_Bitmap *bitmap, unsigned int a, unsigned int b) {
     FT_Bitmap *c_bitmap;
     int x;

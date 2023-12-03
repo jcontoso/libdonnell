@@ -12,13 +12,13 @@
 #define DONNELL_FONTCONFIG
 
 typedef struct {
-    char* font;
-	FcBool embolden;
+    char *font;
+    FcBool embolden;
 } FontConfig_Font;
 
 void FontConfig_Init(void);
 FontConfig_Font *FontConfig_SelectFont(DonnellFont req_font, FriBidiString *string, DonnellFontStyle font_style);
-void FontConfig_FreeFont(FontConfig_Font* font);
+void FontConfig_FreeFont(FontConfig_Font *font);
 FT_UInt FontConfig_CharIndex(FT_Face face, FcChar32 chr);
 void FontConfig_Cleanup(void);
 

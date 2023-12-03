@@ -4,8 +4,10 @@
 #define DONNELL
 
 typedef unsigned char DonnellUInt8;
-typedef enum { 
-	DONNELL_FALSE, DONNELL_TRUE 
+typedef enum
+{
+    DONNELL_FALSE,
+    DONNELL_TRUE
 } DonnellBool;
 
 typedef struct {

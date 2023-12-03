@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "bidi.h"
+#include "harfbuzz.h"
 #include "textutils.h"
 
 /* Internal functions for FriBidi support */
@@ -65,7 +66,7 @@ FriBidiString *FriBidiString_ConvertFromUTF8(char *string) {
     return result;
 }
 
-void FriBidiString_Handle(FriBidiString *string) {
+void FriBidiString_Handle(FriBidiString *string, DonnellBool shape) {
     FriBidiCharType *types;
     FriBidiParType direction;
     FriBidiLevel *levels;
@@ -105,7 +106,9 @@ void FriBidiString_Handle(FriBidiString *string) {
     max_level = fribidi_get_par_embedding_levels(types, string->len, &direction, levels);
     fribidi_get_joining_types(string->str, string->len, props);
     fribidi_join_arabic(types, string->len, levels, props);
-    fribidi_shape(FRIBIDI_FLAGS_DEFAULT | FRIBIDI_FLAGS_ARABIC, levels, string->len, props, string->str);
+    if (shape == DONNELL_TRUE) {
+        fribidi_shape(FRIBIDI_FLAGS_DEFAULT | FRIBIDI_FLAGS_ARABIC, levels, string->len, props, string->str);
+    }
 
     for (end = 0, start = 0; end < string->len; end++) {
         if (TextUtils_IsNewLine(string->str[end]) || end == string->len - 1) {
@@ -144,7 +147,11 @@ FriBidiParagraphs *FriBidiParagraphs_ConvertFromParagraphs(Paragraphs *paragraph
 
     for (i = 0; i < paragraphs->count; i++) {
         fr_paragraphs->str[i] = FriBidiString_ConvertFromUTF8(paragraphs->str[i]);
-        FriBidiString_Handle(fr_paragraphs->str[i]);
+        if (HarfBuzz_GetLibrary()) {
+            FriBidiString_Handle(fr_paragraphs->str[i], DONNELL_FALSE);
+        } else {
+            FriBidiString_Handle(fr_paragraphs->str[i], DONNELL_TRUE);
+        }
     }
 
     return fr_paragraphs;

@@ -16,7 +16,7 @@ int main() {
 	buffer = Donnell_ImageBuffer_Create(300, 300);
 	Donnell_ImageBuffer_Clear(buffer, cpixel);
 
-	Donnell_GraphicsPrimitives_DrawTextLine(buffer, pixel, "This is a test", 0,0, 16, DONNELL_FONT_SANS_SERIF, 0);
+	Donnell_GraphicsPrimitives_DrawText(buffer, pixel, "This is the journey into sound\n阳光灿烂\nВиняткова технологія\n\nמימין לשמאל.\nحتى أطول من اليمين إلى اليسار\n", 5,5, 16, DONNELL_FONT_SANS_SERIF, 0);
 
 	Donnell_ImageBuffer_DumpAsBitmap(buffer, "test.bmp");
 	Donnell_ImageBuffer_Free(buffer);
