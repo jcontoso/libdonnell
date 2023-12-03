@@ -72,7 +72,7 @@ void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_B
 int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, bool return_max_asc, DonnellFontStyle font_style) {
     FT_Face face;
     FT_Int32 flags;
-    char *font_file;
+    FontConfig_Font *font_file;
     unsigned int i;
     int val;
 
@@ -88,8 +88,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     }
 
     font_file = FontConfig_SelectFont(req_font, string, font_style);
-    FT_New_Face(freetype, font_file, 0, &face);
-    free(font_file);
+    FT_New_Face(freetype, font_file->font, 0, &face);
 
     FT_Set_Pixel_Sizes(face, pixel_size, pixel_size);
     FT_Select_Charmap(face, ft_encoding_unicode);
@@ -168,6 +167,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
         }
     }
 
+    FontConfig_FreeFont(font_file);
     FT_Done_Face(face);
     return 0;
 }

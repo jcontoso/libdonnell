@@ -1,9 +1,9 @@
-#include <stdint.h>
-
 /* Public API for libdonnell */
 
 #ifndef DONNELL
 #define DONNELL
+
+typedef unsigned char DonnellUInt8;
 
 typedef struct {
     unsigned int w;
@@ -18,10 +18,10 @@ typedef struct {
 } DonnellRect;
 
 typedef struct {
-    uint8_t red;
-    uint8_t green;
-    uint8_t blue;
-    uint8_t alpha;
+    DonnellUInt8 red;
+    DonnellUInt8 green;
+    DonnellUInt8 blue;
+    DonnellUInt8 alpha;
 } DonnellPixel;
 
 typedef struct {
@@ -47,7 +47,7 @@ void Donnell_Init(void);
 void Donnell_Cleanup(void);
 
 DonnellPixel *Donnell_Pixel_Create();
-DonnellPixel *Donnell_Pixel_CreateEasy(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
+DonnellPixel *Donnell_Pixel_CreateEasy(DonnellUInt8 red, DonnellUInt8 green, DonnellUInt8 blue, DonnellUInt8 alpha);
 
 DonnellImageBuffer *Donnell_ImageBuffer_Create(unsigned int width, unsigned int height);
 void Donnell_ImageBuffer_SetPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellPixel *pixel);

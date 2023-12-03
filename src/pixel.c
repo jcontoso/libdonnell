@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -6,7 +5,7 @@
 #include "pixel.h"
 #include "symvis.h"
 
-uint8_t Pixel_Blend(uint8_t alpha, uint8_t value1, uint8_t value2) {
+DonnellUInt8 Pixel_Blend(DonnellUInt8 alpha, DonnellUInt8 value1, DonnellUInt8 value2) {
     int ret;
 
     ret = (255 - alpha) * value1 + alpha * value2;
@@ -24,7 +23,7 @@ DONNELL_EXPORT DonnellPixel *Donnell_Pixel_Create() {
     return pixel;
 }
 
-DONNELL_EXPORT DonnellPixel *Donnell_Pixel_CreateEasy(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
+DONNELL_EXPORT DonnellPixel *Donnell_Pixel_CreateEasy(DonnellUInt8 red, DonnellUInt8 green, DonnellUInt8 blue, DonnellUInt8 alpha) {
     DonnellPixel *pixel;
 
     pixel = malloc(sizeof(DonnellPixel));

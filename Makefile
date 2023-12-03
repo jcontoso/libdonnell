@@ -2,7 +2,7 @@
 CC ?= cc
 PKGCONFIG = $(shell which pkg-config)
 DEPS = fribidi fontconfig freetype2
-CFLAGS = -g $(shell $(PKGCONFIG) --cflags $(DEPS)) -fvisibility=hidden -fPIC -shared -Iinclude
+CFLAGS = -g $(shell $(PKGCONFIG) --cflags $(DEPS)) -std=c89 -fvisibility=hidden -fPIC -shared -Iinclude
 LIBS = $(shell $(PKGCONFIG) --libs $(DEPS)) -ldl
 
 # FILE AND PROJECT NAMES
