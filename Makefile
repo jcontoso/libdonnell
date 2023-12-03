@@ -50,10 +50,14 @@ all: $(LIBTARGET) $(PCTARGET)
 clean:
 	rm -f $(OBJECTS) $(LIBTARGET) $(PCTARGET)
 	rm -f $(EXAMPLES)
-	rm -f examples/test.bmp
 	rm -f donnell.pc
-	rm -f test.bmp
-
+	rm -f example.bmp
+	rm -f examples/example.bmp
+	rm -f example_downsized.bmp
+	rm -f examples/example_downsized.bmp
+	rm -f example_upsized.bmp
+	rm -f examples/example_upsized.bmp
+	
 uninstall:
 	rm -f $(word 1,$(PKGCONFIG_PATHS_LIST))/$(PCTARGET)
 	rm -f $(PREFIX)/include/donnell.h

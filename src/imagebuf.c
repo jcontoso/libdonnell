@@ -74,6 +74,18 @@ DONNELL_EXPORT void Donnell_ImageBuffer_Free(DonnellImageBuffer *buffer) {
     free(buffer);
 }
 
+DONNELL_EXPORT DonnellPixel *Donnell_ImageBuffer_GetPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y) {
+    if ((y < 0) || (x < 0) || (!buffer)) {
+        return NULL;
+    }
+
+    if ((y >= buffer->height) || (x >= buffer->width)) {
+        return NULL;
+    }
+
+    return Misc_MemDup(buffer->pixels[y][x], sizeof(DonnellPixel));
+}
+
 DONNELL_EXPORT void Donnell_ImageBuffer_SetPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellPixel *pixel) {
     if ((y < 0) || (x < 0) || (!pixel) || (!buffer)) {
         return;
@@ -180,4 +192,59 @@ DONNELL_EXPORT void Donnell_ImageBuffer_DumpAsBitmap(DonnellImageBuffer *buffer,
 
     free(bitmap_data);
     fclose(file);
+}
+
+DonnellImageBuffer *ImageBuffer_ScaleNN(DonnellImageBuffer *buffer, unsigned int width, unsigned int height) {
+    DonnellImageBuffer *ret;
+    double scale_h;
+    double scale_w;
+    unsigned int closest_h;
+    unsigned int closest_w;
+    unsigned int i;
+    unsigned int j;
+
+    if ((width < 0) || (height < 0) || (!buffer)) {
+        return NULL;
+    }
+
+    ret = Donnell_ImageBuffer_Create(width, height);
+    scale_w = buffer->width / (double)width;
+    scale_h = buffer->height / (double)height;
+
+    for (i = 0; i < height; ++i) {
+        closest_h = (int)(scale_h * i + 0.5);
+        for (j = 0; j < width; ++j) {
+            DonnellPixel *pixel;
+            unsigned int ch;
+            unsigned int cw;
+
+            closest_w = (int)(scale_w * j + 0.5);
+            if (closest_h >= buffer->height) {
+                ch = buffer->height - 1;
+            } else {
+                ch = closest_h;
+            }
+
+            if (closest_w >= buffer->width) {
+                cw = buffer->width - 1;
+            } else {
+                cw = closest_w;
+            }
+
+            pixel = Donnell_ImageBuffer_GetPixel(buffer, cw, ch);
+
+            Donnell_ImageBuffer_SetPixel(ret, j, i, pixel);
+
+            Donnell_Pixel_Free(pixel);
+        }
+    }
+
+    return ret;
+}
+
+DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Scale(DonnellImageBuffer *buffer, unsigned int width, unsigned int height, DonnellScalingAlgorithm algo) {
+    switch (algo) {
+    default:
+        return ImageBuffer_ScaleNN(buffer, width, height);
+    }
 }
