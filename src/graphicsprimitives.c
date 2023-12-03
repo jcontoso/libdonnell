@@ -25,11 +25,7 @@ DONNELL_EXPORT void Donnell_GraphicsPrimitives_DrawTextLine(DonnellImageBuffer *
     }
 
     string = FriBidiString_ConvertFromUTF8(utf8string);
-    if (HarfBuzz_GetLibrary()) {
-        FriBidiString_Handle(string, DONNELL_FALSE);
-    } else {
-        FriBidiString_Handle(string, DONNELL_TRUE);
-    }
+	FriBidiString_Handle(string);
     MeasureAndRenderTextLine(buffer, NULL, color, string, x, y, pixel_size, req_font, 0, font_style);
     FriBidiString_Free(string);
 }
@@ -42,11 +38,7 @@ DONNELL_EXPORT void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size
     }
 
     string = FriBidiString_ConvertFromUTF8(utf8string);
-    if (HarfBuzz_GetLibrary()) {
-        FriBidiString_Handle(string, DONNELL_FALSE);
-    } else {
-        FriBidiString_Handle(string, DONNELL_TRUE);
-    }
+	FriBidiString_Handle(string);
     MeasureAndRenderTextLine(NULL, size, NULL, string, 0, 0, pixel_size, req_font, 0, font_style);
     FriBidiString_Free(string);
 }

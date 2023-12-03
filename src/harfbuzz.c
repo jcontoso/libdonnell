@@ -102,8 +102,6 @@ void HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Do
     harfbuzz->buffer_add(harfbuzz_buffer, string->str, string->len, 0, string->len);
     harfbuzz->buffer_guess(harfbuzz_buffer);
 
-    char *asda;
-
     font_file = FontConfig_SelectFont(req_font, string, font_style);
     FT_New_Face(hb_freetype, font_file->font, 0, &face);
 
