@@ -175,9 +175,6 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
         } else {
             size->h = max_ascent + max_descent;
         }
-        
-        printf("%d %d\n", max_ascent, max_descent);
-
     }
 
     FontConfig_FreeFont(font_file);
