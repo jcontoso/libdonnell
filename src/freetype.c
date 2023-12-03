@@ -25,10 +25,12 @@ void FreeType_Cleanup(void) {
 
 void FreeType_CopyToBufferLCD(DonnellImageBuffer *buffer, DonnellPixel *color, FT_Bitmap *bitmap, unsigned int a, unsigned int b) {
     FT_Bitmap *c_bitmap;
-
+	int x;
+	int y;
+	
     FT_Bitmap_Convert(freetype, bitmap, c_bitmap, 4);
-    for (int y = 0; y < bitmap->rows; y++) {
-        for (int x = 0; x < bitmap->width; x++) {
+    for (y = 0; y < bitmap->rows; y++) {
+        for (x = 0; x < bitmap->width; x++) {
             DonnellPixel *pixel;
 
             pixel = Donnell_Pixel_Create();
@@ -46,8 +48,11 @@ void FreeType_CopyToBufferLCD(DonnellImageBuffer *buffer, DonnellPixel *color, F
 }
 
 void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_Bitmap *bitmap, unsigned int a, unsigned int b) {
-    for (int y = 0; y < bitmap->rows; y++) {
-        for (int x = 0; x < bitmap->width; x++) {
+	int x;
+	int y;
+	
+	for (y = 0; y < bitmap->rows; y++) {
+        for (x = 0; x < bitmap->width; x++) {
             DonnellPixel *pixel;
 
             pixel = Donnell_Pixel_Create();
@@ -69,7 +74,7 @@ void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_B
  * If size is NULL, this function will render text to the buffer.
  */
 
-int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, bool return_max_asc, DonnellFontStyle font_style) {
+int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, FT_Bool return_max_asc, DonnellFontStyle font_style) {
     FT_Face face;
     FT_Int32 flags;
     FontConfig_Font *font_file;
@@ -102,7 +107,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     if (!size) {
         DonnellSize csize;
 
-        FreeType_MeasureAndRender(NULL, &csize, NULL, string, x, y, pixel_size, req_font, true, font_style);
+        FreeType_MeasureAndRender(NULL, &csize, NULL, string, x, y, pixel_size, req_font, 1, font_style);
         for (i = 0; i < string->len; i++) {
             FT_UInt glyph_index;
 
@@ -136,8 +141,8 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
         for (i = 0; i < string->len; i++) {
             FT_Vector kerning;
             FT_UInt glyph_index;
-            unsigned int calc_height;
-
+            int calc_height;
+            
             glyph_index = FontConfig_CharIndex(face, string->str[i]);
             freetype_error = FT_Load_Glyph(face, glyph_index, FT_LOAD_NO_BITMAP);
             if (freetype_error) {
@@ -155,8 +160,13 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
                 max_descent = (face->glyph->metrics.height >> 6) - face->glyph->bitmap_top;
             }
 
-            if (face->glyph->bitmap_top > max_ascent) {
-                max_ascent = face->glyph->bitmap_top;
+			calc_height = face->glyph->bitmap_top;
+			if (calc_height < 0) {
+				calc_height = 0;
+			}
+			
+            if (calc_height > max_ascent) {
+                max_ascent = calc_height;
             }
         }
 
@@ -165,6 +175,9 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
         } else {
             size->h = max_ascent + max_descent;
         }
+        
+        printf("%d %d\n", max_ascent, max_descent);
+
     }
 
     FontConfig_FreeFont(font_file);

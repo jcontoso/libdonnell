@@ -1,8 +1,6 @@
-#include <stdint.h>
-
 #ifndef DONNELL_PIXEL
 #define DONNELL_PIXEL
 
-uint8_t Pixel_Blend(uint8_t alpha, uint8_t value1, uint8_t value2);
+DonnellUInt8 Pixel_Blend(DonnellUInt8 alpha, DonnellUInt8 value1, DonnellUInt8 value2);
 
 #endif

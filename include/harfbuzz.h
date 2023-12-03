@@ -1,5 +1,4 @@
 #include <ft2build.h>
-#include <stdint.h>
 #include FT_FREETYPE_H
 
 #ifndef DONNELL_HARFBUZZ
@@ -7,7 +6,7 @@
 
 typedef void *HarfBuzzBuffer;
 typedef HarfBuzzBuffer (*HarfBuzzBufferCreate)(void);
-typedef void (*HarfBuzzBufferAdd)(HarfBuzzBuffer, const uint32_t *, int, unsigned int, int);
+typedef void (*HarfBuzzBufferAdd)(HarfBuzzBuffer, const FT_UInt32 *, int, unsigned int, int);
 
 typedef void (*HarfBuzzBufferGuess)(HarfBuzzBuffer);
 
@@ -18,15 +17,15 @@ typedef void (*HarfBuzzFontSetup)(HarfBuzzFont);
 typedef void (*HarfBuzzShape)(HarfBuzzFont, HarfBuzzBuffer, void *, unsigned int);
 
 typedef struct {
-    int32_t x_advance;
-    int32_t y_advance;
-    int32_t x_offset;
-    int32_t y_offset;
+    FT_Int32 x_advance;
+    FT_Int32 y_advance;
+    FT_Int32 x_offset;
+    FT_Int32 y_offset;
 } HarfBuzzGlyphPos;
 
 typedef struct {
-    uint32_t codepoint;
-    uint32_t cluster;
+    FT_UInt32 codepoint;
+    FT_UInt32 cluster;
 } HarfBuzzGlyphInfo;
 
 typedef HarfBuzzGlyphInfo *(*HarfBuzzGetGlyphInfos)(HarfBuzzBuffer, unsigned int *);

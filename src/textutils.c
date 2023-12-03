@@ -1,5 +1,4 @@
 #include <fribidi.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,11 +7,11 @@
 
 /* Various internal text utility functions */
 
-bool TextUtils_IsNewLine(FriBidiChar chr) {
+DonnellBool TextUtils_IsNewLine(FriBidiChar chr) {
     return chr == '\n' || chr == '\r' || chr == '\f' || chr == '\v';
 }
 
-bool TextUtils_IsNewLineChar(char chr) {
+DonnellBool TextUtils_IsNewLineChar(char chr) {
     return chr == '\n' || chr == '\r' || chr == '\f' || chr == '\v';
 }
 

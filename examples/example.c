@@ -6,7 +6,6 @@ int main() {
 	DonnellImageBuffer* buffer;
 	DonnellPixel* pixel;
 	DonnellPixel* cpixel;
-	DonnellSize rect;
 
 	Donnell_Init();
 
@@ -17,7 +16,7 @@ int main() {
 	buffer = Donnell_ImageBuffer_Create(300, 300);
 	Donnell_ImageBuffer_Clear(buffer, cpixel);
 
-	Donnell_GraphicsPrimitives_DrawText(buffer, pixel, "Latin 日本語\n한글\n台灣\n大陆\nСлава Україні\nمیک ڈونلڈز سیگا گیمز لائن\nܐܠܦ ܒܝܬ ܣܘܪܝܝܐ \nᏣᎳᎩ ᎦᏬᏂᎯᏍᏗ\n", 0, 0, 16, DONNELL_FONT_SANS_SERIF, 0);
+	Donnell_GraphicsPrimitives_DrawTextLine(buffer, pixel, "This is a test", 0,0, 16, DONNELL_FONT_SANS_SERIF, 0);
 
 	Donnell_ImageBuffer_DumpAsBitmap(buffer, "test.bmp");
 	Donnell_ImageBuffer_Free(buffer);

@@ -1,4 +1,4 @@
-#include <stdbool.h>
+#include "donnell.h"
 
 /* Internal header for various text utility functions */
 
@@ -10,7 +10,7 @@ typedef struct {
     unsigned int count;
 } Paragraphs;
 
-bool TextUtils_IsNewLine(FriBidiChar chr);
+DonnellBool TextUtils_IsNewLine(FriBidiChar chr);
 Paragraphs *TextUtils_Paragraphs_Create(char *string);
 void TextUtils_Paragraphs_Free(Paragraphs *paragraphs);
 
