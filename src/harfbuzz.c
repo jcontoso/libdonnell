@@ -44,7 +44,7 @@ void HarfBuzz_Init(void) {
 
     harfbuzz->font_create = dlsym(harfbuzz->library, "hb_ft_font_create");
     harfbuzz->font_setup = dlsym(harfbuzz->library, "hb_ft_font_set_funcs");
-    harfbuzz->font_destroy = dlsym(harfbuzz->library, "hb_buffer_destroy");
+    harfbuzz->font_destroy = dlsym(harfbuzz->library, "hb_font_destroy");
 
     harfbuzz->shape = dlsym(harfbuzz->library, "hb_shape");
 
@@ -144,7 +144,9 @@ void HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Do
 
         for (i = 0; i < string->len; i++) {
             FT_Vector kerning;
-            int calc_height;
+            int calc_as;
+            int calc_de;
+            int hb_yoffset;
 
             hb_freetype_error = FT_Load_Glyph(face, harfbuzz_info[i].codepoint, FT_LOAD_NO_BITMAP);
             if (hb_freetype_error) {
@@ -158,17 +160,18 @@ void HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Do
                 size->w += ((harfbuzz_pos[i].x_advance / 64) - kerning.x) >> 6;
             }
 
-            if ((face->glyph->metrics.height >> 6) - (face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64))) {
-                max_descent = (face->glyph->metrics.height >> 6) - (face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64));
+			calc_de = (face->glyph->metrics.height >> 6) - (face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64));
+            if (calc_de > max_descent) {
+                max_descent = calc_de;
             }
 
-            calc_height = face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64);
-            if (calc_height < 0) {
-                calc_height = 0;
+            calc_as = face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64);
+            if (calc_as < 0) {
+                calc_as = 0;
             }
 
-            if (calc_height > max_ascent) {
-                max_ascent = calc_height;
+            if (calc_as > max_ascent) {
+                max_ascent = calc_as;
             }
         }
 
@@ -177,8 +180,12 @@ void HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Do
         } else {
             size->h = max_ascent + max_descent;
         }
+        
+        printf("height: %d as: %d des: %d\n", size->h, max_ascent, max_descent);
     }
-
+    
+    harfbuzz->buffer_destroy(harfbuzz_buffer);
+    harfbuzz->font_destroy(harfbuzz_font);
     FontConfig_FreeFont(font_file);
     FT_Done_Face(face);
 }

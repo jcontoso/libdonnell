@@ -63,6 +63,7 @@ FontConfig_Font *FontConfig_SelectFont(DonnellFont req_font, FriBidiString *stri
         }
     }
 
+	/* workaround */
     if (font_style & DONNELL_FONT_STYLE_BOLD) {
         pattern = FcPatternBuild(0, FC_FAMILY, FcTypeString, font_name, FC_CHARSET, FcTypeCharSet, char_set, FC_SLANT, FcTypeInteger, slant, FC_WEIGHT, FcTypeInteger, FC_WEIGHT_BOLD, (char *)0);
     } else {
