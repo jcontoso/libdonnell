@@ -160,7 +160,7 @@ void HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Do
                 size->w += ((harfbuzz_pos[i].x_advance / 64) - kerning.x) >> 6;
             }
 
-			calc_de = (face->glyph->metrics.height >> 6) - (face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64));
+            calc_de = (face->glyph->metrics.height >> 6) - (face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64));
             if (calc_de > max_descent) {
                 max_descent = calc_de;
             }
@@ -180,10 +180,10 @@ void HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Do
         } else {
             size->h = max_ascent + max_descent;
         }
-        
+
         printf("height: %d as: %d des: %d\n", size->h, max_ascent, max_descent);
     }
-    
+
     harfbuzz->buffer_destroy(harfbuzz_buffer);
     harfbuzz->font_destroy(harfbuzz_font);
     FontConfig_FreeFont(font_file);

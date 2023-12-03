@@ -8,7 +8,7 @@
 DONNELL_EXPORT void Donnell_Init(void) {
     FontConfig_Init();
     FreeType_Init();
-    HarfBuzz_Init();
+    /*HarfBuzz_Init();*/
 }
 
 DONNELL_EXPORT void Donnell_Cleanup(void) {

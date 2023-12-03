@@ -10,7 +10,6 @@
 #include "fontconfig.h"
 #include "freetype.h"
 
-
 #ifndef DONNELL_HARFBUZZ
 #define DONNELL_HARFBUZZ
 
@@ -20,7 +19,7 @@ typedef hb_font_t *HarfBuzzFont;
 
 typedef hb_glyph_info_t HarfBuzzGlyphInfo;
 typedef hb_glyph_position_t HarfBuzzGlyphPos;
-#else 
+#else
 typedef void *HarfBuzzBuffer;
 typedef void *HarfBuzzFont;
 
