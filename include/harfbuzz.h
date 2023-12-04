@@ -84,7 +84,7 @@ typedef struct {
 } HarfBuzzLibrary;
 
 void HarfBuzz_Init(void);
-void HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, FT_Bool return_max_asc, DonnellFontOptions font_options);
+int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellBool return_max_asc, DonnellFontOptions font_options);
 void HarfBuzz_Cleanup(void);
 HarfBuzzLibrary *HarfBuzz_GetLibrary(void);
 

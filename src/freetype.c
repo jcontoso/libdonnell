@@ -82,7 +82,7 @@ void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_B
  * If size is NULL, this function will render text to the buffer.
  */
 
-int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, FT_Bool return_max_asc, DonnellFontOptions font_options) {
+int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellBool return_max_asc, DonnellFontOptions font_options) {
     FT_Face face;
     FT_Int32 flags;
     FontConfig_Font *font_file;
@@ -115,7 +115,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     if (!size) {
         DonnellSize csize;
 
-        FreeType_MeasureAndRender(NULL, &csize, NULL, string, x, y, pixel_size, 1, font_options);
+        FreeType_MeasureAndRender(NULL, &csize, NULL, string, x, y, pixel_size, DONNELL_TRUE, font_options);
         for (i = 0; i < string->len; i++) {
             FT_UInt glyph_index;
 
