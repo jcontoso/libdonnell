@@ -37,19 +37,17 @@ typedef struct {
 
 typedef enum
 {
-    DONNELL_FONT_SERIF,
-    DONNELL_FONT_SANS_SERIF,
-    DONNELL_FONT_MONOSPACE,
-} DonnellFont;
+    DONNELL_FONT_OPTIONS_SERIF = 1 << 0,
+    DONNELL_FONT_OPTIONS_SANS_SERIF = 1 << 1,
+    DONNELL_FONT_OPTIONS_MONOSPACE = 1 << 2,
+    DONNELL_FONT_OPTIONS_BOLD = 1 << 3,
+    DONNELL_FONT_OPTIONS_ITALIC = 1 << 4
+} DonnellFontOptions;
 
 typedef enum
 {
-    DONNELL_FONT_STYLE_BOLD = 1 << 0,
-    DONNELL_FONT_STYLE_ITALIC = 1 << 1
-} DonnellFontStyle;
-
-typedef enum
-{ DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR, } DonnellScalingAlgorithm;
+	 DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR, 
+} DonnellScalingAlgorithm;
 
 void Donnell_Init(void);
 void Donnell_Cleanup(void);
@@ -67,9 +65,9 @@ void Donnell_ImageBuffer_DumpAsBitmap(DonnellImageBuffer *buffer, char *name);
 DonnellImageBuffer *Donnell_ImageBuffer_Scale(DonnellImageBuffer *buffer, unsigned int width, unsigned int height, DonnellScalingAlgorithm algo);
 void Donnell_ImageBuffer_Free(DonnellImageBuffer *buffer);
 
-void Donnell_GraphicsPrimitives_DrawTextLine(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style);
-void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style);
-void Donnell_GraphicsPrimitives_DrawText(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style);
-void Donnell_GraphicsPrimitives_MeasureText(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFont req_font, DonnellFontStyle font_style);
+void Donnell_GraphicsPrimitives_DrawTextLine(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFontOptions font_options);
+void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFontOptions font_options);
+void Donnell_GraphicsPrimitives_DrawText(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFontOptions font_options);
+void Donnell_GraphicsPrimitives_MeasureText(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFontOptions font_options);
 
 #endif

@@ -75,7 +75,7 @@ void HarfBuzz_Cleanup(void) {
     free(harfbuzz);
 }
 
-void HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, FT_Bool return_max_asc, DonnellFontStyle font_style) {
+void HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, FT_Bool return_max_asc, DonnellFontOptions font_options) {
     FT_Face face;
     FT_Int32 flags;
     FontConfig_Font *font_file;
@@ -102,7 +102,7 @@ void HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Do
     harfbuzz->buffer_add(harfbuzz_buffer, string->str, string->len, 0, string->len);
     harfbuzz->buffer_guess(harfbuzz_buffer);
 
-    font_file = FontConfig_SelectFont(req_font, string, font_style);
+    font_file = FontConfig_SelectFont(string, font_options);
     FT_New_Face(hb_freetype, font_file->font, 0, &face);
 
     FT_Set_Pixel_Sizes(face, pixel_size, pixel_size);
@@ -119,7 +119,7 @@ void HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Do
     if (!size) {
         DonnellSize csize;
 
-        HarfBuzz_MeasureAndRender(NULL, &csize, NULL, string, x, y, pixel_size, req_font, 1, font_style);
+        HarfBuzz_MeasureAndRender(NULL, &csize, NULL, string, x, y, pixel_size, 1, font_options);
         for (i = 0; i < glyph_count; i++) {
             hb_freetype_error = FT_Load_Glyph(face, harfbuzz_info[i].codepoint, flags);
             if (hb_freetype_error) {

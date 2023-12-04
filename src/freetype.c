@@ -82,7 +82,7 @@ void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_B
  * If size is NULL, this function will render text to the buffer.
  */
 
-int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFont req_font, FT_Bool return_max_asc, DonnellFontStyle font_style) {
+int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, FT_Bool return_max_asc, DonnellFontOptions font_options) {
     FT_Face face;
     FT_Int32 flags;
     FontConfig_Font *font_file;
@@ -100,7 +100,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
         flags = FT_LOAD_RENDER | FT_LOAD_TARGET_LCD;
     }
 
-    font_file = FontConfig_SelectFont(req_font, string, font_style);
+    font_file = FontConfig_SelectFont(string, font_options);
     FT_New_Face(freetype, font_file->font, 0, &face);
 
     FT_Set_Pixel_Sizes(face, pixel_size, pixel_size);
@@ -115,7 +115,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     if (!size) {
         DonnellSize csize;
 
-        FreeType_MeasureAndRender(NULL, &csize, NULL, string, x, y, pixel_size, req_font, 1, font_style);
+        FreeType_MeasureAndRender(NULL, &csize, NULL, string, x, y, pixel_size, 1, font_options);
         for (i = 0; i < string->len; i++) {
             FT_UInt glyph_index;
 

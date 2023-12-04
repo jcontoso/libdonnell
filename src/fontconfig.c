@@ -21,7 +21,7 @@ void FontConfig_FreeFont(FontConfig_Font *font) {
     free(font);
 }
 
-FontConfig_Font *FontConfig_SelectFont(DonnellFont req_font, FriBidiString *string, DonnellFontStyle font_style) {
+FontConfig_Font *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions font_options) {
     FcPattern *pattern;
     FcPattern *font;
     FcResult result;
@@ -33,43 +33,38 @@ FontConfig_Font *FontConfig_SelectFont(DonnellFont req_font, FriBidiString *stri
     int slant;
     int weight;
 
+	char_set = NULL;
     ret = malloc(sizeof(FontConfig_Font));
     if (!ret) {
         return NULL;
     }
 
-    char_set = FcCharSetCreate();
-
-    switch (req_font) {
-    case DONNELL_FONT_SERIF:
-        font_name = "serif";
-        break;
-    case DONNELL_FONT_MONOSPACE:
-        font_name = "monospace";
-        break;
-    default:
-        font_name = "sans-serif";
-    }
-
-    if (font_style & DONNELL_FONT_STYLE_ITALIC) {
-        slant = FC_SLANT_ITALIC;
+    if (font_options & DONNELL_FONT_OPTIONS_SERIF) {
+		font_name = "serif";
+    } else if (font_options & DONNELL_FONT_OPTIONS_MONOSPACE) {
+		font_name = "monospace";
     } else {
-        slant = FC_SLANT_ROMAN;
-    }
+		font_name = "sans-serif";	
+	}
+	
+	pattern = FcPatternBuild(0, FC_FAMILY, FcTypeString, font_name, (char *)0);
 
     if (string) {
+		char_set = FcCharSetCreate();
         for (i = 0; i < string->len; i++) {
             FcCharSetAddChar(char_set, string->str[i]);
         }
+		FcPatternAddCharSet(pattern, FC_CHARSET, char_set);
     }
 
-    /* workaround */
-    if (font_style & DONNELL_FONT_STYLE_BOLD) {
-        pattern = FcPatternBuild(0, FC_FAMILY, FcTypeString, font_name, FC_CHARSET, FcTypeCharSet, char_set, FC_SLANT, FcTypeInteger, slant, FC_WEIGHT, FcTypeInteger, FC_WEIGHT_BOLD, (char *)0);
-    } else {
-        pattern = FcPatternBuild(0, FC_FAMILY, FcTypeString, font_name, FC_CHARSET, FcTypeCharSet, char_set, FC_SLANT, FcTypeInteger, slant, (char *)0);
+    if (font_options & DONNELL_FONT_OPTIONS_BOLD) {
+		FcPatternAddInteger(pattern, FC_WEIGHT, FC_WEIGHT_BOLD);
     }
-
+      
+    if (font_options & DONNELL_FONT_OPTIONS_ITALIC) {
+		FcPatternAddInteger(pattern, FC_SLANT, slant);
+    }
+    
     FcConfigSubstitute(fontconfig, pattern, FcMatchPattern);
     FcDefaultSubstitute(pattern);
     font = FcFontMatch(fontconfig, pattern, &result);
@@ -81,7 +76,9 @@ FontConfig_Font *FontConfig_SelectFont(DonnellFont req_font, FriBidiString *stri
 
     FcPatternDestroy(font);
     FcPatternDestroy(pattern);
-    FcCharSetDestroy(char_set);
+    if (char_set) {
+		FcCharSetDestroy(char_set);
+	}
     return ret;
 }
 
