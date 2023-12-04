@@ -13,7 +13,7 @@ void MeasureAndRenderTextLine(DonnellImageBuffer *buffer, DonnellSize *size, Don
     if (HarfBuzz_GetLibrary()) {
         HarfBuzz_MeasureAndRender(buffer, size, color, string, x, y, pixel_size, return_max_asc, font_options);
     } else {
-       FreeType_MeasureAndRender(buffer, size, color, string, x, y, pixel_size, return_max_asc, font_options);
+        FreeType_MeasureAndRender(buffer, size, color, string, x, y, pixel_size, return_max_asc, font_options);
     }
 }
 
@@ -96,7 +96,7 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
     unsigned int first_ndn_paragraph;
     unsigned int i;
     unsigned int t;
-	unsigned int line_height;
+    unsigned int line_height;
 
     longest_rtl_width = 0;
 
@@ -127,7 +127,7 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
 
     for (i = 0; i < fribidi_paragraphs->count; i++) {
         FriBidiString *string;
-		line_height = FreeType_MeasureAndRender(NULL, NULL, NULL, NULL, 0, 0, pixel_size, 0, font_options);
+        line_height = FreeType_MeasureAndRender(NULL, NULL, NULL, NULL, 0, 0, pixel_size, 0, font_options);
 
         string = fribidi_paragraphs->str[i];
 

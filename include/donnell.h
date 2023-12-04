@@ -45,9 +45,7 @@ typedef enum
 } DonnellFontOptions;
 
 typedef enum
-{
-	 DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR, 
-} DonnellScalingAlgorithm;
+{ DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR, } DonnellScalingAlgorithm;
 
 void Donnell_Init(void);
 void Donnell_Cleanup(void);
