@@ -30,8 +30,6 @@ FontConfig_Font *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions
     FontConfig_Font *ret;
     char *font_name;
     unsigned int i;
-    int slant;
-    int weight;
 
     char_set = NULL;
     ret = malloc(sizeof(FontConfig_Font));
@@ -62,7 +60,7 @@ FontConfig_Font *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions
     }
 
     if (font_options & DONNELL_FONT_OPTIONS_ITALIC) {
-        FcPatternAddInteger(pattern, FC_SLANT, slant);
+        FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ITALIC);
     }
 
     FcConfigSubstitute(fontconfig, pattern, FcMatchPattern);
