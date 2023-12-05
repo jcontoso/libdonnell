@@ -2,15 +2,7 @@
 #include <stdlib.h>
 
 #include "donnell.h"
-#include "pixel.h"
 #include "symvis.h"
-
-DonnellUInt8 Pixel_Blend(DonnellUInt8 alpha, DonnellUInt8 value1, DonnellUInt8 value2) {
-    int ret;
-
-    ret = (255 - alpha) * value1 + alpha * value2;
-    return ret / 255;
-}
 
 DONNELL_EXPORT DonnellPixel *Donnell_Pixel_Create() {
     DonnellPixel *pixel;
@@ -22,6 +14,24 @@ DONNELL_EXPORT DonnellPixel *Donnell_Pixel_Create() {
 
     return pixel;
 }
+
+DONNELL_EXPORT DonnellPixel *Donnell_Pixel_Blend(DonnellPixel *a, DonnellPixel* b) {
+	unsigned int cr;
+	unsigned int cg;
+	unsigned int cb;
+	unsigned int ca;
+
+	cr = (a->red * a->alpha + b->red * (255 - a->alpha) / 255 * b->alpha) / 255;
+	cg = (a->green * a->alpha + b->green * (255 - a->alpha) / 255 * b->alpha) / 255;
+	cb = (a->blue * a->alpha + b->blue * (255 - a->alpha) / 255 * b->alpha) / 255;
+	ca = a->alpha + b->alpha * (255 - a->alpha) / 255;
+		
+	printf("%d %d %d %d\n", cr, cg, cb,  (a->red * a->alpha + b->red * b->alpha * (255 - a->alpha) / 255)/ca);
+	//printf("%d %d %d %d\n", cr, cg, cb, ca);
+
+
+	return Donnell_Pixel_CreateEasy(cr, cg, cb, ca);
+} 
 
 DONNELL_EXPORT DonnellPixel *Donnell_Pixel_CreateEasy(DonnellUInt8 red, DonnellUInt8 green, DonnellUInt8 blue, DonnellUInt8 alpha) {
     DonnellPixel *pixel;

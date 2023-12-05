@@ -7,7 +7,6 @@
 #include "donnell.h"
 #include "fontconfig.h"
 #include "freetype.h"
-#include "pixel.h"
 #include "textutils.h"
 
 FT_Library freetype;

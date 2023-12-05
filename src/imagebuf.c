@@ -4,7 +4,6 @@
 
 #include "donnell.h"
 #include "misc.h"
-#include "pixel.h"
 #include "symvis.h"
 
 DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Create(unsigned int width, unsigned int height) {
@@ -114,14 +113,10 @@ DONNELL_EXPORT void Donnell_ImageBuffer_BlendPixel(DonnellImageBuffer *buffer, u
     if (buffer->pixels[y][x]) {
         DonnellPixel *cpixel;
 
-        cpixel = Donnell_Pixel_Create();
-
-        cpixel->red = Pixel_Blend(pixel->alpha, buffer->pixels[y][x]->red, pixel->red);
-        cpixel->green = Pixel_Blend(pixel->alpha, buffer->pixels[y][x]->green, pixel->green);
-        cpixel->blue = Pixel_Blend(pixel->alpha, buffer->pixels[y][x]->blue, pixel->blue);
-        cpixel->alpha = 255;
+        cpixel = Donnell_Pixel_Blend(buffer->pixels[y][x], pixel);
 
         Donnell_ImageBuffer_SetPixel(buffer, x, y, cpixel);
+        
         free(cpixel);
     } else {
         Donnell_ImageBuffer_SetPixel(buffer, x, y, pixel);
