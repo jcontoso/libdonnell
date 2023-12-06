@@ -15,11 +15,9 @@ FT_Int32 flags;
 FreeTypeCopyToBufferFunction buffer_copy;
 
 void FreeType_CopyToBufferLCD(DonnellImageBuffer *buffer, DonnellPixel *color, FT_Bitmap *bitmap, unsigned int a, unsigned int b) {
-    FT_Bitmap *c_bitmap;
     int x;
     int y;
 
-    FT_Bitmap_Convert(freetype, bitmap, c_bitmap, 4);
     for (y = 0; y < bitmap->rows; y++) {
         for (x = 0; x < bitmap->width; x++) {
             DonnellPixel *pixel;
@@ -35,7 +33,6 @@ void FreeType_CopyToBufferLCD(DonnellImageBuffer *buffer, DonnellPixel *color, F
             free(pixel);
         }
     }
-    FT_Bitmap_Done(freetype, c_bitmap);
 }
 
 void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_Bitmap *bitmap, unsigned int a, unsigned int b) {
@@ -45,8 +42,9 @@ void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_B
     for (y = 0; y < bitmap->rows; y++) {
         for (x = 0; x < bitmap->width; x++) {
             DonnellPixel *pixel;
-
+			
             pixel = Donnell_Pixel_Create();
+        
             pixel->alpha = bitmap->buffer[y * bitmap->pitch + x];
             pixel->red = color->red;
             pixel->green = color->green;
