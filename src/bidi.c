@@ -28,6 +28,10 @@ char *FriBidiString_ConvertToUTF8(FriBidiString *string) {
 FriBidiString *FriBidiString_Create(unsigned int size) {
     FriBidiString *result;
 
+    if (size >= 0) {
+        return NULL;
+    }
+
     result = malloc(sizeof(FriBidiString));
     if (!result) {
         return NULL;
@@ -131,13 +135,24 @@ void FriBidiString_Handle(FriBidiString *string) {
 }
 
 void FriBidiString_Free(FriBidiString *string) {
-    free(string->str);
+    if (!string) {
+        return;
+    }
+
+    if (string->str) {
+        free(string->str);
+    }
+
     free(string);
 }
 
 FriBidiParagraphs *FriBidiParagraphs_ConvertFromParagraphs(Paragraphs *paragraphs) {
     FriBidiParagraphs *fr_paragraphs;
     unsigned int i;
+
+    if (!paragraphs) {
+        return NULL;
+    }
 
     fr_paragraphs = malloc(sizeof(FriBidiParagraphs));
     if (!fr_paragraphs) {
@@ -157,10 +172,15 @@ FriBidiParagraphs *FriBidiParagraphs_ConvertFromParagraphs(Paragraphs *paragraph
 void FriBidiParagraphs_Free(FriBidiParagraphs *paragraphs) {
     unsigned int i;
 
-    for (i = 0; i < paragraphs->count; i++) {
-        FriBidiString_Free(paragraphs->str[i]);
+    if (!paragraphs) {
+        return;
     }
 
-    free(paragraphs->str);
+    if (paragraphs->str) {
+        for (i = 0; i < paragraphs->count; i++) {
+            FriBidiString_Free(paragraphs->str[i]);
+        }
+        free(paragraphs->str);
+    }
     free(paragraphs);
 }

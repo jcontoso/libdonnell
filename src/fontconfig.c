@@ -17,7 +17,14 @@ void FontConfig_Init(void) {
 }
 
 void FontConfig_FreeFont(FontConfig_Font *font) {
-    free(font->font);
+    if (!font) {
+        return;
+    }
+
+    if (font->font) {
+        free(font->font);
+    }
+
     free(font);
 }
 
@@ -30,6 +37,10 @@ FontConfig_Font *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions
     FontConfig_Font *ret;
     char *font_name;
     unsigned int i;
+
+    if (!fontconfig) {
+        return NULL;
+    }
 
     char_set = NULL;
     ret = malloc(sizeof(FontConfig_Font));
@@ -85,6 +96,8 @@ FT_UInt FontConfig_CharIndex(FT_Face face, FcChar32 chr) {
 }
 
 void FontConfig_Cleanup(void) {
-    FcConfigDestroy(fontconfig);
+    if (fontconfig) {
+        FcConfigDestroy(fontconfig);
+    }
     FcFini();
 }

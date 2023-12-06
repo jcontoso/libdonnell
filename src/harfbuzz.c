@@ -17,7 +17,8 @@ HarfBuzzLibrary *harfbuzz;
 
 FT_Library hb_freetype;
 FT_Error hb_freetype_error;
-FT_Error hb_lcd_error;
+FT_Int32 hb_flags;
+FreeTypeCopyToBufferFunction hb_buffer_copy;
 
 void HarfBuzz_Init(void) {
     char *error;
@@ -59,7 +60,8 @@ void HarfBuzz_Init(void) {
     }
 
     hb_freetype = *FreeType_GetLibrary();
-    hb_lcd_error = FreeType_GetLCDError();
+    hb_flags = FreeType_GetFlags();
+    hb_buffer_copy = *FreeType_GetBufferCopyFunction();
 }
 
 HarfBuzzLibrary *HarfBuzz_GetLibrary(void) {
@@ -77,7 +79,6 @@ void HarfBuzz_Cleanup(void) {
 
 int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellBool return_max_asc, DonnellFontOptions font_options) {
     FT_Face face;
-    FT_Int32 flags;
     FontConfig_Font *font_file;
     HarfBuzzBuffer harfbuzz_buffer;
     HarfBuzzFont harfbuzz_font;
@@ -92,16 +93,6 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
         size->w = 0;
     }
 
-    if (hb_lcd_error) {
-        flags = FT_LOAD_RENDER;
-    } else {
-        flags = FT_LOAD_RENDER | FT_LOAD_TARGET_LCD;
-    }
-
-    harfbuzz_buffer = harfbuzz->buffer_create();
-    harfbuzz->buffer_add(harfbuzz_buffer, string->str, string->len, 0, string->len);
-    harfbuzz->buffer_guess(harfbuzz_buffer);
-
     font_file = FontConfig_SelectFont(string, font_options);
     FT_New_Face(hb_freetype, font_file->font, 0, &face);
 
@@ -113,6 +104,10 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
         FT_Done_Face(face);
         return val;
     }
+
+    harfbuzz_buffer = harfbuzz->buffer_create();
+    harfbuzz->buffer_add(harfbuzz_buffer, string->str, string->len, 0, string->len);
+    harfbuzz->buffer_guess(harfbuzz_buffer);
 
     harfbuzz_font = harfbuzz->font_create(face, NULL);
     harfbuzz->font_setup(harfbuzz_font);
@@ -127,16 +122,12 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
 
         HarfBuzz_MeasureAndRender(NULL, &csize, NULL, string, x, y, pixel_size, DONNELL_TRUE, font_options);
         for (i = 0; i < glyph_count; i++) {
-            hb_freetype_error = FT_Load_Glyph(face, harfbuzz_info[i].codepoint, flags);
+            hb_freetype_error = FT_Load_Glyph(face, harfbuzz_info[i].codepoint, hb_flags);
             if (hb_freetype_error) {
                 continue;
             }
 
-            if (hb_lcd_error) {
-                FreeType_CopyToBuffer(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left + (harfbuzz_pos[i].x_offset / 64), csize.h + y - face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64));
-            } else {
-                FreeType_CopyToBufferLCD(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left + (harfbuzz_pos[i].x_offset / 64), csize.h + y - face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64));
-            }
+            hb_buffer_copy(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left + (harfbuzz_pos[i].x_offset / 64), csize.h + y - face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64));
 
             x += harfbuzz_pos[i].x_advance / 64;
             y += harfbuzz_pos[i].y_advance / 64;

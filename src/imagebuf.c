@@ -116,7 +116,7 @@ DONNELL_EXPORT void Donnell_ImageBuffer_BlendPixel(DonnellImageBuffer *buffer, u
         cpixel = Donnell_Pixel_Blend(buffer->pixels[y][x], pixel);
 
         Donnell_ImageBuffer_SetPixel(buffer, x, y, cpixel);
-        
+
         free(cpixel);
     } else {
         Donnell_ImageBuffer_SetPixel(buffer, x, y, pixel);

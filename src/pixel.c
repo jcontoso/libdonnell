@@ -15,23 +15,23 @@ DONNELL_EXPORT DonnellPixel *Donnell_Pixel_Create() {
     return pixel;
 }
 
-DONNELL_EXPORT DonnellPixel *Donnell_Pixel_Blend(DonnellPixel *a, DonnellPixel* b) {
-	unsigned int cr;
-	unsigned int cg;
-	unsigned int cb;
-	unsigned int ca;
+DONNELL_EXPORT DonnellPixel *Donnell_Pixel_Blend(DonnellPixel *a, DonnellPixel *b) {
+    unsigned int result_r;
+    unsigned int result_g;
+    unsigned int result_b;
+    unsigned int result_a;
 
-	cr = (a->red * a->alpha + b->red * (255 - a->alpha) / 255 * b->alpha) / 255;
-	cg = (a->green * a->alpha + b->green * (255 - a->alpha) / 255 * b->alpha) / 255;
-	cb = (a->blue * a->alpha + b->blue * (255 - a->alpha) / 255 * b->alpha) / 255;
-	ca = a->alpha + b->alpha * (255 - a->alpha) / 255;
-		
-	printf("%d %d %d %d\n", cr, cg, cb,  (a->red * a->alpha + b->red * b->alpha * (255 - a->alpha) / 255)/ca);
-	//printf("%d %d %d %d\n", cr, cg, cb, ca);
+    if ((!a) || (!b)) {
+        return NULL;
+    }
 
+    result_r = ((255 - b->alpha) * a->red + b->alpha * b->red) / 255;
+    result_g = ((255 - b->alpha) * a->green + b->alpha * b->green) / 255;
+    result_b = ((255 - b->alpha) * a->blue + b->alpha * b->blue) / 255;
+    result_a = a->alpha;
 
-	return Donnell_Pixel_CreateEasy(cr, cg, cb, ca);
-} 
+    return Donnell_Pixel_CreateEasy(result_r, result_g, result_b, result_a);
+}
 
 DONNELL_EXPORT DonnellPixel *Donnell_Pixel_CreateEasy(DonnellUInt8 red, DonnellUInt8 green, DonnellUInt8 blue, DonnellUInt8 alpha) {
     DonnellPixel *pixel;

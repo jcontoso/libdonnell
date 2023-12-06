@@ -11,24 +11,8 @@
 
 FT_Library freetype;
 FT_Error freetype_error;
-FT_Error lcd_error;
-
-void FreeType_Init(void) {
-    FT_Init_FreeType(&freetype);
-    lcd_error = 1;
-}
-
-void FreeType_Cleanup(void) {
-    FT_Done_FreeType(freetype);
-}
-
-FT_Library *FreeType_GetLibrary(void) {
-    return &freetype;
-}
-
-FT_Error FreeType_GetLCDError(void) {
-    return lcd_error;
-}
+FT_Int32 flags;
+FreeTypeCopyToBufferFunction buffer_copy;
 
 void FreeType_CopyToBufferLCD(DonnellImageBuffer *buffer, DonnellPixel *color, FT_Bitmap *bitmap, unsigned int a, unsigned int b) {
     FT_Bitmap *c_bitmap;
@@ -75,6 +59,38 @@ void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_B
     }
 }
 
+void FreeType_Init(void) {
+    FT_Init_FreeType(&freetype);
+    /*freetype_error = FT_Library_SetLcdFilter(freetype, FT_LCD_FILTER_DEFAULT);*/
+	freetype_error = 1;
+	
+    if (!freetype_error) {
+        flags = FT_LOAD_RENDER | FT_LOAD_TARGET_LCD;
+        buffer_copy = &FreeType_CopyToBufferLCD;
+    } else {
+        flags = FT_LOAD_RENDER;
+        buffer_copy = &FreeType_CopyToBuffer;
+    }
+    
+    freetype_error = 0;
+}
+
+void FreeType_Cleanup(void) {
+    FT_Done_FreeType(freetype);
+}
+
+FT_Library *FreeType_GetLibrary(void) {
+    return &freetype;
+}
+
+FT_Int32 FreeType_GetFlags(void) {
+    return flags;
+}
+
+FreeTypeCopyToBufferFunction *FreeType_GetBufferCopyFunction(void) {
+    return &buffer_copy;
+}
+
 /*
  * If buffer, color and size are all NULL, this function will simply return the advance amount for new lines.
  * If buffer and color are both NULL, this function will calculate the text extents.
@@ -83,7 +99,6 @@ void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_B
 
 int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellBool return_max_asc, DonnellFontOptions font_options) {
     FT_Face face;
-    FT_Int32 flags;
     FontConfig_Font *font_file;
     unsigned int i;
     int val;
@@ -93,13 +108,11 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
         size->w = 0;
     }
 
-    if (lcd_error) {
-        flags = FT_LOAD_RENDER;
-    } else {
-        flags = FT_LOAD_RENDER | FT_LOAD_TARGET_LCD;
-    }
-
     font_file = FontConfig_SelectFont(string, font_options);
+    if(!font_file) {
+		return 0;
+	}
+	
     FT_New_Face(freetype, font_file->font, 0, &face);
 
     FT_Set_Pixel_Sizes(face, pixel_size, pixel_size);
@@ -129,11 +142,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
                 continue;
             }
 
-            if (lcd_error) {
-                FreeType_CopyToBuffer(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left, csize.h + y - face->glyph->bitmap_top);
-            } else {
-                FreeType_CopyToBufferLCD(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left, csize.h + y - face->glyph->bitmap_top);
-            }
+            buffer_copy(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left, csize.h + y - face->glyph->bitmap_top);
 
             x += face->glyph->advance.x >> 6;
             y += face->glyph->advance.y >> 6;

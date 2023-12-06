@@ -53,7 +53,7 @@ void Donnell_Cleanup(void);
 
 DonnellPixel *Donnell_Pixel_Create();
 DonnellPixel *Donnell_Pixel_CreateEasy(DonnellUInt8 red, DonnellUInt8 green, DonnellUInt8 blue, DonnellUInt8 alpha);
-DonnellPixel *Donnell_Pixel_Blend(DonnellPixel *a, DonnellPixel* b);
+DonnellPixel *Donnell_Pixel_Blend(DonnellPixel *a, DonnellPixel *b);
 void Donnell_Pixel_Free(DonnellPixel *pixel);
 
 DonnellImageBuffer *Donnell_ImageBuffer_Create(unsigned int width, unsigned int height);
