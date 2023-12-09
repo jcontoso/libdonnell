@@ -13,6 +13,7 @@
 
 typedef struct {
     char *font;
+    int index;
     FcBool embolden;
 } FontConfig_Font;
 

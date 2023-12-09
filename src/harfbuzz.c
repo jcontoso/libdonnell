@@ -94,7 +94,7 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     }
 
     font_file = FontConfig_SelectFont(string, font_options);
-    FT_New_Face(hb_freetype, font_file->font, 0, &face);
+    FT_New_Face(hb_freetype, font_file->font, font_file->index, &face);
 
     FT_Set_Pixel_Sizes(face, pixel_size, pixel_size);
     FT_Select_Charmap(face, ft_encoding_unicode);

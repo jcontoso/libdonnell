@@ -86,10 +86,11 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
     unsigned int last_ndn_paragraph;
     unsigned int first_ndn_paragraph;
     unsigned int i;
-    unsigned int t;
     unsigned int line_height;
+    int t;
 
     longest_rtl_width = 0;
+    t = -1;
 
     paragraphs = TextUtils_Paragraphs_Create(utf8string);
     fribidi_paragraphs = FriBidiParagraphs_ConvertFromParagraphs(paragraphs);
@@ -135,6 +136,9 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
                 } else {
                     t = last_ndn_paragraph;
                 DN_RENDER:
+                    if (t < 0) {
+                        goto LTR_RENDER;
+                    }
                     if (fribidi_paragraphs->str[t]->direction == FRIBIDI_PAR_RTL) {
                         goto RTL_RENDER;
                     } else {

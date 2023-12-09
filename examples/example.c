@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <donnell.h>
 
-#define DEMO_STRING "This is the journey into sound\n阳光灿烂\nВиняткова технологія\n\nמימין לשמאל.\nحتى أطول من اليمين إلى اليسار\n"
+#define DEMO_STRING "😀😬😁😂😃😄😅😆\nThis is the journey into sound\n阳光灿烂\nВиняткова технологія\n\nמימין לשמאל.\nحتى أطول من اليمين إلى اليسار\n"
 
 int main() {	
 	DonnellImageBuffer* buffer;
@@ -17,12 +17,12 @@ int main() {
 
 	cpixel = Donnell_Pixel_CreateEasy(30, 56, 12, 255);
 
-	buffer = Donnell_ImageBuffer_Create(300, 300);
+	buffer = Donnell_ImageBuffer_Create(300*2, 300*2);
 	Donnell_ImageBuffer_Clear(buffer, cpixel);
 
-	Donnell_GraphicsPrimitives_DrawText(buffer, pixel, DEMO_STRING, 5, 5, 16, DONNELL_FONT_OPTIONS_SANS_SERIF);
-
-	downscaled = Donnell_ImageBuffer_Scale(buffer, 120, 120, DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR);
+	Donnell_GraphicsPrimitives_DrawText(buffer, pixel, DEMO_STRING, 0, 0, 16*2, DONNELL_FONT_OPTIONS_SANS_SERIF);
+	
+	downscaled = Donnell_ImageBuffer_Scale(buffer, 300, 300, DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR);
 	upscaled = Donnell_ImageBuffer_Scale(buffer, 640, 640, DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR);
 	
 	Donnell_ImageBuffer_DumpAsBitmap(buffer, "example.bmp");

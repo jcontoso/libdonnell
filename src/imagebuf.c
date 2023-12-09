@@ -79,7 +79,11 @@ DONNELL_EXPORT DonnellPixel *Donnell_ImageBuffer_GetPixel(DonnellImageBuffer *bu
     }
 
     if ((y >= buffer->height) || (x >= buffer->width)) {
-        return NULL;
+        return Donnell_Pixel_CreateEasy(0, 0, 0, 255);
+    }
+
+    if (!buffer->pixels[y][x]) {
+        return Donnell_Pixel_CreateEasy(0, 0, 0, 255);
     }
 
     return Misc_MemDup(buffer->pixels[y][x], sizeof(DonnellPixel));
@@ -198,10 +202,6 @@ DonnellImageBuffer *ImageBuffer_ScaleNN(DonnellImageBuffer *buffer, unsigned int
     unsigned int i;
     unsigned int j;
 
-    if ((width < 0) || (height < 0) || (!buffer)) {
-        return NULL;
-    }
-
     ret = Donnell_ImageBuffer_Create(width, height);
     scale_w = buffer->width / (double)width;
     scale_h = buffer->height / (double)height;
@@ -237,9 +237,90 @@ DonnellImageBuffer *ImageBuffer_ScaleNN(DonnellImageBuffer *buffer, unsigned int
     return ret;
 }
 
+float ImageBuffer_ScaleBL_LinearOp(float a, float b, float c) {
+    return a + (b - a) * c;
+}
+
+float ImageBuffer_ScaleBL_BiLinearOp(float a, float b, float c, float d, float x, float y) {
+    return ImageBuffer_ScaleBL_LinearOp(ImageBuffer_ScaleBL_LinearOp(a, b, x), ImageBuffer_ScaleBL_LinearOp(c, d, x), y);
+}
+
+DonnellImageBuffer *ImageBuffer_ScaleBL(DonnellImageBuffer *buffer, unsigned int width, unsigned int height) {
+    DonnellImageBuffer *ret;
+    float scale_h;
+    float scale_w;
+    unsigned int i;
+    unsigned int j;
+
+    ret = Donnell_ImageBuffer_Create(width, height);
+    scale_w = buffer->width / (float)width;
+    scale_h = buffer->height / (float)height;
+
+    for (i = 0; i < height; ++i) {
+        for (j = 0; j < width; ++j) {
+            float gx;
+            float gy;
+            int ix;
+            int iy;
+            DonnellPixel *a;
+            DonnellPixel *b;
+            DonnellPixel *c;
+            DonnellPixel *d;
+            DonnellPixel *e;
+
+            gx = j / (float)(width) * (buffer->width - 1);
+            gy = i / (float)(height) * (buffer->height - 1);
+
+            ix = (int)gx;
+            iy = (int)gy;
+
+            e = Donnell_Pixel_Create();
+            a = Donnell_ImageBuffer_GetPixel(buffer, ix, iy);
+            b = Donnell_ImageBuffer_GetPixel(buffer, ix + 1, iy);
+            c = Donnell_ImageBuffer_GetPixel(buffer, ix, iy + 1);
+            d = Donnell_ImageBuffer_GetPixel(buffer, ix + 1, iy + 1);
+
+            e->red = (DonnellUInt8)ImageBuffer_ScaleBL_BiLinearOp(a->red, b->red, c->red, d->red, (gx - ix), (gy - iy));
+            e->green = (DonnellUInt8)ImageBuffer_ScaleBL_BiLinearOp(a->green, b->green, c->green, d->green, (gx - ix), (gy - iy));
+            e->blue = (DonnellUInt8)ImageBuffer_ScaleBL_BiLinearOp(a->blue, b->blue, c->blue, d->blue, (gx - ix), (gy - iy));
+            e->alpha = (DonnellUInt8)ImageBuffer_ScaleBL_BiLinearOp(a->alpha, b->alpha, c->alpha, d->alpha, (gx - ix), (gy - iy));
+
+            Donnell_ImageBuffer_SetPixel(ret, j, i, e);
+
+            Donnell_Pixel_Free(e);
+        }
+    }
+
+    return ret;
+}
+
 DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Scale(DonnellImageBuffer *buffer, unsigned int width, unsigned int height, DonnellScalingAlgorithm algo) {
+    if ((width < 0) || (height < 0) || (!buffer)) {
+        return NULL;
+    }
+
     switch (algo) {
+    case DONNELL_SCALING_ALGORITHM_BILINEAR:
+        return ImageBuffer_ScaleBL(buffer, width, height);
+        break;
     default:
         return ImageBuffer_ScaleNN(buffer, width, height);
+    }
+}
+
+DONNELL_EXPORT void Donnell_ImageBuffer_BlendBufferContents(DonnellImageBuffer *buffer, DonnellImageBuffer *cbuffer, DonnellRect *srect, DonnellRect *drect) {
+    unsigned int i;
+    unsigned int j;
+
+    for (i = 0; i < drect->h; ++i) {
+        for (j = 0; j < drect->w; ++j) {
+            DonnellPixel *pixel;
+
+            pixel = Donnell_ImageBuffer_GetPixel(cbuffer, j, i);
+
+            Donnell_ImageBuffer_BlendPixel(buffer, drect->x + j, drect->y + i, pixel);
+
+            Donnell_Pixel_Free(pixel);
+        }
     }
 }

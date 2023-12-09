@@ -46,7 +46,10 @@ typedef enum
 } DonnellFontOptions;
 
 typedef enum
-{ DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR, } DonnellScalingAlgorithm;
+{
+    DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR,
+    DONNELL_SCALING_ALGORITHM_BILINEAR,
+} DonnellScalingAlgorithm;
 
 void Donnell_Init(void);
 void Donnell_Cleanup(void);
@@ -63,6 +66,7 @@ void Donnell_ImageBuffer_BlendPixel(DonnellImageBuffer *buffer, unsigned int x, 
 void Donnell_ImageBuffer_Clear(DonnellImageBuffer *buffer, DonnellPixel *pixel);
 void Donnell_ImageBuffer_DumpAsBitmap(DonnellImageBuffer *buffer, char *name);
 DonnellImageBuffer *Donnell_ImageBuffer_Scale(DonnellImageBuffer *buffer, unsigned int width, unsigned int height, DonnellScalingAlgorithm algo);
+void Donnell_ImageBuffer_BlendBufferContents(DonnellImageBuffer *buffer, DonnellImageBuffer *cbuffer, DonnellRect *srect, DonnellRect *drect);
 void Donnell_ImageBuffer_Free(DonnellImageBuffer *buffer);
 
 void Donnell_GraphicsPrimitives_DrawTextLine(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFontOptions font_options);

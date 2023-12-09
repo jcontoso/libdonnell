@@ -48,6 +48,8 @@ FontConfig_Font *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions
         return NULL;
     }
 
+    ret->index = 0;
+
     if (font_options & DONNELL_FONT_OPTIONS_SERIF) {
         font_name = "serif";
     } else if (font_options & DONNELL_FONT_OPTIONS_MONOSPACE) {
@@ -80,9 +82,11 @@ FontConfig_Font *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions
 
     FcPatternGetString(font, FC_FILE, 0, &file);
     FcPatternGetBool(font, FC_EMBOLDEN, 0, &ret->embolden);
+    FcPatternGetInteger(font, FC_INDEX, 0, &ret->index);
 
     ret->font = strdup((char *)file);
-
+	puts(ret->font);
+	
     FcPatternDestroy(font);
     FcPatternDestroy(pattern);
     if (char_set) {
