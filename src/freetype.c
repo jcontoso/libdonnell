@@ -13,9 +13,8 @@ FT_Library freetype;
 FT_Error freetype_error;
 FT_Int32 flags;
 
-DonnellImageBuffer *FreeType_ConvertToBufferFromBitmap(FT_Bitmap *bitmap, DonnellBool non_ideal_size, unsigned int wanted_size) {
+DonnellImageBuffer *FreeType_ConvertToBufferFromRGBABitmap(FT_Bitmap *bitmap, DonnellBool non_ideal_size, unsigned int wanted_size) {
     DonnellImageBuffer *buffer;
-    DonnellImageBuffer *sbuffer;
     int x;
     int y;
 
@@ -38,6 +37,42 @@ DonnellImageBuffer *FreeType_ConvertToBufferFromBitmap(FT_Bitmap *bitmap, Donnel
     }
 
     if (non_ideal_size) {
+		DonnellImageBuffer *sbuffer;
+		
+        sbuffer = Donnell_ImageBuffer_Scale(buffer, wanted_size, wanted_size, DONNELL_SCALING_ALGORITHM_BILINEAR);
+        
+        Donnell_ImageBuffer_Free(buffer);
+        return sbuffer;
+    } else {
+        return buffer;
+    }
+}
+
+DonnellImageBuffer *FreeType_ConvertToBufferFromGray8Bitmap(FT_Bitmap *bitmap, DonnellPixel* color, DonnellBool non_ideal_size, unsigned int wanted_size) {
+    DonnellImageBuffer *buffer;
+    int x;
+    int y;
+
+    buffer = Donnell_ImageBuffer_Create(bitmap->width, bitmap->rows);
+
+    for (y = 0; y < bitmap->rows; y++) {
+        for (x = 0; x < bitmap->width; x++) {
+            DonnellPixel *pixel;
+
+            pixel = Donnell_Pixel_Create();
+			pixel->alpha = bitmap->buffer[y * bitmap->pitch + x];
+			pixel->red = color->red;
+			pixel->green = color->green;
+			pixel->blue = color->blue;		
+						
+            Donnell_ImageBuffer_SetPixel(buffer, x, y, pixel);
+
+            Donnell_Pixel_Free(pixel);
+        }
+    }
+
+    if (non_ideal_size) {
+		DonnellImageBuffer *sbuffer;
         sbuffer = Donnell_ImageBuffer_Scale(buffer, wanted_size, wanted_size, DONNELL_SCALING_ALGORITHM_BILINEAR);
         Donnell_ImageBuffer_Free(buffer);
         return sbuffer;
@@ -47,31 +82,61 @@ DonnellImageBuffer *FreeType_ConvertToBufferFromBitmap(FT_Bitmap *bitmap, Donnel
 }
 
 void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_Bitmap *bitmap, unsigned int a, unsigned int b, DonnellBool non_ideal_size, unsigned int wanted_size) {
+    DonnellImageBuffer *cbuffer;
+    DonnellPixel *pixel;
+    DonnellRect dst;
     int x;
     int y;
 
-    if (bitmap->pixel_mode == FT_PIXEL_MODE_BGRA) {
-        DonnellImageBuffer *cbuffer;
-        DonnellRect dst;
+	switch(bitmap->pixel_mode) {
+		case FT_PIXEL_MODE_BGRA:
+			cbuffer = FreeType_ConvertToBufferFromRGBABitmap(bitmap, non_ideal_size, wanted_size);
+	
+			dst.w = cbuffer->width;
+			dst.h = cbuffer->height;
+			dst.x = a;
+			dst.y = b;
 
-        cbuffer = FreeType_ConvertToBufferFromBitmap(bitmap, non_ideal_size, wanted_size);
+			Donnell_ImageBuffer_BlendBufferContents(buffer, cbuffer, NULL, &dst);
+			Donnell_ImageBuffer_Free(cbuffer);
+			break;
+		case FT_PIXEL_MODE_GRAY:
+			if (!non_ideal_size) {
+			    for (y = 0; y < bitmap->rows; y++) {
+					for (x = 0; x < bitmap->width; x++) {
+					    pixel = Donnell_Pixel_Create();
+						pixel->alpha = bitmap->buffer[y * bitmap->pitch + x];
+						pixel->red = color->red;
+						pixel->green = color->green;
+						pixel->blue = color->blue;		
+			            Donnell_ImageBuffer_BlendPixel(buffer, x + a, y + b, pixel);
+						Donnell_Pixel_Free(pixel);				
+					}
+				}
+			} else {
+				cbuffer = FreeType_ConvertToBufferFromGray8Bitmap(bitmap, color, non_ideal_size, wanted_size);
+		
+				dst.w = cbuffer->width;
+				dst.h = cbuffer->height;
+				dst.x = a;
+				dst.y = b;
 
-        dst.w = cbuffer->width;
-        dst.h = cbuffer->height;
-        dst.x = a;
-        dst.y = b;
+				Donnell_ImageBuffer_BlendBufferContents(buffer, cbuffer, NULL, &dst);
+				Donnell_ImageBuffer_Free(cbuffer);				
+			}
+			break;
 
-        Donnell_ImageBuffer_BlendBufferContents(buffer, cbuffer, NULL, &dst);
-        Donnell_ImageBuffer_Free(cbuffer);
-        return;
-    }
+	}
 
+	/*
     for (y = 0; y < bitmap->rows; y++) {
         for (x = 0; x < bitmap->width; x++) {
             DonnellPixel *pixel;
-
+			char* cbuffer;
+			
             pixel = Donnell_Pixel_Create();
-
+			cbuffer = bitmap->buffer;
+			
             switch (bitmap->pixel_mode) {
             case FT_PIXEL_MODE_LCD:
                 pixel->alpha = 255;
@@ -79,6 +144,18 @@ void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_B
                 pixel->green = bitmap->buffer[y * bitmap->pitch + x * 3 + 1];
                 pixel->blue = bitmap->buffer[y * bitmap->pitch + x * 3 + 2];
                 break;
+            case FT_PIXEL_MODE_MONO:
+				cbuffer = &bitmap->buffer[y*bitmap->pitch];
+				if (((cbuffer[x >> 3] & (1 << (x & 7))) != 0) == 1) {
+					pixel->alpha = 255;
+				}	else {
+					pixel->alpha = 0;
+			
+				}
+                pixel->red = color->red;
+                pixel->green = color->green;
+                pixel->blue = color->blue;
+				break;
             default:
                 pixel->alpha = bitmap->buffer[y * bitmap->pitch + x];
                 pixel->red = color->red;
@@ -86,11 +163,9 @@ void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_B
                 pixel->blue = color->blue;
             }
 
-            Donnell_ImageBuffer_BlendPixel(buffer, x + a, y + b, pixel);
 
-            free(pixel);
         }
-    }
+    }*/
 }
 
 void FreeType_Init(void) {

@@ -1,5 +1,4 @@
 #include <fribidi.h>
-
 #include "textutils.h"
 
 /* Internal header for FriBidi support */

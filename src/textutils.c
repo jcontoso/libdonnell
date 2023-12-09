@@ -1,9 +1,11 @@
 #include <fribidi.h>
+#include <unictype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "textutils.h"
+#include "bidi.h"
 
 /* Various internal text utility functions */
 
@@ -75,3 +77,16 @@ void TextUtils_Paragraphs_Free(Paragraphs *paragraphs) {
     free(paragraphs->str);
     free(paragraphs);
 }
+
+Runs *TextUtils_Runs_Create(FriBidiString *str) {
+	/*uc_script_t *script;
+	int i;
+	
+    FriBidiString_Handle(str);
+
+    for (i = 0; i < str->len; i++) {
+		script = uc_script(str->str[i]);
+		puts(script->name);	
+    }*/
+}
+

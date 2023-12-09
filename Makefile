@@ -3,7 +3,7 @@ CC ?= cc
 PKGCONFIG = $(shell which pkg-config)
 DEPS = fribidi fontconfig freetype2
 CFLAGS = -g $(shell $(PKGCONFIG) --cflags $(DEPS)) -fvisibility=hidden -fPIC -shared -Iinclude
-LIBS = $(shell $(PKGCONFIG) --libs $(DEPS)) -ldl
+LIBS = $(shell $(PKGCONFIG) --libs $(DEPS)) -ldl -lunistring
 
 # FILE AND PROJECT NAMES
 NAME = donnell
