@@ -28,7 +28,7 @@ char *FriBidiString_ConvertToUTF8(FriBidiString *string) {
 FriBidiString *FriBidiString_Create(unsigned int size) {
     FriBidiString *result;
 
-    if (size >= 0) {
+    if (size <= 0) {
         return NULL;
     }
 

@@ -7,7 +7,20 @@
 
 DONNELL_EXPORT void Donnell_Init(void) {
     TextRenderer_Init();
-    TextUtils_Runs_Create(FriBidiString_ConvertFromUTF8("😀😬😁😂😃😄😅😆\nThis is the journey into sound\n阳光灿烂\nВиняткова технологія\n\nמימין לשמאל.\nحتى أطول من اليمين إلى اليسار\n"));
+    return;
+    
+    FriBidiString* str;
+    Runs* runs;
+   
+    str = FriBidiString_ConvertFromUTF8("😀\n");
+    
+	FriBidiString_Handle(str);
+
+    runs = TextUtils_Runs_Create(str);
+    
+    for (int i = 0; i < runs->count; i++) {
+		puts(FriBidiString_ConvertToUTF8(runs->str[i]));
+	}    
 }
 
 DONNELL_EXPORT void Donnell_Cleanup(void) {

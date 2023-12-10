@@ -78,15 +78,74 @@ void TextUtils_Paragraphs_Free(Paragraphs *paragraphs) {
     free(paragraphs);
 }
 
-Runs *TextUtils_Runs_Create(FriBidiString *str) {
-	/*uc_script_t *script;
-	int i;
-	
-    FriBidiString_Handle(str);
+unsigned int Runs_GetCount(FriBidiString *str) {
+	const uc_script_t *iscript;	
+	const uc_script_t *script;	
+	unsigned int i;
+	unsigned int j;
+	unsigned int c;
+    
+    c = 0;
+    
+    for (i = 0; i < str->len; i += j + 1) {
+		j = 0;
+		iscript = uc_script(str->str[i + j]);
+		script = uc_script(str->str[i + j]);
+		
+		while (!strcmp(iscript->name, script->name)) {	
+			j++;
+			script = uc_script(str->str[i + j]);
+		}
+		c++;
+	}
+			   
+	return c;
+}
 
-    for (i = 0; i < str->len; i++) {
-		script = uc_script(str->str[i]);
-		puts(script->name);	
-    }*/
+Runs *TextUtils_Runs_Create(FriBidiString *str) {
+	Runs* runs;
+	const uc_script_t *iscript;	
+	const uc_script_t *script;	
+	unsigned int i;
+	unsigned int j;
+ 	unsigned int c;
+   
+    c = 0;
+    	
+    runs = malloc(sizeof(Runs));
+    if (!runs) {
+        return NULL;
+    }
+ 
+ 	runs->count = Runs_GetCount(str);
+ 	
+    runs->str = calloc(runs->count, sizeof(FriBidiString*));
+    if (!runs->str) {
+		free(runs);
+        return NULL;
+    }
+    	
+    for (i = 0; i < str->len; i += j + 1) {
+		j = 0;
+	
+		runs->str[c] = FriBidiString_Create(j + 1);
+		
+		iscript = uc_script(str->str[i + j]);
+		script = uc_script(str->str[i + j]);
+		runs->str[c]->str[j] = str->str[i + j];
+		
+		while (!strcmp(iscript->name, script->name)) {	
+			j++;
+			script = uc_script(str->str[i + j]);
+			runs->str[c]->str = realloc(runs->str[c]->str, j + 1);
+			runs->str[c]->str[j] = str->str[i + j];
+			printf("%d %d\n", j, str->str[i + j]);
+
+		}
+	
+		c++;
+	}	
+	
+	return runs;
 }
 
