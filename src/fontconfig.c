@@ -85,7 +85,6 @@ FontConfig_Font *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions
     FcPatternGetInteger(font, FC_INDEX, 0, &ret->index);
 
     ret->font = strdup((char *)file);
-    ret->font = strdup("color.ttf");
 
     FcPatternDestroy(font);
     FcPatternDestroy(pattern);
