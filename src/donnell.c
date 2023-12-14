@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "donnell.h"
 
 #include "symvis.h"

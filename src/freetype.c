@@ -185,10 +185,6 @@ FT_Int32 FreeType_GetFlags(void) {
     return flags;
 }
 
-FreeTypeCopyToBufferFunction *FreeType_GetBufferCopyFunction(void) {
-    return NULL;
-}
-
 /*
  * If buffer, color and size are all NULL, this function will simply return the advance amount for new lines.
  * If buffer and color are both NULL, this function will calculate the text extents.
