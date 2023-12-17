@@ -1,5 +1,5 @@
-#include <fribidi.h>
 #include "donnell.h"
+#include <fribidi.h>
 
 /* Internal header for various text utility functions */
 

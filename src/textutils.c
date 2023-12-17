@@ -1,8 +1,8 @@
 #include <fribidi.h>
-#include <unictype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unictype.h>
 
 #include "textutils.h"
 
@@ -77,9 +77,8 @@ void TextUtils_Paragraphs_Free(Paragraphs *paragraphs) {
     free(paragraphs);
 }
 
-
 Runs *TextUtils_Runs_Create(FriBidiString *str) {
-    Runs* runs;
+    Runs *runs;
     const uc_script_t *iscript;
     const uc_script_t *script;
     unsigned int i;
@@ -105,14 +104,14 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
             i++;
         }
 
-        if(!i) {
-            runs->str = calloc(c+1, sizeof(FriBidiString*));
+        if (!i) {
+            runs->str = calloc(c + 1, sizeof(FriBidiString *));
             if (!runs->str) {
                 free(runs);
                 return NULL;
             }
         } else {
-            runs->str = realloc(runs->str, (c+1)*sizeof(FriBidiString*));
+            runs->str = realloc(runs->str, (c + 1) * sizeof(FriBidiString *));
             if (!runs->str) {
                 free(runs);
                 return NULL;
@@ -122,15 +121,15 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
         script = uc_script(str->str[i + j]);
         iscript = uc_script(str->str[i + j]);
 
-        if(!script) {
+        if (!script) {
             puts("something has gone horribly wrong 1");
         }
 
-        if(!iscript) {
+        if (!iscript) {
             puts("something has gone horribly wrong 2");
         }
 
-        while(!strcmp(script->name, iscript->name)) {
+        while (!strcmp(script->name, iscript->name)) {
             jc = DONNELL_FALSE;
             if (TextUtils_IsNewLine(str->str[i + j])) {
                 script = uc_script(str->str[i + j - 1]);
@@ -141,7 +140,7 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
 
             script = uc_script(str->str[i + j]);
 
-            if(!script) {
+            if (!script) {
                 script = uc_script(str->str[i + j - 1]);
             }
 
@@ -153,7 +152,7 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
                     return NULL;
                 }
             } else {
-                runs->str[c]->str = realloc(runs->str[c]->str, (j+1)*sizeof(FriBidiChar));
+                runs->str[c]->str = realloc(runs->str[c]->str, (j + 1) * sizeof(FriBidiChar));
                 if (!runs->str[c]) {
                     free(runs->str);
                     free(runs);
@@ -162,7 +161,7 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
             }
 
             if (jc) {
-                runs->str[c]->str[j-1] = str->str[i + j - 1];
+                runs->str[c]->str[j - 1] = str->str[i + j - 1];
                 runs->str[c]->len = j;
             } else {
                 runs->str[c]->str[j] = str->str[i + j];
@@ -179,19 +178,17 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
 }
 
 void TextUtils_Runs_Free(Runs *runs) {
-	unsigned int i;
-	
-	if (!runs) {
-		return;
-	}
-	
+    unsigned int i;
+
+    if (!runs) {
+        return;
+    }
+
     for (i = 0; i < runs->count; i++) {
-		FriBidiString_Free(runs->str[i]);
-	}
-	if (runs->count) {
-		free(runs->str);
-	}
-	free(runs);
+        FriBidiString_Free(runs->str[i]);
+    }
+    if (runs->count) {
+        free(runs->str);
+    }
+    free(runs);
 }
-
-
