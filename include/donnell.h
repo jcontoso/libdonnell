@@ -5,8 +5,7 @@
 
 typedef unsigned char DonnellUInt8;
 typedef unsigned short DonnellUInt16;
-typedef enum
-{
+typedef enum {
     DONNELL_FALSE,
     DONNELL_TRUE
 } DonnellBool;
@@ -36,8 +35,7 @@ typedef struct {
     unsigned int height;
 } DonnellImageBuffer;
 
-typedef enum
-{
+typedef enum {
     DONNELL_FONT_OPTIONS_SERIF = 1 << 0,
     DONNELL_FONT_OPTIONS_SANS_SERIF = 1 << 1,
     DONNELL_FONT_OPTIONS_MONOSPACE = 1 << 2,
@@ -45,8 +43,7 @@ typedef enum
     DONNELL_FONT_OPTIONS_ITALIC = 1 << 4
 } DonnellFontOptions;
 
-typedef enum
-{
+typedef enum {
     DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR,
     DONNELL_SCALING_ALGORITHM_BILINEAR,
 } DonnellScalingAlgorithm;

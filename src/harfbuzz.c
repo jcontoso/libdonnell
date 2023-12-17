@@ -31,7 +31,6 @@ void HarfBuzz_Init(void) {
 
     harfbuzz->library = dlopen("libharfbuzz.so.0", RTLD_LAZY);
     if (!harfbuzz->library) {
-		puts("unable to load the library");
         free(harfbuzz);
         harfbuzz = NULL;
         return;
@@ -54,7 +53,6 @@ void HarfBuzz_Init(void) {
 
     error = dlerror();
     if (error) {
-		puts(error);
         free(harfbuzz);
         harfbuzz = NULL;
         return;
@@ -127,7 +125,7 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
                 continue;
             }
 
-            FreeType_CopyToBuffer(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left + (harfbuzz_pos[i].x_offset / 64), csize.h + y - face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64), DONNELL_FALSE, 0);
+            // FreeType_CopyToBuffer(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left + (harfbuzz_pos[i].x_offset / 64), csize.h + y - face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64), DONNELL_FALSE, 0);
 
             x += harfbuzz_pos[i].x_advance / 64;
             y += harfbuzz_pos[i].y_advance / 64;

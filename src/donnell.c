@@ -2,9 +2,9 @@
 
 #include "donnell.h"
 
+#include "bidi.h"
 #include "symvis.h"
 #include "textrenderer.h"
-#include "bidi.h"
 #include "textutils.h"
 
 DONNELL_EXPORT void Donnell_Init(void) {

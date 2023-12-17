@@ -1,10 +1,6 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#ifdef USE_HARFBUZZ_HEADERS
-#include <hb.h>
-#endif
-
 #include "bidi.h"
 #include "donnell.h"
 #include "fontconfig.h"
@@ -13,13 +9,6 @@
 #ifndef DONNELL_HARFBUZZ
 #define DONNELL_HARFBUZZ
 
-#ifdef USE_HARFBUZZ_HEADERS
-typedef hb_buffer_t *HarfBuzzBuffer;
-typedef hb_font_t *HarfBuzzFont;
-
-typedef hb_glyph_info_t HarfBuzzGlyphInfo;
-typedef hb_glyph_position_t HarfBuzzGlyphPos;
-#else
 typedef void *HarfBuzzBuffer;
 typedef void *HarfBuzzFont;
 
@@ -47,7 +36,6 @@ typedef struct {
     HarfBuzzVarInt var1;
     HarfBuzzVarInt var2;
 } HarfBuzzGlyphInfo;
-#endif
 
 typedef HarfBuzzBuffer (*HarfBuzzBufferCreate)(void);
 typedef void (*HarfBuzzBufferAdd)(HarfBuzzBuffer, const FT_UInt32 *, int, unsigned int, int);

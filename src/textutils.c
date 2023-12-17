@@ -1,11 +1,9 @@
 #include <fribidi.h>
-#include <unictype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "textutils.h"
-#include "bidi.h"
 
 /* Various internal text utility functions */
 
@@ -78,127 +76,104 @@ void TextUtils_Paragraphs_Free(Paragraphs *paragraphs) {
     free(paragraphs);
 }
 
-unsigned int Runs_GetCount(FriBidiString *str) {
-	const uc_script_t *iscript;	
-	const uc_script_t *script;	
-	unsigned int i;
-	unsigned int j;
-	unsigned int c;
-    
-    c = 0;
-    
-    for (i = 0; i < str->len; i += j + 1) {
-		j = 0;
-		iscript = uc_script(str->str[i + j]);
-		script = uc_script(str->str[i + j]);
-		
-		while (!strcmp(iscript->name, script->name)) {	
-			j++;
-			script = uc_script(str->str[i + j]);
-		}
-		c++;
-	}
-			   
-	return c;
-}
-
+/*
 Runs *TextUtils_Runs_Create(FriBidiString *str) {
-	Runs* runs;
-	const uc_script_t *iscript;	
-	const uc_script_t *script;	
-	unsigned int i;
-	unsigned int j;
- 	unsigned int c;
-  	DonnellBool jc;
- 
-	if (!str) {
-		return NULL;
-	}
-	
-	c = 0;
-	
+    Runs* runs;
+    const uc_script_t *iscript;
+    const uc_script_t *script;
+    unsigned int i;
+    unsigned int j;
+    unsigned int c;
+    DonnellBool jc;
+
+    if (!str) {
+        return NULL;
+    }
+
+    c = 0;
+
     runs = malloc(sizeof(Runs));
     if (!runs) {
         return NULL;
     }
-     
+
     for (i = 0; i < str->len; i += j - 1) {
-		j = 0;
-		
-		if (TextUtils_IsNewLine(str->str[i + j])) {
-			i++;
-		}
+        j = 0;
 
-		if(!i) {
-			runs->str = calloc(c+1, sizeof(FriBidiString*));
-			if (!runs->str) {
-				free(runs);
-				return NULL;
-			}
-		} else {
-			runs->str = realloc(runs->str, (c+1)*sizeof(FriBidiString*));
-			if (!runs->str) {
-				free(runs);
-				return NULL;
-			}			
-		}
+        if (TextUtils_IsNewLine(str->str[i + j])) {
+            i++;
+        }
 
-		script = uc_script(str->str[i + j]);
-		iscript = uc_script(str->str[i + j]);
-		
-		if(!script) {
-			puts("something has gone horribly wrong 1");
-		}
-	
-		if(!iscript) {
-			puts("something has gone horribly wrong 2");
-		}
-			
-		while(!strcmp(script->name, iscript->name)) {
-			jc = DONNELL_FALSE;
-			if (TextUtils_IsNewLine(str->str[i + j])) {
-				script = uc_script(str->str[i + j - 1]);
-				j++;
-				jc = DONNELL_TRUE;
-				continue;
-			}
-			
-			script = uc_script(str->str[i + j]);
-	
-			if(!script) {
-				script = uc_script(str->str[i + j - 1]);
-			}
-						
-			if ((jc) || (!j)) {
-				runs->str[c] = FriBidiString_Create(1);
-				if (!runs->str[c]) {
-					free(runs->str);
-					free(runs);
-					return NULL;
-				}				
-			} else {
-				runs->str[c]->str = realloc(runs->str[c]->str, (j+1)*sizeof(FriBidiChar));
-				if (!runs->str[c]) {
-					free(runs->str);
-					free(runs);
-					return NULL;
-				}					
-			}
-			
-			if (jc) {
-				runs->str[c]->str[j-1] = str->str[i + j - 1];
-				runs->str[c]->len = j;
-			} else {
-				runs->str[c]->str[j] = str->str[i + j];	
-				runs->str[c]->len = j;
-			}
-			
-			j++;
-		}
-		c++;
-	}
-	   
-	runs->count = c;
-	return runs;
+        if(!i) {
+            runs->str = calloc(c+1, sizeof(FriBidiString*));
+            if (!runs->str) {
+                free(runs);
+                return NULL;
+            }
+        } else {
+            runs->str = realloc(runs->str, (c+1)*sizeof(FriBidiString*));
+            if (!runs->str) {
+                free(runs);
+                return NULL;
+            }
+        }
+
+        script = uc_script(str->str[i + j]);
+        iscript = uc_script(str->str[i + j]);
+
+        if(!script) {
+            puts("something has gone horribly wrong 1");
+        }
+
+        if(!iscript) {
+            puts("something has gone horribly wrong 2");
+        }
+
+        while(!strcmp(script->name, iscript->name)) {
+            jc = DONNELL_FALSE;
+            if (TextUtils_IsNewLine(str->str[i + j])) {
+                script = uc_script(str->str[i + j - 1]);
+                j++;
+                jc = DONNELL_TRUE;
+                continue;
+            }
+
+            script = uc_script(str->str[i + j]);
+
+            if(!script) {
+                script = uc_script(str->str[i + j - 1]);
+            }
+
+            if ((jc) || (!j)) {
+                runs->str[c] = FriBidiString_Create(1);
+                if (!runs->str[c]) {
+                    free(runs->str);
+                    free(runs);
+                    return NULL;
+                }
+            } else {
+                runs->str[c]->str = realloc(runs->str[c]->str, (j+1)*sizeof(FriBidiChar));
+                if (!runs->str[c]) {
+                    free(runs->str);
+                    free(runs);
+                    return NULL;
+                }
+            }
+
+            if (jc) {
+                runs->str[c]->str[j-1] = str->str[i + j - 1];
+                runs->str[c]->len = j;
+            } else {
+                runs->str[c]->str[j] = str->str[i + j];
+                runs->str[c]->len = j;
+            }
+
+            j++;
+        }
+        c++;
+    }
+
+    runs->count = c;
+    return runs;
 }
-
+*/

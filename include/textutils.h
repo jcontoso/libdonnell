@@ -16,6 +16,7 @@ DonnellBool TextUtils_IsNewLine(FriBidiChar chr);
 Paragraphs *TextUtils_Paragraphs_Create(char *string);
 void TextUtils_Paragraphs_Free(Paragraphs *paragraphs);
 
+/*
 #include "bidi.h"
 
 typedef struct {
@@ -24,5 +25,6 @@ typedef struct {
 } Runs;
 
 Runs *TextUtils_Runs_Create(FriBidiString *str);
+*/
 
 #endif
