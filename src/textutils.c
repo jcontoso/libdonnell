@@ -1,4 +1,5 @@
 #include <fribidi.h>
+#include <unictype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -76,7 +77,7 @@ void TextUtils_Paragraphs_Free(Paragraphs *paragraphs) {
     free(paragraphs);
 }
 
-/*
+
 Runs *TextUtils_Runs_Create(FriBidiString *str) {
     Runs* runs;
     const uc_script_t *iscript;
@@ -176,4 +177,21 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
     runs->count = c;
     return runs;
 }
-*/
+
+void TextUtils_Runs_Free(Runs *runs) {
+	unsigned int i;
+	
+	if (!runs) {
+		return;
+	}
+	
+    for (i = 0; i < runs->count; i++) {
+		FriBidiString_Free(runs->str[i]);
+	}
+	if (runs->count) {
+		free(runs->str);
+	}
+	free(runs);
+}
+
+

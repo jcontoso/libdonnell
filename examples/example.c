@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <donnell.h>
 
-#define DEMO_STRING "😀😬😁😂😃😄😅😆\nThis is the journey into sound\n阳光灿烂\nВиняткова технологія\n\nמימין לשמאל\nحتى أطول من اليمين إلى اليسار\n"
+#define DEMO_STRING "😀😬😁\nLatin\n阳光灿烂\nВиняткова\n\nמימין לשמאל\nحتى أطول من اليمين إلى اليسار\n"
 
 int main() {	
 	DonnellImageBuffer* buffer;
