@@ -263,7 +263,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     FT_Select_Charmap(face, ft_encoding_unicode);
 
     if (!string) {
-        val = face->size->metrics.height / 64;
+        val = face->size->metrics.height / 64 * h_ratio;
         FT_Done_Face(face);
         return val;
     }
@@ -287,15 +287,20 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
                 continue;
             }
 
-            FreeType_CopyToBuffer(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left, csize.h + y - face->glyph->bitmap_top, non_ideal_size, pixel_size, h_ratio);
+			if (font_file->embolden) {
+				FT_Bitmap emboldened;
+				
+				FT_Bitmap_New(&emboldened);
+				FT_Bitmap_Copy(freetype, &face->glyph->bitmap, &emboldened);
+				FT_Bitmap_Embolden(freetype, &emboldened,  1 << 6,  1 << 6);
+				FreeType_CopyToBuffer(buffer, color, &emboldened, x + face->glyph->bitmap_left, csize.h + y - face->glyph->bitmap_top, non_ideal_size, pixel_size, h_ratio);	
+				FT_Bitmap_Done(freetype, &emboldened);
+			} else {
+				FreeType_CopyToBuffer(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left, csize.h + y - face->glyph->bitmap_top, non_ideal_size, pixel_size, h_ratio);	
+			}
 
-            if (non_ideal_size) {
-                x += (int)(face->glyph->advance.x * w_ratio) >> 6;
-                y += (int)(face->glyph->advance.y * h_ratio) >> 6;
-            } else {
-                x += face->glyph->advance.x >> 6;
-                y += face->glyph->advance.y >> 6;
-            }
+			x += (int)(face->glyph->advance.x * w_ratio) >> 6;
+            y += (int)(face->glyph->advance.y * h_ratio) >> 6;
         }
     } else {
         unsigned int max_ascent;
@@ -316,10 +321,10 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
             }
 
             if (i == 0) {
-                size->w += (int)(face->glyph->advance.x * w_ratio) >> 6;
+                size->w += (face->glyph->advance.x >> 6)*w_ratio;
             } else {
                 FT_Get_Kerning(face, FontConfig_CharIndex(face, string->str[i - 1]), glyph_index, FT_KERNING_DEFAULT, &kerning);
-                size->w += ((int)(face->glyph->advance.x * w_ratio) - (int)(kerning.x * w_ratio)) >> 6;
+                size->w += ((face->glyph->advance.x - kerning.x) >> 6)*w_ratio;
             }
 
             if (((int)(face->glyph->metrics.height * h_ratio) >> 6) - (int)(face->glyph->bitmap_top * h_ratio) > max_descent) {

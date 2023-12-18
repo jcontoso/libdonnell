@@ -77,6 +77,7 @@ void HarfBuzz_Cleanup(void) {
 
 int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellBool return_max_asc, DonnellFontOptions font_options) {
     FT_Face face;
+    FT_Int32 cflags;
     FontConfig_Font *font_file;
     HarfBuzzBuffer harfbuzz_buffer;
     HarfBuzzFont harfbuzz_font;
@@ -85,7 +86,15 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     unsigned int glyph_count;
     unsigned int i;
     int val;
+    unsigned int best;
+    double w_ratio;
+    double h_ratio;
+    DonnellBool non_ideal_size;
 
+    non_ideal_size = DONNELL_FALSE;
+    w_ratio = 1;
+    h_ratio = 1;
+    
     if (size) {
         size->h = 0;
         size->w = 0;
@@ -94,11 +103,47 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     font_file = FontConfig_SelectFont(string, font_options);
     FT_New_Face(hb_freetype, font_file->font, font_file->index, &face);
 
-    FT_Set_Pixel_Sizes(face, pixel_size, pixel_size);
+    cflags = hb_flags;
+    if ((size) && (!FT_HAS_COLOR(face))) {
+        cflags &= ~FT_LOAD_RENDER;
+        cflags |= FT_LOAD_NO_BITMAP;
+    }
+
+    if (FT_HAS_COLOR(face)) {
+        cflags |= FT_LOAD_COLOR;
+    }
+    
+    hb_freetype_error = FT_Set_Pixel_Sizes(face, 0, pixel_size);
+    if (hb_freetype_error) {
+        unsigned int diff;
+
+        best = 0;
+        diff = abs(pixel_size - face->available_sizes[0].width);
+
+        for (i = 0; i < face->num_fixed_sizes; ++i) {
+            unsigned int cdiff;
+
+            cdiff = abs(pixel_size - face->available_sizes[i].width);
+
+            if (cdiff < diff) {
+                best = i;
+                diff = cdiff;
+            }
+        }
+
+        if (!return_max_asc) {
+            h_ratio = (double)pixel_size / (double)face->available_sizes[best].height;
+            w_ratio = h_ratio;
+        }
+
+        FT_Select_Size(face, best);
+        non_ideal_size = DONNELL_TRUE;
+    }
+
     FT_Select_Charmap(face, ft_encoding_unicode);
 
     if (!string) {
-        val = face->size->metrics.height / 64;
+        val = face->size->metrics.height / 64 * h_ratio;
         FT_Done_Face(face);
         return val;
     }
@@ -125,11 +170,12 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
                 continue;
             }
 
-            // FreeType_CopyToBuffer(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left + (harfbuzz_pos[i].x_offset / 64), csize.h + y - face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64), DONNELL_FALSE, 0);
+			FreeType_CopyToBuffer(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left + (harfbuzz_pos[i].x_offset / 64  * w_ratio), csize.h + y - face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64 * h_ratio), non_ideal_size, pixel_size, h_ratio);
 
-            x += harfbuzz_pos[i].x_advance / 64;
-            y += harfbuzz_pos[i].y_advance / 64;
-        }
+
+			x += harfbuzz_pos[i].x_advance * w_ratio / 64;
+			y += harfbuzz_pos[i].y_advance * h_ratio / 64;
+		}
     } else {
         unsigned int max_ascent;
         unsigned int max_descent;
@@ -149,18 +195,18 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
             }
 
             if (i == 0) {
-                size->w += harfbuzz_pos[i].x_advance / 64;
+                size->w += harfbuzz_pos[i].x_advance / 64  * w_ratio;
             } else {
                 FT_Get_Kerning(face, harfbuzz_info[i - 1].codepoint, harfbuzz_info[i].codepoint, FT_KERNING_DEFAULT, &kerning);
-                size->w += ((harfbuzz_pos[i].x_advance / 64) - kerning.x) >> 6;
+                size->w += ((harfbuzz_pos[i].x_advance / 64) + (kerning.x >> 6))  * w_ratio;
             }
 
-            calc_de = (face->glyph->metrics.height >> 6) - (face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64));
+            calc_de = ((face->glyph->metrics.height >> 6) - (face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64))) * h_ratio;
             if (calc_de > max_descent) {
                 max_descent = calc_de;
             }
 
-            calc_as = face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64);
+            calc_as = (face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64)) * h_ratio;
             if (calc_as < 0) {
                 calc_as = 0;
             }
@@ -175,8 +221,6 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
         } else {
             size->h = max_ascent + max_descent;
         }
-
-        printf("height: %d as: %d des: %d\n", size->h, max_ascent, max_descent);
     }
 
     harfbuzz->buffer_destroy(harfbuzz_buffer);

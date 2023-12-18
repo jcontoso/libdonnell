@@ -80,17 +80,18 @@ void TextUtils_Paragraphs_Free(Paragraphs *paragraphs) {
 Runs *TextUtils_Runs_Create(FriBidiString *str) {
     Runs *runs;
     const uc_script_t *iscript;
+    const uc_script_t *cscript;
     const uc_script_t *script;
     unsigned int i;
     unsigned int j;
     unsigned int c;
-    DonnellBool jc;
 
     if (!str) {
         return NULL;
     }
 
     c = 0;
+    cscript = uc_script(32);
 
     runs = malloc(sizeof(Runs));
     if (!runs) {
@@ -99,10 +100,6 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
 
     for (i = 0; i < str->len; i += j - 1) {
         j = 0;
-
-        if (TextUtils_IsNewLine(str->str[i + j])) {
-            i++;
-        }
 
         if (!i) {
             runs->str = calloc(c + 1, sizeof(FriBidiString *));
@@ -121,38 +118,26 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
         script = uc_script(str->str[i + j]);
         iscript = uc_script(str->str[i + j]);
 
-        if (!script) {
-            puts("something has gone horribly wrong 1");
-        }
-
-        if (!iscript) {
-            puts("something has gone horribly wrong 2");
-        }
-
-        while (!strcmp(script->name, iscript->name)) {
-            jc = DONNELL_FALSE;
-            if (TextUtils_IsNewLine(str->str[i + j])) {
-                script = uc_script(str->str[i + j - 1]);
-                j++;
-                jc = DONNELL_TRUE;
-                continue;
-            }
-
+         while ((script->name == iscript->name) || (script->name == cscript->name)) {
+			if (j >= str->len) {
+				j++;
+				break;
+			}
             script = uc_script(str->str[i + j]);
 
-            if (!script) {
-                script = uc_script(str->str[i + j - 1]);
-            }
-
-            if ((jc) || (!j)) {
-                runs->str[c] = FriBidiString_Create(1);
+			if(!script) {
+				script = uc_script(str->str[i]);		
+			}
+			
+            if (!j) {
+                runs->str[c] = FriBidiString_Create(j+1);
                 if (!runs->str[c]) {
                     free(runs->str);
                     free(runs);
                     return NULL;
                 }
             } else {
-                runs->str[c]->str = realloc(runs->str[c]->str, (j + 1) * sizeof(FriBidiChar));
+                runs->str[c]->str = realloc(runs->str[c]->str, (j+1) * sizeof(FriBidiChar));
                 if (!runs->str[c]) {
                     free(runs->str);
                     free(runs);
@@ -160,15 +145,9 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
                 }
             }
 
-            if (jc) {
-                runs->str[c]->str[j - 1] = str->str[i + j - 1];
-                runs->str[c]->len = j;
-            } else {
-                runs->str[c]->str[j] = str->str[i + j];
-                runs->str[c]->len = j;
-            }
-
-            j++;
+			runs->str[c]->str[j] = str->str[i + j];
+			runs->str[c]->len = j + 1;
+            j++;        
         }
         c++;
     }

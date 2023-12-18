@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <donnell.h>
 
-#define DEMO_STRING "😀😬😁\nLatin\n阳光灿烂\nВиняткова\n\nמימין לשמאל\nحتى أطول من اليمين إلى اليسار\n"
+#define DEMO_STRING "😀😬😁\nLatin?\n阳光灿烂\nВиняткова\n\nמימין לשמאל\nحتى أطول من اليمين إلى اليسار\n"
 
 int main() {	
 	DonnellImageBuffer* buffer;
@@ -10,7 +10,8 @@ int main() {
 	DonnellImageBuffer* upscaled;
 	DonnellPixel* pixel;
 	DonnellPixel* cpixel;
-
+	DonnellSize size;
+	
 	Donnell_Init();
 
 	pixel = Donnell_Pixel_CreateEasy(255, 255, 255, 255);
@@ -21,6 +22,8 @@ int main() {
 	Donnell_ImageBuffer_Clear(buffer, cpixel);
 
 	Donnell_GraphicsPrimitives_DrawText(buffer, pixel, DEMO_STRING, 0, 0, 16, DONNELL_FONT_OPTIONS_SANS_SERIF);
+	Donnell_GraphicsPrimitives_MeasureText(&size, DEMO_STRING, 16, DONNELL_FONT_OPTIONS_SANS_SERIF);
+	printf("%d %d\n", size.w, size.h);
 	
 	downscaled = Donnell_ImageBuffer_Scale(buffer, 120, 120, DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR);
 	upscaled = Donnell_ImageBuffer_Scale(buffer, 640, 640, DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR);

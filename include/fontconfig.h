@@ -14,7 +14,7 @@
 typedef struct {
     char *font;
     int index;
-    FcBool embolden;
+    DonnellBool embolden;
 } FontConfig_Font;
 
 void FontConfig_Init(void);
