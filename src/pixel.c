@@ -16,21 +16,24 @@ DONNELL_EXPORT DonnellPixel *Donnell_Pixel_Create() {
 }
 
 DONNELL_EXPORT DonnellPixel *Donnell_Pixel_Blend(DonnellPixel *a, DonnellPixel *b) {
-    unsigned int result_r;
-    unsigned int result_g;
-    unsigned int result_b;
-    unsigned int result_a;
-
+    DonnellPixel *result;
+    double aa;
+    double ba;
+    
     if ((!a) || (!b)) {
         return NULL;
     }
-
-    result_r = ((255 - b->alpha) * a->red + b->alpha * b->red) / 255;
-    result_g = ((255 - b->alpha) * a->green + b->alpha * b->green) / 255;
-    result_b = ((255 - b->alpha) * a->blue + b->alpha * b->blue) / 255;
-    result_a = a->alpha;
-
-    return Donnell_Pixel_CreateEasy(result_r, result_g, result_b, result_a);
+    
+    aa = a->alpha / 255.0;
+    ba = b->alpha / 255.0;	
+	result = Donnell_Pixel_Create();
+    result->red =  (DonnellUInt8)(aa * a->red + ba * (1 - aa) * b->red);
+    result->green = (DonnellUInt8)(aa * a->green + ba * (1 - aa) * b->green);
+    result->blue = (DonnellUInt8)(aa * a->blue + ba * (1 - aa) * b->blue);
+    result->alpha = (DonnellUInt8)(255 * (aa + ba * (1 - aa)));
+	printf("%d %d %d\n", a->red, b->red, (int)(aa * a->red + ba * (1 - aa) * b->red));
+   
+    return result;
 }
 
 DONNELL_EXPORT DonnellPixel *Donnell_Pixel_CreateEasy(DonnellUInt8 red, DonnellUInt8 green, DonnellUInt8 blue, DonnellUInt8 alpha) {
