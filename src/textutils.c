@@ -118,26 +118,26 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
         script = uc_script(str->str[i + j]);
         iscript = uc_script(str->str[i + j]);
 
-         while ((script->name == iscript->name) || (script->name == cscript->name)) {
-			if (j >= str->len) {
-				j++;
-				break;
-			}
+        while ((script->name == iscript->name) || (script->name == cscript->name)) {
+            if (j >= str->len) {
+                j++;
+                break;
+            }
             script = uc_script(str->str[i + j]);
 
-			if(!script) {
-				script = uc_script(str->str[i]);		
-			}
-			
+            if (!script) {
+                script = uc_script(str->str[i]);
+            }
+
             if (!j) {
-                runs->str[c] = FriBidiString_Create(j+1);
+                runs->str[c] = FriBidiString_Create(j + 1);
                 if (!runs->str[c]) {
                     free(runs->str);
                     free(runs);
                     return NULL;
                 }
             } else {
-                runs->str[c]->str = realloc(runs->str[c]->str, (j+1) * sizeof(FriBidiChar));
+                runs->str[c]->str = realloc(runs->str[c]->str, (j + 1) * sizeof(FriBidiChar));
                 if (!runs->str[c]) {
                     free(runs->str);
                     free(runs);
@@ -145,9 +145,9 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
                 }
             }
 
-			runs->str[c]->str[j] = str->str[i + j];
-			runs->str[c]->len = j + 1;
-            j++;        
+            runs->str[c]->str[j] = str->str[i + j];
+            runs->str[c]->len = j + 1;
+            j++;
         }
         c++;
     }

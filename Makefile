@@ -1,7 +1,7 @@
 # COMPILER OPTIONS
 CC ?= cc
 PKGCONFIG = $(shell which pkg-config)
-DEPS = fribidi fontconfig freetype2
+DEPS = fribidi fontconfig freetype2 libpng
 CFLAGS = -g $(shell $(PKGCONFIG) --cflags $(DEPS)) -fvisibility=hidden -fPIC -shared -Iinclude
 LIBS = $(shell $(PKGCONFIG) --libs $(DEPS)) -ldl -lunistring
 

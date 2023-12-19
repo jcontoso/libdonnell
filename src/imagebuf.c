@@ -1,3 +1,4 @@
+#include <png.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -127,69 +128,41 @@ DONNELL_EXPORT void Donnell_ImageBuffer_BlendPixel(DonnellImageBuffer *buffer, u
     }
 }
 
-DONNELL_EXPORT void Donnell_ImageBuffer_DumpAsBitmap(DonnellImageBuffer *buffer, char *name) {
+DONNELL_EXPORT void Donnell_ImageBuffer_DumpAsPNG(DonnellImageBuffer *buffer, char *name) {
     FILE *file;
-    unsigned char *bitmap_data;
-    unsigned int file_size;
+    png_structp png;
+    png_infop png_info;
+    png_bytep png_row;
     unsigned int i;
     unsigned int j;
-    unsigned int x;
-    unsigned int y;
 
-    unsigned char file_header[14] = {'B', 'M', 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 0};
-    unsigned char info_header[40] = {40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 24, 0};
-    unsigned char padding[3] = {0, 0, 0};
-
-    if ((!buffer) || (!name)) {
-        return;
-    }
-
-    file_size = 54 + 3 * buffer->width * buffer->height;
-
-    bitmap_data = calloc(3, buffer->width * buffer->height);
-    memset(bitmap_data, 0, 3 * buffer->width * buffer->height);
-
-    for (i = 0; i < buffer->width; i++) {
-        for (j = 0; j < buffer->height; j++) {
-            x = i;
-            y = (buffer->height - 1) - j;
-
-            if (buffer->pixels[y][x]) {
-                bitmap_data[(x + y * buffer->width) * 3 + 2] = buffer->pixels[y][x]->red;
-                bitmap_data[(x + y * buffer->width) * 3 + 1] = buffer->pixels[y][x]->green;
-                bitmap_data[(x + y * buffer->width) * 3 + 0] = buffer->pixels[y][x]->blue;
-            } else {
-                bitmap_data[(x + y * buffer->width) * 3 + 2] = 0;
-                bitmap_data[(x + y * buffer->width) * 3 + 1] = 0;
-                bitmap_data[(x + y * buffer->width) * 3 + 0] = 0;
-            }
-        }
-    }
-
-    file_header[2] = (unsigned char)(file_size);
-    file_header[3] = (unsigned char)(file_size >> 8);
-    file_header[4] = (unsigned char)(file_size >> 16);
-    file_header[5] = (unsigned char)(file_size >> 24);
-
-    info_header[4] = (unsigned char)(buffer->width);
-    info_header[5] = (unsigned char)(buffer->width >> 8);
-    info_header[6] = (unsigned char)(buffer->width >> 16);
-    info_header[7] = (unsigned char)(buffer->width >> 24);
-    info_header[8] = (unsigned char)(buffer->height);
-    info_header[9] = (unsigned char)(buffer->height >> 8);
-    info_header[10] = (unsigned char)(buffer->height >> 16);
-    info_header[11] = (unsigned char)(buffer->height >> 24);
-
+    png_row = NULL;
     file = fopen(name, "wb");
-    fwrite(file_header, 1, 14, file);
-    fwrite(info_header, 1, 40, file);
+
+    png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    png_info = png_create_info_struct(png);
+    png_init_io(png, file);
+    png_set_IHDR(png, png_info, buffer->width, buffer->height, 8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+    png_write_info(png, png_info);
+
+    png_row = malloc(sizeof(png_byte) * buffer->width * 4);
 
     for (i = 0; i < buffer->height; i++) {
-        fwrite(bitmap_data + (buffer->width * (buffer->height - i - 1) * 3), 3, buffer->width, file);
-        fwrite(padding, 1, (4 - (buffer->width * 3) % 4) % 4, file);
+        for (j = 0; j < buffer->width; j++) {
+            DonnellPixel *pixel;
+
+            pixel = Donnell_ImageBuffer_GetPixel(buffer, j, i);
+            png_row[j * 4] = pixel->red;
+            png_row[j * 4 + 1] = pixel->green;
+            png_row[j * 4 + 2] = pixel->blue;
+            png_row[j * 4 + 3] = pixel->alpha;
+            Donnell_Pixel_Free(pixel);
+        }
+        png_write_row(png, png_row);
     }
 
-    free(bitmap_data);
+    png_write_end(png, png_info);
+    free(png_row);
     fclose(file);
 }
 

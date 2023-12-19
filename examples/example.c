@@ -6,11 +6,8 @@
 
 int main() {	
 	DonnellImageBuffer* buffer;
-	DonnellImageBuffer* downscaled;
-	DonnellImageBuffer* upscaled;
 	DonnellPixel* pixel;
 	DonnellPixel* cpixel;
-	DonnellSize size;
 	
 	Donnell_Init();
 
@@ -22,22 +19,13 @@ int main() {
 	Donnell_ImageBuffer_Clear(buffer, cpixel);
 
 	Donnell_GraphicsPrimitives_DrawText(buffer, pixel, DEMO_STRING, 0, 0, 16, DONNELL_FONT_OPTIONS_SANS_SERIF);
-	Donnell_GraphicsPrimitives_MeasureText(&size, DEMO_STRING, 16, DONNELL_FONT_OPTIONS_SANS_SERIF);
-	printf("%d %d\n", size.w, size.h);
-	
-	downscaled = Donnell_ImageBuffer_Scale(buffer, 120, 120, DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR);
-	upscaled = Donnell_ImageBuffer_Scale(buffer, 640, 640, DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR);
-	
-	Donnell_ImageBuffer_DumpAsBitmap(buffer, "example.bmp");
-	Donnell_ImageBuffer_DumpAsBitmap(downscaled, "example_downsized.bmp");
-	Donnell_ImageBuffer_DumpAsBitmap(upscaled, "example_upsized.bmp");
+
+	Donnell_ImageBuffer_DumpAsPNG(buffer, "example.png");
 	
 	Donnell_ImageBuffer_Free(buffer);
 	Donnell_Pixel_Free(pixel);
 	Donnell_Pixel_Free(cpixel);
-	Donnell_ImageBuffer_Free(downscaled);
-	Donnell_ImageBuffer_Free(upscaled);
-
+	
 	Donnell_Cleanup();
 	return 0;
 }

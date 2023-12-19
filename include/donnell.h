@@ -61,7 +61,7 @@ void Donnell_ImageBuffer_SetPixel(DonnellImageBuffer *buffer, unsigned int x, un
 DonnellPixel *Donnell_ImageBuffer_GetPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y);
 void Donnell_ImageBuffer_BlendPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellPixel *pixel);
 void Donnell_ImageBuffer_Clear(DonnellImageBuffer *buffer, DonnellPixel *pixel);
-void Donnell_ImageBuffer_DumpAsBitmap(DonnellImageBuffer *buffer, char *name);
+void Donnell_ImageBuffer_DumpAsPNG(DonnellImageBuffer *buffer, char *name);
 DonnellImageBuffer *Donnell_ImageBuffer_Scale(DonnellImageBuffer *buffer, unsigned int width, unsigned int height, DonnellScalingAlgorithm algo);
 void Donnell_ImageBuffer_BlendBufferContents(DonnellImageBuffer *buffer, DonnellImageBuffer *cbuffer, DonnellRect *srect, DonnellRect *drect);
 void Donnell_ImageBuffer_Free(DonnellImageBuffer *buffer);

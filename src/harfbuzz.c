@@ -94,7 +94,7 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     non_ideal_size = DONNELL_FALSE;
     w_ratio = 1;
     h_ratio = 1;
-    
+
     if (size) {
         size->h = 0;
         size->w = 0;
@@ -112,7 +112,7 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     if (FT_HAS_COLOR(face)) {
         cflags |= FT_LOAD_COLOR;
     }
-    
+
     hb_freetype_error = FT_Set_Pixel_Sizes(face, 0, pixel_size);
     if (hb_freetype_error) {
         unsigned int diff;
@@ -170,12 +170,11 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
                 continue;
             }
 
-			FreeType_CopyToBuffer(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left + (harfbuzz_pos[i].x_offset / 64  * w_ratio), csize.h + y - face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64 * h_ratio), non_ideal_size, pixel_size, h_ratio);
+            FreeType_CopyToBuffer(buffer, color, &face->glyph->bitmap, x + face->glyph->bitmap_left + (harfbuzz_pos[i].x_offset / 64 * w_ratio), csize.h + y - face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64 * h_ratio), non_ideal_size, pixel_size, h_ratio);
 
-
-			x += harfbuzz_pos[i].x_advance * w_ratio / 64;
-			y += harfbuzz_pos[i].y_advance * h_ratio / 64;
-		}
+            x += harfbuzz_pos[i].x_advance * w_ratio / 64;
+            y += harfbuzz_pos[i].y_advance * h_ratio / 64;
+        }
     } else {
         unsigned int max_ascent;
         unsigned int max_descent;
@@ -195,10 +194,10 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
             }
 
             if (i == 0) {
-                size->w += harfbuzz_pos[i].x_advance / 64  * w_ratio;
+                size->w += harfbuzz_pos[i].x_advance / 64 * w_ratio;
             } else {
                 FT_Get_Kerning(face, harfbuzz_info[i - 1].codepoint, harfbuzz_info[i].codepoint, FT_KERNING_DEFAULT, &kerning);
-                size->w += ((harfbuzz_pos[i].x_advance / 64) + (kerning.x >> 6))  * w_ratio;
+                size->w += ((harfbuzz_pos[i].x_advance / 64) + (kerning.x >> 6)) * w_ratio;
             }
 
             calc_de = ((face->glyph->metrics.height >> 6) - (face->glyph->bitmap_top + (harfbuzz_pos[i].y_offset / 64))) * h_ratio;

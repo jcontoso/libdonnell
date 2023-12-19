@@ -84,12 +84,12 @@ FontConfig_Font *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions
     FcPatternGetString(font, FC_FILE, 0, &file);
     FcPatternGetBool(font, FC_EMBOLDEN, 0, &embolden);
     FcPatternGetInteger(font, FC_INDEX, 0, &ret->index);
-    
-    if(embolden == FcTrue) {
-		ret->embolden = DONNELL_TRUE;
-	} else {
-		ret->embolden = DONNELL_FALSE;
-	}
+
+    if (embolden == FcTrue) {
+        ret->embolden = DONNELL_TRUE;
+    } else {
+        ret->embolden = DONNELL_FALSE;
+    }
 
     ret->font = strdup((char *)file);
 
