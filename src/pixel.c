@@ -31,8 +31,7 @@ DONNELL_EXPORT DonnellPixel *Donnell_Pixel_Blend(DonnellPixel *a, DonnellPixel *
     result->green = (DonnellUInt8)(aa * a->green + ba * (1 - aa) * b->green);
     result->blue = (DonnellUInt8)(aa * a->blue + ba * (1 - aa) * b->blue);
     result->alpha = (DonnellUInt8)(255 * (aa + ba * (1 - aa)));
-	printf("%d %d %d\n", a->red, b->red, (int)(aa * a->red + ba * (1 - aa) * b->red));
-   
+       
     return result;
 }
 
