@@ -51,12 +51,8 @@ clean:
 	rm -f $(OBJECTS) $(LIBTARGET) $(PCTARGET)
 	rm -f $(EXAMPLES)
 	rm -f donnell.pc
-	rm -f example.bmp
-	rm -f examples/example.bmp
-	rm -f example_downsized.bmp
-	rm -f examples/example_downsized.bmp
-	rm -f example_upsized.bmp
-	rm -f examples/example_upsized.bmp
+	rm -f example.png
+	rm -f examples/example.png
 	
 uninstall:
 	rm -f $(word 1,$(PKGCONFIG_PATHS_LIST))/$(PCTARGET)
