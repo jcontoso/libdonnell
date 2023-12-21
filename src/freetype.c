@@ -21,7 +21,7 @@ DonnellImageBuffer *FreeType_ConvertToBufferFromRGBABitmap(FT_Bitmap *bitmap, Do
     int x;
     int y;
 
-    buffer = Donnell_ImageBuffer_Create(bitmap->width, bitmap->rows);
+    buffer = Donnell_ImageBuffer_Create(bitmap->width, bitmap->rows, 1);
 
     for (y = 0; y < bitmap->rows; y++) {
         for (x = 0; x < bitmap->width; x++) {
@@ -56,7 +56,7 @@ DonnellImageBuffer *FreeType_ConvertToBufferFromGray8OrMonoBitmap(FT_Bitmap *bit
     int x;
     int y;
 
-    buffer = Donnell_ImageBuffer_Create(bitmap->width, bitmap->rows);
+    buffer = Donnell_ImageBuffer_Create(bitmap->width, bitmap->rows, 1);
 
     for (y = 0; y < bitmap->rows; y++) {
         for (x = 0; x < bitmap->width; x++) {
@@ -265,6 +265,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     if (!string) {
         val = face->size->metrics.height / 64 * h_ratio;
         FT_Done_Face(face);
+		FontConfig_FreeFont(font_file);
         return val;
     }
 

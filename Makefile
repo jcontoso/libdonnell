@@ -2,7 +2,7 @@
 CC ?= cc
 PKGCONFIG = $(shell which pkg-config)
 DEPS = fribidi fontconfig freetype2 libpng
-CFLAGS = -g $(shell $(PKGCONFIG) --cflags $(DEPS)) -fvisibility=hidden -fPIC -shared -Iinclude
+CFLAGS = -g $(shell $(PKGCONFIG) --cflags $(DEPS)) -fvisibility=hidden -fPIC -shared -Iinclude -Iassets
 LIBS = $(shell $(PKGCONFIG) --libs $(DEPS)) -ldl -lunistring
 
 # FILE AND PROJECT NAMES
@@ -12,7 +12,6 @@ PCTARGET = $(NAME).pc
 
 # FILES
 SOURCES = $(wildcard src/*.c)
-HEADERS = $(wildcard include/*.h)
 
 # PATHS
 PREFIX = /usr

@@ -17,7 +17,7 @@ char *RemoveExtension(char* myStr) {
     return retStr;
 }
 
-void LoadAndConvert(char* name, char* out_name) {
+void LoadAndConvert(char* name, char* out_name, unsigned int scale) {
     FILE *file;
     FILE *out_file;
     char* header_name;
@@ -49,7 +49,7 @@ void LoadAndConvert(char* name, char* out_name) {
   	color_type = png_get_color_type(png, png_info);
 	bit_depth  = png_get_bit_depth(png, png_info);
 
-	fprintf(out_file, "	\"%u %u\",\n", width, height);
+	fprintf(out_file, "	\"%u %u %u\",\n", width, height, scale);
 
 	if(bit_depth == 16) {
 		png_set_strip_16(png);
@@ -105,14 +105,15 @@ void LoadAndConvert(char* name, char* out_name) {
 int main(int argc, char *argv[]) { 
 	char* ifile;
 	char* ofile;
-    int overwrite; 
+    unsigned int overwrite; 
+	unsigned int scale;
     int opt; 
     
     ifile = NULL;
     ofile = NULL;
     overwrite = 0;
     
-    while((opt = getopt(argc, argv, "ri:o:")) != -1)  {  
+    while((opt = getopt(argc, argv, "ri:o:s:")) != -1)  {  
         switch(opt)  {  
             case 'r':  
 				overwrite = 1;
@@ -123,7 +124,10 @@ int main(int argc, char *argv[]) {
             case 'o':  
 				ofile = strdup(optarg);
                 break;  
-        }  
+            case 's':  
+				scale = atoi(optarg);
+                break;  
+       }
     }  
     
     if (!ifile) {
@@ -159,7 +163,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	LoadAndConvert(ifile, ofile);
+	LoadAndConvert(ifile, ofile, scale);
 	puts("Conversion successful");
 
 	if (ifile) {

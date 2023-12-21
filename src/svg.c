@@ -17,6 +17,7 @@ void SVG_Init(void) {
 
     error = NULL;
     svg_library = NULL;
+        
     svg_library = malloc(sizeof(SVGLibrary));
     if (!svg_library) {
         return;
