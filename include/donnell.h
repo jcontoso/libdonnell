@@ -79,6 +79,7 @@ DonnellPixel *Donnell_Pixel_Blend(DonnellPixel *a, DonnellPixel *b);
 void Donnell_Pixel_Free(DonnellPixel *pixel);
 
 DonnellStockImage* Donnell_StockImage_Create(DonnellImageBuffer* image, char* name);
+DonnellStockImage* Donnell_StockImage_Copy(DonnellStockImage* stock_image);
 void Donnell_StockImage_Free(DonnellStockImage* stock_image);
 void Donnell_StockImages_Add(DonnellStockImage* stock_image);
 DonnellStockImage* Donnell_StockImages_Load(char* name);

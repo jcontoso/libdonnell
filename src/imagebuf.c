@@ -148,7 +148,7 @@ DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_LoadFromInline(char** str
 	sscanf(str[0], "%u %u %u", &w, &h, &s);
 	
 	buffer = Donnell_ImageBuffer_Create(w, h, s);
-    for (i = 1; i < h; i++) {
+    for (i = 1; i < h+1; i++) {
 		j = 0;		
 		dstrline = strdup(str[i]);
 		strline = dstrline;
@@ -396,7 +396,7 @@ DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Scale(DonnellImageBuffer 
     if ((width < 0) || (height < 0) || (!buffer)) {
         return NULL;
     }
-
+    
     switch (algo) {
     case DONNELL_SCALING_ALGORITHM_BILINEAR:
         return ImageBuffer_ScaleBL(buffer, width, height);
@@ -420,12 +420,12 @@ DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Crop(DonnellImageBuffer *
 	scaled = DONNELL_FALSE;
 	cbuffer = buffer;
 	
-	if ((rect->w > buffer->width) || (buffer->width > rect->w)) {
+	if (rect->w > buffer->width) {
 		cbuffer = Donnell_ImageBuffer_Scale(buffer, rect->w, buffer->height, DONNELL_SCALING_ALGORITHM_BILINEAR);		
 		scaled = DONNELL_TRUE;
 	}
 	
-	if ((rect->h > buffer->height) || (buffer->height > rect->h))  {
+	if (rect->h > buffer->height)  {
 		unsigned int w;
 		
 		w = cbuffer->width;

@@ -112,6 +112,7 @@ int main(int argc, char *argv[]) {
     ifile = NULL;
     ofile = NULL;
     overwrite = 0;
+    scale = 1;
     
     while((opt = getopt(argc, argv, "ri:o:s:")) != -1)  {  
         switch(opt)  {  

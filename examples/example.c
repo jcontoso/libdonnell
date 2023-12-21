@@ -7,7 +7,7 @@
 
 int main() {	
 	DonnellImageBuffer* buffer;
-	DonnellImageBuffer* buffer2;
+	DonnellStockImage* stock_image;
 	DonnellPixel* pixel;
 	DonnellPixel* cpixel;
 	DonnellRect src;
@@ -15,7 +15,7 @@ int main() {
 	
 	Donnell_Init();
 	
-	buffer2 = Donnell_ImageBuffer_LoadFromInline(test2);
+	stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_ERROR_96);
 	
 	pixel = Donnell_Pixel_CreateEasy(255, 255, 255, 255);
 
@@ -26,20 +26,17 @@ int main() {
 
 	Donnell_GraphicsPrimitives_DrawText(buffer, pixel, DEMO_STRING, 0, 0, 16, DONNELL_FONT_OPTIONS_SANS_SERIF);
 	
-	src.w = 200;
-	src.h = 100;
-	src.x = 0;
-	src.y = 0;
-	dest.w = 150;
-	dest.h = 150;
+
+	dest.w = stock_image->image->width;
+	dest.h = stock_image->image->height;
 	dest.x = 150;
 	dest.y = 150;
-	Donnell_ImageBuffer_BlendBufferContents(buffer, buffer2, &src, &dest);
+	Donnell_ImageBuffer_BlendBufferContents(buffer, stock_image->image, NULL, &dest);
 
 	Donnell_ImageBuffer_DumpAsPNG(buffer, "example.png");
 	
 	Donnell_ImageBuffer_Free(buffer);
-	Donnell_ImageBuffer_Free(buffer2);
+	Donnell_StockImage_Free(stock_image);
 	Donnell_Pixel_Free(pixel);
 	Donnell_Pixel_Free(cpixel);
 	
