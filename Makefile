@@ -53,6 +53,8 @@ clean:
 	rm -f donnell.pc
 	rm -f example.png
 	rm -f examples/example.png
+	rm -f example2.png
+	rm -f examples/example2.png	
 	
 uninstall:
 	rm -f $(word 1,$(PKGCONFIG_PATHS_LIST))/$(PCTARGET)

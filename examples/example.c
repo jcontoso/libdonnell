@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <donnell.h>
+#include "test2.h"
 
 #define DEMO_STRING "😀😬😁\nLatin?\n阳光灿烂\nВиняткова\n\nמימין לשמאל\nحتى أطول من اليمين إلى اليسار\n"
 
@@ -10,7 +11,11 @@ int main() {
 	DonnellPixel* cpixel;
 	
 	Donnell_Init();
-
+	
+	buffer = Donnell_ImageBuffer_LoadFromInline(test2);
+	Donnell_ImageBuffer_DumpAsPNG(buffer, "example2.png");
+	Donnell_ImageBuffer_Free(buffer);
+	
 	pixel = Donnell_Pixel_CreateEasy(255, 255, 255, 255);
 
 	cpixel = Donnell_Pixel_CreateEasy(30, 56, 12, 255);

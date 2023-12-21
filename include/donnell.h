@@ -57,6 +57,8 @@ DonnellPixel *Donnell_Pixel_Blend(DonnellPixel *a, DonnellPixel *b);
 void Donnell_Pixel_Free(DonnellPixel *pixel);
 
 DonnellImageBuffer *Donnell_ImageBuffer_Create(unsigned int width, unsigned int height);
+DonnellImageBuffer *Donnell_ImageBuffer_LoadFromPNG(char* name);
+DonnellImageBuffer *Donnell_ImageBuffer_LoadFromInline(char** str);
 void Donnell_ImageBuffer_SetPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellPixel *pixel);
 DonnellPixel *Donnell_ImageBuffer_GetPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y);
 void Donnell_ImageBuffer_BlendPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellPixel *pixel);

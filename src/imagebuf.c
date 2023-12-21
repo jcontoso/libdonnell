@@ -1,7 +1,7 @@
-#include <png.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <png.h>
 
 #include "donnell.h"
 #include "misc.h"
@@ -128,15 +128,133 @@ DONNELL_EXPORT void Donnell_ImageBuffer_BlendPixel(DonnellImageBuffer *buffer, u
     }
 }
 
+DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_LoadFromInline(char** str) {
+    DonnellImageBuffer *buffer;
+    char* token;
+    char* dstrline;
+    char* strline;
+	unsigned int w;
+	unsigned int h;
+	unsigned int i;
+	unsigned int j;
+	
+	if (!str) {
+		return NULL;
+	}
+	
+	sscanf(str[0], "%u %u", &w, &h);
+	printf("%d %d\n", w, h);
+	
+	buffer = Donnell_ImageBuffer_Create(w, h);
+    for (i = 1; i < h; i++) {
+		j = 0;		
+		dstrline = strdup(str[i]);
+		strline = dstrline;
+		token = strtok(strline, "|");
+   
+		while(token) {
+ 			DonnellPixel* pixel;
+			int r;
+			int g;
+			int b;
+			int a;
+			sscanf(token, "%02x%02x%02x%02x", &r, &g, &b, &a);
+			pixel = Donnell_Pixel_CreateEasy((DonnellUInt8)r, (DonnellUInt8)g, (DonnellUInt8)b, (DonnellUInt8)a);
+			Donnell_ImageBuffer_SetPixel(buffer, j, i-1, pixel);
+			Donnell_Pixel_Free(pixel);   
+			token = strtok(NULL, "|");
+			j++;
+		}	
+		free(dstrline);
+	}
+
+	return buffer;
+}
+
+
+DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_LoadFromPNG(char* name) {
+    DonnellImageBuffer *buffer;
+    FILE *file;
+    png_structp png;
+    png_infop png_info;
+	png_byte color_type;
+	png_byte bit_depth;
+    png_bytep* png_rows;
+	unsigned int i;
+	unsigned int j;
+	
+	png_rows = NULL;
+	file = fopen(name, "rb");
+	
+	png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	png_info = png_create_info_struct(png);
+	png_init_io(png, file);
+	png_read_info(png, png_info);
+
+	buffer = Donnell_ImageBuffer_Create(png_get_image_width(png, png_info), png_get_image_height(png, png_info));
+	color_type = png_get_color_type(png, png_info);
+	bit_depth  = png_get_bit_depth(png, png_info);
+
+	if(bit_depth == 16) {
+		png_set_strip_16(png);
+	}
+	
+	if(color_type == PNG_COLOR_TYPE_PALETTE) {
+		png_set_palette_to_rgb(png);
+	}
+	
+	if(color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) {
+		png_set_expand_gray_1_2_4_to_8(png);
+	}
+	
+	if(png_get_valid(png, png_info, PNG_INFO_tRNS)) {
+		png_set_tRNS_to_alpha(png);
+	}
+
+	if(color_type == PNG_COLOR_TYPE_RGB || color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_PALETTE) {
+		png_set_filler(png, 0xff, PNG_FILLER_AFTER);
+	}
+	
+	if(color_type == PNG_COLOR_TYPE_GRAY ||  color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
+		png_set_gray_to_rgb(png);
+	}
+	
+	png_read_update_info(png, png_info);
+
+	png_rows = malloc(sizeof(png_bytep) * buffer->height);
+	for(i = 0; i < buffer->height; i++) {
+		png_rows[i] = malloc(png_get_rowbytes(png,png_info));
+	}
+	png_read_image(png, png_rows);
+
+	for(i = 0; i < buffer->height; i++) {
+		for(j = 0; j < buffer->width; j++) {
+			DonnellPixel* pixel;
+			
+			pixel = Donnell_Pixel_CreateEasy(png_rows[i][j * 4], png_rows[i][j * 4 + 1], png_rows[i][j * 4 + 2], png_rows[i][j * 4 + 3]);
+			Donnell_ImageBuffer_SetPixel(buffer, j, i, pixel);
+			Donnell_Pixel_Free(pixel);
+		}
+	}	
+
+	png_destroy_read_struct(&png, &png_info, NULL);
+ 	fclose(file);
+ 	for(i = 0; i < buffer->height; i++) {
+		free(png_rows[i]);
+	}
+	free(png_rows);
+    return buffer;
+}
+
 DONNELL_EXPORT void Donnell_ImageBuffer_DumpAsPNG(DonnellImageBuffer *buffer, char *name) {
     FILE *file;
     png_structp png;
     png_infop png_info;
-    png_bytep png_row;
+    png_bytep png_rows;
     unsigned int i;
     unsigned int j;
 
-    png_row = NULL;
+    png_rows = NULL;
     file = fopen(name, "wb");
 
     png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -145,24 +263,24 @@ DONNELL_EXPORT void Donnell_ImageBuffer_DumpAsPNG(DonnellImageBuffer *buffer, ch
     png_set_IHDR(png, png_info, buffer->width, buffer->height, 8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
     png_write_info(png, png_info);
 
-    png_row = malloc(sizeof(png_byte) * buffer->width * 4);
+    png_rows = malloc(sizeof(png_byte) * buffer->width * 4);
 
     for (i = 0; i < buffer->height; i++) {
         for (j = 0; j < buffer->width; j++) {
             DonnellPixel *pixel;
 
             pixel = Donnell_ImageBuffer_GetPixel(buffer, j, i);
-            png_row[j * 4] = pixel->red;
-            png_row[j * 4 + 1] = pixel->green;
-            png_row[j * 4 + 2] = pixel->blue;
-            png_row[j * 4 + 3] = pixel->alpha;
+            png_rows[j * 4] = pixel->red;
+            png_rows[j * 4 + 1] = pixel->green;
+            png_rows[j * 4 + 2] = pixel->blue;
+            png_rows[j * 4 + 3] = pixel->alpha;
             Donnell_Pixel_Free(pixel);
         }
-        png_write_row(png, png_row);
+        png_write_row(png, png_rows);
     }
 
     png_write_end(png, png_info);
-    free(png_row);
+    free(png_rows);
     fclose(file);
 }
 
