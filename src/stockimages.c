@@ -26,6 +26,9 @@ DonnellStockImage** stock_images;
 unsigned int stock_image_count;
 
 DONNELL_EXPORT DonnellStockImage* Donnell_StockImage_Copy(DonnellStockImage* stock_image) {
+	if (!stock_image) {
+		return NULL;
+	}
 	return Donnell_StockImage_Create(stock_image->image, stock_image->name);
 }
 

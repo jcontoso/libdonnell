@@ -42,6 +42,13 @@ typedef struct {
 	DonnellBool alloced_name;
 } DonnellStockImage;
 
+typedef struct {
+	DonnellImageBuffer** images;
+	unsigned int count;
+	char* name;
+	DonnellBool alloced_name;
+} DonnellIcon;
+
 typedef enum {
     DONNELL_FONT_OPTIONS_SERIF = 1 << 0,
     DONNELL_FONT_OPTIONS_SANS_SERIF = 1 << 1,
@@ -54,6 +61,11 @@ typedef enum {
     DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR,
     DONNELL_SCALING_ALGORITHM_BILINEAR,
 } DonnellScalingAlgorithm;
+
+#define DONNELL_ICON_SIZE_16 16
+#define DONNELL_ICON_SIZE_32 32
+#define DONNELL_ICON_SIZE_64 64
+#define DONNELL_ICON_SIZE_96 96
 
 #define DONNELL_STOCK_IMAGE_ERROR_16 "error-16"
 #define DONNELL_STOCK_IMAGE_ERROR_32 "error-32"
@@ -69,6 +81,11 @@ typedef enum {
 #define DONNELL_STOCK_IMAGE_WARNING_32 "warning-32"
 #define DONNELL_STOCK_IMAGE_WARNING_64 "warning-64"
 #define DONNELL_STOCK_IMAGE_WARNING_96 "warning-96"
+
+#define DONNELL_STOCK_ICON_ERROR "error"
+#define DONNELL_STOCK_ICON_WARNING "warning"
+#define DONNELL_STOCK_ICON_INFO "info"
+
 
 void Donnell_Init(void);
 void Donnell_Cleanup(void);
@@ -103,4 +120,11 @@ void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size, char *utf8str
 void Donnell_GraphicsPrimitives_DrawText(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFontOptions font_options);
 void Donnell_GraphicsPrimitives_MeasureText(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFontOptions font_options, unsigned int pixel_scale);
 
+DonnellIcon* Donnell_GuiPrimitives_Icon_Create(DonnellImageBuffer** images, char* name, unsigned int count);
+DonnellIcon* Donnell_GuiPrimitives_Icon_Copy(DonnellIcon* icon);
+void Donnell_GuiPrimitives_Icon_Free(DonnellIcon* icon);
+unsigned int Donnell_GuiPrimitives_Icon_GetBestForSize(DonnellImageBuffer *buffer, DonnellIcon* icon, unsigned int size);
+void Donnell_GuiPrimitives_Icon_Draw(DonnellImageBuffer *buffer, DonnellIcon* icon, unsigned int index, unsigned int size, unsigned int x, unsigned int y);
+
+DonnellIcon* Donnell_GuiPrimitives_StockIcons_Load(char* name);
 #endif

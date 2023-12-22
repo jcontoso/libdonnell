@@ -15,6 +15,8 @@ DONNELL_EXPORT void Donnell_GraphicsPrimitives_DrawTextLine(DonnellImageBuffer *
         return;
     }
 
+    x = buffer->scale*x;
+    y = buffer->scale*y;
     string = FriBidiString_ConvertFromUTF8(utf8string);
     FriBidiString_Handle(string);
     TextRenderer_MeasureAndRender(buffer, NULL, color, string, x*buffer->scale, y*buffer->scale, pixel_size*buffer->scale, DONNELL_FALSE, font_options);
@@ -91,6 +93,8 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
 
     longest_rtl_width = 0;
     t = -1;
+    x = buffer->scale*x;
+    y = buffer->scale*y;
 
     paragraphs = TextUtils_Paragraphs_Create(utf8string);
     fribidi_paragraphs = FriBidiParagraphs_ConvertFromParagraphs(paragraphs);
