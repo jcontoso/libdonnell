@@ -15,7 +15,7 @@ int main() {
 	
 	Donnell_Init();
 	
-	stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_ERROR_96);
+	stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_WARNING_64);
 	
 	pixel = Donnell_Pixel_CreateEasy(255, 255, 255, 255);
 

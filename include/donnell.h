@@ -87,6 +87,7 @@ DonnellStockImage* Donnell_StockImages_Load(char* name);
 DonnellImageBuffer *Donnell_ImageBuffer_Create(unsigned int width, unsigned int height, unsigned int scale);
 DonnellImageBuffer *Donnell_ImageBuffer_LoadFromPNG(char* name);
 DonnellImageBuffer *Donnell_ImageBuffer_LoadFromInline(char** str);
+DonnellImageBuffer *Donnell_ImageBuffer_Copy(DonnellImageBuffer *src);
 void Donnell_ImageBuffer_SetPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellPixel *pixel);
 DonnellPixel *Donnell_ImageBuffer_GetPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y);
 void Donnell_ImageBuffer_BlendPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellPixel *pixel);

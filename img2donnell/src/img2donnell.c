@@ -114,8 +114,16 @@ int main(int argc, char *argv[]) {
     overwrite = 0;
     scale = 1;
     
-    while((opt = getopt(argc, argv, "ri:o:s:")) != -1)  {  
+    while((opt = getopt(argc, argv, "hri:o:s:")) != -1)  {  
         switch(opt)  {  
+            case 'h':  
+				puts("-h: Display help");
+				puts("-r: Overwrite the output file");
+				puts("-i: Input file name");
+				puts("-o: Output file name");
+				puts("-s: Scale (integer)");				
+				exit(0);
+                break;  
             case 'r':  
 				overwrite = 1;
                 break;  

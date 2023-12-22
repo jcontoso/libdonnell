@@ -459,6 +459,31 @@ DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Crop(DonnellImageBuffer *
     return rbuffer;
 }
 
+DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Copy(DonnellImageBuffer *src) {
+	DonnellImageBuffer* ret;
+    unsigned int i;
+    unsigned int j;
+    
+	if (!src) {
+		return NULL;
+	}
+	
+	ret = Donnell_ImageBuffer_Create(src->width, src->height, src->scale);
+	
+    for (i = 0; i < src->height; ++i) {
+        for (j = 0; j < src->width; ++j) {
+            DonnellPixel *pixel;
+
+            pixel = Donnell_ImageBuffer_GetPixel(src, j, i);
+
+            Donnell_ImageBuffer_SetPixel(ret, j, i, pixel);
+
+            Donnell_Pixel_Free(pixel);
+        }
+    }
+    
+    return ret;
+}
 
 DONNELL_EXPORT void Donnell_ImageBuffer_BlendBufferContents(DonnellImageBuffer *buffer, DonnellImageBuffer *cbuffer, DonnellRect *srect, DonnellRect *drect) {
 	DonnellImageBuffer* sbuffer;
