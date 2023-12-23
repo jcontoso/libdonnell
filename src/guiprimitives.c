@@ -567,8 +567,8 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer,
         button_img = Donnell_GuiPrimitives_StockElements_Load(DONNELL_STOCK_ELEMENT_BUTTON_PRESSED, buffer->scale);
     }
 
-    src1_rect.w = w;
-    src1_rect.h = h;
+    src1_rect.w = w * buffer->scale;
+    src1_rect.h = h * buffer->scale;
     src1_rect.x = 0;
     src1_rect.y = 0;
 
@@ -582,12 +582,13 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer,
 
         Donnell_Rect_Center(&dest_rect, &src1_rect, &src2_rect);
 
-        if (rect->w < ctext_size.w) {
-            w = (ctext_size.w + dest_rect.x * 2);
+        if (src1_rect.w  < ctext_size.w) {
+            w = (ctext_size.w + dest_rect.x/buffer->scale * 2);
         }
 
-        if (rect->h < ctext_size.h) {
-            h = (ctext_size.h + dest_rect.y * 2);
+        if (src1_rect.h < ctext_size.h) {
+			puts("good");
+            h = (ctext_size.h + dest_rect.y/buffer->scale * 2);
         }
     }
 
@@ -599,7 +600,7 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer,
     Donnell_GuiPrimitives_NineSlice_Draw(buffer, button_img, &draw_rect);
 
     if (text) {
-        Donnell_GraphicsPrimitives_DrawTextLine(buffer, color, text, rect->x + dest_rect.x * buffer->scale, rect->y + dest_rect.y * buffer->scale, text_size, text_font_options);
+        Donnell_GraphicsPrimitives_DrawTextLine(buffer, color, text, rect->x + dest_rect.x/buffer->scale, rect->y + dest_rect.y/buffer->scale-1, text_size, text_font_options);
     }
 
     if (button_img) {
