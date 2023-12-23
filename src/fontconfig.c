@@ -81,7 +81,7 @@ FontConfig_Font *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions
     FcDefaultSubstitute(pattern);
     font = FcFontMatch(fontconfig, pattern, &result);
 
-	embolden == FcFalse;
+    embolden == FcFalse;
     FcPatternGetString(font, FC_FILE, 0, &file);
     FcPatternGetBool(font, FC_EMBOLDEN, 0, &embolden);
     FcPatternGetInteger(font, FC_INDEX, 0, &ret->index);

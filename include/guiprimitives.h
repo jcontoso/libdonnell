@@ -5,7 +5,7 @@
 #ifndef DONNELL_GUI
 #define DONNELL_GUI
 
-void StockIcons_Init();
-void StockIcons_Cleanup();
+void GuiPrimitives_Init();
+void GuiPrimitives_Cleanup();
 
 #endif

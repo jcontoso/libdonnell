@@ -37,17 +37,54 @@ typedef struct {
 } DonnellImageBuffer;
 
 typedef struct {
-	DonnellImageBuffer* image;
-	char* name;
-	DonnellBool alloced_name;
+    DonnellImageBuffer *image;
+    char *name;
+    DonnellBool alloced_name;
 } DonnellStockImage;
 
 typedef struct {
-	DonnellImageBuffer** images;
-	unsigned int count;
-	char* name;
-	DonnellBool alloced_name;
+    DonnellImageBuffer **images;
+    unsigned int count;
+    char *name;
+    DonnellBool alloced_name;
 } DonnellIcon;
+
+typedef struct {
+    DonnellRect top_left;
+    DonnellRect top_center;
+    DonnellRect top_right;
+    DonnellRect center_left;
+    DonnellRect center_center;
+    DonnellRect center_right;
+    DonnellRect bottom_left;
+    DonnellRect bottom_center;
+    DonnellRect bottom_right;
+} DonnellNineSliceRects;
+
+typedef struct {
+    DonnellImageBuffer *top_left;
+    DonnellImageBuffer *top_center;
+    DonnellImageBuffer *top_right;
+    DonnellImageBuffer *center_left;
+    DonnellImageBuffer *center_center;
+    DonnellImageBuffer *center_right;
+    DonnellImageBuffer *bottom_left;
+    DonnellImageBuffer *bottom_center;
+    DonnellImageBuffer *bottom_right;
+    unsigned int scale;
+    char *name;
+    DonnellBool alloced_name;
+} DonnellNineSlice;
+
+typedef struct {
+    DonnellNineSlice *button_normal;
+    DonnellNineSlice *button_hover;
+    DonnellNineSlice *button_pressed;
+
+    DonnellNineSlice *button_selected_normal;
+    DonnellNineSlice *button_selected_hover;
+    DonnellNineSlice *button_selected_pressed;
+} DonnellStyle;
 
 typedef enum {
     DONNELL_FONT_OPTIONS_SERIF = 1 << 0,
@@ -56,6 +93,13 @@ typedef enum {
     DONNELL_FONT_OPTIONS_BOLD = 1 << 3,
     DONNELL_FONT_OPTIONS_ITALIC = 1 << 4
 } DonnellFontOptions;
+
+typedef enum {
+    DONNELL_BUTTON_STATE_NORMAL = 1 << 0,
+    DONNELL_BUTTON_STATE_HOVER = 1 << 1,
+    DONNELL_BUTTON_STATE_PRESSED = 1 << 2,
+    DONNELL_BUTTON_STATE_SELECTED = 1 << 3
+} DonnellButtonState;
 
 typedef enum {
     DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR,
@@ -82,28 +126,45 @@ typedef enum {
 #define DONNELL_STOCK_IMAGE_WARNING_64 "warning-64"
 #define DONNELL_STOCK_IMAGE_WARNING_96 "warning-96"
 
+#define DONNELL_STOCK_IMAGE_BUTTON_HOVER "button-hover"
+#define DONNELL_STOCK_IMAGE_BUTTON_NORMAL "button-normal"
+#define DONNELL_STOCK_IMAGE_BUTTON_PRESSED "button-pressed"
+
+#define DONNELL_STOCK_IMAGE_BUTTON_HOVER_2X "button-hover-2x"
+#define DONNELL_STOCK_IMAGE_BUTTON_NORMAL_2X "button-normal-2x"
+#define DONNELL_STOCK_IMAGE_BUTTON_PRESSED_2X "button-pressed-2x"
+
+#define DONNELL_STOCK_IMAGE_BUTTON_HOVER_3X "button-hover-3x"
+#define DONNELL_STOCK_IMAGE_BUTTON_NORMAL_3X "button-normal-3x"
+#define DONNELL_STOCK_IMAGE_BUTTON_PRESSED_3X "button-pressed-3x"
+
+#define DONNELL_STOCK_ELEMENT_BUTTON_HOVER "button-hover"
+#define DONNELL_STOCK_ELEMENT_BUTTON_NORMAL "button-normal"
+#define DONNELL_STOCK_ELEMENT_BUTTON_PRESSED "button-pressed"
+
 #define DONNELL_STOCK_ICON_ERROR "error"
 #define DONNELL_STOCK_ICON_WARNING "warning"
 #define DONNELL_STOCK_ICON_INFO "info"
 
-
 void Donnell_Init(void);
 void Donnell_Cleanup(void);
+
+void Donnell_Rect_Center(DonnellRect *dest, DonnellRect *src1, DonnellRect *src2);
 
 DonnellPixel *Donnell_Pixel_Create();
 DonnellPixel *Donnell_Pixel_CreateEasy(DonnellUInt8 red, DonnellUInt8 green, DonnellUInt8 blue, DonnellUInt8 alpha);
 DonnellPixel *Donnell_Pixel_Blend(DonnellPixel *a, DonnellPixel *b);
 void Donnell_Pixel_Free(DonnellPixel *pixel);
 
-DonnellStockImage* Donnell_StockImage_Create(DonnellImageBuffer* image, char* name);
-DonnellStockImage* Donnell_StockImage_Copy(DonnellStockImage* stock_image);
-void Donnell_StockImage_Free(DonnellStockImage* stock_image);
-void Donnell_StockImages_Add(DonnellStockImage* stock_image);
-DonnellStockImage* Donnell_StockImages_Load(char* name);
+DonnellStockImage *Donnell_StockImage_Create(DonnellImageBuffer *image, char *name);
+DonnellStockImage *Donnell_StockImage_Copy(DonnellStockImage *stock_image);
+void Donnell_StockImage_Free(DonnellStockImage *stock_image);
+void Donnell_StockImages_Add(DonnellStockImage *stock_image);
+DonnellStockImage *Donnell_StockImages_Load(char *name);
 
 DonnellImageBuffer *Donnell_ImageBuffer_Create(unsigned int width, unsigned int height, unsigned int scale);
-DonnellImageBuffer *Donnell_ImageBuffer_LoadFromPNG(char* name);
-DonnellImageBuffer *Donnell_ImageBuffer_LoadFromInline(char** str);
+DonnellImageBuffer *Donnell_ImageBuffer_LoadFromPNG(char *name);
+DonnellImageBuffer *Donnell_ImageBuffer_LoadFromInline(char **str);
 DonnellImageBuffer *Donnell_ImageBuffer_Copy(DonnellImageBuffer *src);
 void Donnell_ImageBuffer_SetPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellPixel *pixel);
 DonnellPixel *Donnell_ImageBuffer_GetPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y);
@@ -120,11 +181,23 @@ void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size, char *utf8str
 void Donnell_GraphicsPrimitives_DrawText(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFontOptions font_options);
 void Donnell_GraphicsPrimitives_MeasureText(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFontOptions font_options, unsigned int pixel_scale);
 
-DonnellIcon* Donnell_GuiPrimitives_Icon_Create(DonnellImageBuffer** images, char* name, unsigned int count);
-DonnellIcon* Donnell_GuiPrimitives_Icon_Copy(DonnellIcon* icon);
-void Donnell_GuiPrimitives_Icon_Free(DonnellIcon* icon);
-unsigned int Donnell_GuiPrimitives_Icon_GetBestForSize(DonnellImageBuffer *buffer, DonnellIcon* icon, unsigned int size);
-void Donnell_GuiPrimitives_Icon_Draw(DonnellImageBuffer *buffer, DonnellIcon* icon, unsigned int index, unsigned int size, unsigned int x, unsigned int y);
+DonnellIcon *Donnell_GuiPrimitives_Icon_Create(DonnellImageBuffer **images, char *name, unsigned int count);
+DonnellIcon *Donnell_GuiPrimitives_Icon_Copy(DonnellIcon *icon);
+void Donnell_GuiPrimitives_Icon_Free(DonnellIcon *icon);
+unsigned int Donnell_GuiPrimitives_Icon_GetBestForSize(DonnellIcon *icon, unsigned int size, unsigned int scale);
+void Donnell_GuiPrimitives_Icon_Draw(DonnellImageBuffer *buffer, DonnellIcon *icon, unsigned int index, unsigned int size, unsigned int x, unsigned int y);
 
-DonnellIcon* Donnell_GuiPrimitives_StockIcons_Load(char* name);
+DonnellIcon *Donnell_GuiPrimitives_StockIcons_Load(char *name);
+void Donnell_GuiPrimitives_StockIcons_Add(DonnellIcon *icon);
+
+DonnellNineSlice *Donnell_GuiPrimitives_StockElements_Load(char *name, unsigned int scale);
+void Donnell_GuiPrimitives_StockElements_Add(DonnellNineSlice *elem);
+
+DonnellNineSlice *Donnell_GuiPrimitives_NineSlice_Create(DonnellImageBuffer *image, DonnellNineSliceRects *rects, unsigned int scale, char *name);
+void Donnell_GuiPrimitives_NineSlice_Free(DonnellNineSlice *image);
+DonnellNineSlice *Donnell_GuiPrimitives_NineSlice_Copy(DonnellNineSlice *image);
+void Donnell_GuiPrimitives_NineSlice_Draw(DonnellImageBuffer *buffer, DonnellNineSlice *image, DonnellRect *rect);
+
+void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer, char *text, DonnellRect *rect, DonnellPixel *color, unsigned int text_size, DonnellFontOptions text_font_options, DonnellButtonState state);
+
 #endif

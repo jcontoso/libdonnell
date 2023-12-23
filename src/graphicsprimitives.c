@@ -15,11 +15,9 @@ DONNELL_EXPORT void Donnell_GraphicsPrimitives_DrawTextLine(DonnellImageBuffer *
         return;
     }
 
-    x = buffer->scale*x;
-    y = buffer->scale*y;
     string = FriBidiString_ConvertFromUTF8(utf8string);
     FriBidiString_Handle(string);
-    TextRenderer_MeasureAndRender(buffer, NULL, color, string, x*buffer->scale, y*buffer->scale, pixel_size*buffer->scale, DONNELL_FALSE, font_options);
+    TextRenderer_MeasureAndRender(buffer, NULL, color, string, x * buffer->scale, y * buffer->scale, pixel_size * buffer->scale, DONNELL_FALSE, font_options);
     FriBidiString_Free(string);
 }
 
@@ -32,7 +30,7 @@ DONNELL_EXPORT void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size
 
     string = FriBidiString_ConvertFromUTF8(utf8string);
     FriBidiString_Handle(string);
-    TextRenderer_MeasureAndRender(NULL, size, NULL, string, 0, 0, pixel_size*pixel_scale, DONNELL_FALSE, font_options);
+    TextRenderer_MeasureAndRender(NULL, size, NULL, string, 0, 0, pixel_size * pixel_scale, DONNELL_FALSE, font_options);
     FriBidiString_Free(string);
 }
 
@@ -93,15 +91,15 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
 
     longest_rtl_width = 0;
     t = -1;
-    x = buffer->scale*x;
-    y = buffer->scale*y;
+    x = buffer->scale * x;
+    y = buffer->scale * y;
 
     paragraphs = TextUtils_Paragraphs_Create(utf8string);
     fribidi_paragraphs = FriBidiParagraphs_ConvertFromParagraphs(paragraphs);
 
-    longest_rtl_width = GetLongestWidth(fribidi_paragraphs, pixel_size*buffer->scale, FRIBIDI_PAR_RTL, font_options);
-    longest_ltr_width = GetLongestWidth(fribidi_paragraphs, pixel_size*buffer->scale, FRIBIDI_PAR_LTR, font_options);
-    longest_on_width = GetLongestWidth(fribidi_paragraphs, pixel_size*buffer->scale, FRIBIDI_PAR_ON, font_options);
+    longest_rtl_width = GetLongestWidth(fribidi_paragraphs, pixel_size * buffer->scale, FRIBIDI_PAR_RTL, font_options);
+    longest_ltr_width = GetLongestWidth(fribidi_paragraphs, pixel_size * buffer->scale, FRIBIDI_PAR_LTR, font_options);
+    longest_on_width = GetLongestWidth(fribidi_paragraphs, pixel_size * buffer->scale, FRIBIDI_PAR_ON, font_options);
 
     if (longest_rtl_width > longest_ltr_width) {
         longest_ndn_width = longest_rtl_width;
@@ -123,7 +121,7 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
 
     for (i = 0; i < fribidi_paragraphs->count; i++) {
         FriBidiString *string;
-        line_height = TextRenderer_MeasureAndRender(NULL, NULL, NULL, NULL, 0, 0, pixel_size*buffer->scale, DONNELL_FALSE, font_options);
+        line_height = TextRenderer_MeasureAndRender(NULL, NULL, NULL, NULL, 0, 0, pixel_size * buffer->scale, DONNELL_FALSE, font_options);
 
         string = fribidi_paragraphs->str[i];
 
@@ -152,14 +150,14 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
                 break;
             case FRIBIDI_PAR_RTL:
             RTL_RENDER:
-                TextRenderer_MeasureAndRender(NULL, &size, NULL, string, 0, 0, pixel_size*buffer->scale, DONNELL_FALSE, font_options);
-                TextRenderer_MeasureAndRender(buffer, NULL, color, fribidi_paragraphs->str[i], (longest_width - size.w + x), y, pixel_size*buffer->scale, DONNELL_FALSE, font_options);
+                TextRenderer_MeasureAndRender(NULL, &size, NULL, string, 0, 0, pixel_size * buffer->scale, DONNELL_FALSE, font_options);
+                TextRenderer_MeasureAndRender(buffer, NULL, color, fribidi_paragraphs->str[i], (longest_width - size.w + x), y, pixel_size * buffer->scale, DONNELL_FALSE, font_options);
                 last_ndn_paragraph = i;
                 break;
             default:
             LTR_RENDER:
-                TextRenderer_MeasureAndRender(buffer, NULL, color, fribidi_paragraphs->str[i], x, y, pixel_size*buffer->scale, DONNELL_FALSE, font_options);
-                TextRenderer_MeasureAndRender(NULL, &size, NULL, string, 0, 0, pixel_size*buffer->scale, DONNELL_FALSE, font_options);
+                TextRenderer_MeasureAndRender(buffer, NULL, color, fribidi_paragraphs->str[i], x, y, pixel_size * buffer->scale, DONNELL_FALSE, font_options);
+                TextRenderer_MeasureAndRender(NULL, &size, NULL, string, 0, 0, pixel_size * buffer->scale, DONNELL_FALSE, font_options);
                 last_ndn_paragraph = i;
             }
         }
@@ -168,7 +166,7 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
     }
 
     if (csize) {
-        TextRenderer_MeasureAndRender(NULL, &size, NULL, fribidi_paragraphs->str[i - 1], 0, 0, pixel_size*buffer->scale, DONNELL_FALSE, font_options);
+        TextRenderer_MeasureAndRender(NULL, &size, NULL, fribidi_paragraphs->str[i - 1], 0, 0, pixel_size * buffer->scale, DONNELL_FALSE, font_options);
         csize->h = y - line_height + size.h;
     }
 
@@ -189,5 +187,5 @@ DONNELL_EXPORT void Donnell_GraphicsPrimitives_MeasureText(DonnellSize *size, ch
         return;
     }
 
-    MeasureAndRender(NULL, size, NULL, utf8string, 0, 0, pixel_size*pixel_scale, font_options);
+    MeasureAndRender(NULL, size, NULL, utf8string, 0, 0, pixel_size * pixel_scale, font_options);
 }

@@ -19,19 +19,19 @@ DONNELL_EXPORT DonnellPixel *Donnell_Pixel_Blend(DonnellPixel *a, DonnellPixel *
     DonnellPixel *result;
     double aa;
     double ba;
-    
+
     if ((!a) || (!b)) {
         return NULL;
     }
-    
+
     aa = a->alpha / 255.0;
-    ba = b->alpha / 255.0;	
-	result = Donnell_Pixel_Create();
-    result->red =  (DonnellUInt8)(aa * a->red + ba * (1 - aa) * b->red);
+    ba = b->alpha / 255.0;
+    result = Donnell_Pixel_Create();
+    result->red = (DonnellUInt8)(aa * a->red + ba * (1 - aa) * b->red);
     result->green = (DonnellUInt8)(aa * a->green + ba * (1 - aa) * b->green);
     result->blue = (DonnellUInt8)(aa * a->blue + ba * (1 - aa) * b->blue);
     result->alpha = (DonnellUInt8)(255 * (aa + ba * (1 - aa)));
-       
+
     return result;
 }
 

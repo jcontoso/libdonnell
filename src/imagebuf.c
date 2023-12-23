@@ -1,7 +1,7 @@
+#include <png.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <png.h>
 
 #include "donnell.h"
 #include "misc.h"
@@ -17,10 +17,10 @@ DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Create(unsigned int width
         return NULL;
     }
 
-    buffer->width = width*scale;
-    buffer->height = height*scale;
+    buffer->width = width * scale;
+    buffer->height = height * scale;
     buffer->scale = scale;
-	
+
     buffer->pixels = calloc(buffer->height, sizeof(DonnellPixel **));
     if (!buffer->pixels) {
         return NULL;
@@ -130,121 +130,120 @@ DONNELL_EXPORT void Donnell_ImageBuffer_BlendPixel(DonnellImageBuffer *buffer, u
     }
 }
 
-DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_LoadFromInline(char** str) {
+DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_LoadFromInline(char **str) {
     DonnellImageBuffer *buffer;
-    char* token;
-    char* dstrline;
-    char* strline;
-	unsigned int w;
-	unsigned int h;
-	unsigned int i;
-	unsigned int j;
-	unsigned int s;
-	
-	if (!str) {
-		return NULL;
-	}
-	
-	sscanf(str[0], "%u %u %u", &w, &h, &s);
-	
-	buffer = Donnell_ImageBuffer_Create(w, h, s);
-    for (i = 1; i < h+1; i++) {
-		j = 0;		
-		dstrline = strdup(str[i]);
-		strline = dstrline;
-		token = strtok(strline, "|");
-   
-		while(token) {
- 			DonnellPixel* pixel;
-			int r;
-			int g;
-			int b;
-			int a;
-			sscanf(token, "%02x%02x%02x%02x", &r, &g, &b, &a);
-			pixel = Donnell_Pixel_CreateEasy((DonnellUInt8)r, (DonnellUInt8)g, (DonnellUInt8)b, (DonnellUInt8)a);
-			Donnell_ImageBuffer_SetPixel(buffer, j, i-1, pixel);
-			Donnell_Pixel_Free(pixel);   
-			token = strtok(NULL, "|");
-			j++;
-		}	
-		free(dstrline);
-	}
+    char *token;
+    char *dstrline;
+    char *strline;
+    unsigned int w;
+    unsigned int h;
+    unsigned int i;
+    unsigned int j;
+    unsigned int s;
 
-	return buffer;
+    if (!str) {
+        return NULL;
+    }
+
+    sscanf(str[0], "%u %u %u", &w, &h, &s);
+
+    buffer = Donnell_ImageBuffer_Create(w, h, s);
+    for (i = 1; i < h + 1; i++) {
+        j = 0;
+        dstrline = strdup(str[i]);
+        strline = dstrline;
+        token = strtok(strline, "|");
+
+        while (token) {
+            DonnellPixel *pixel;
+            int r;
+            int g;
+            int b;
+            int a;
+            sscanf(token, "%02x%02x%02x%02x", &r, &g, &b, &a);
+            pixel = Donnell_Pixel_CreateEasy((DonnellUInt8)r, (DonnellUInt8)g, (DonnellUInt8)b, (DonnellUInt8)a);
+            Donnell_ImageBuffer_SetPixel(buffer, j, i - 1, pixel);
+            Donnell_Pixel_Free(pixel);
+            token = strtok(NULL, "|");
+            j++;
+        }
+        free(dstrline);
+    }
+
+    return buffer;
 }
 
-
-DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_LoadFromPNG(char* name) {
+DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_LoadFromPNG(char *name) {
     DonnellImageBuffer *buffer;
     FILE *file;
     png_structp png;
     png_infop png_info;
-	png_byte color_type;
-	png_byte bit_depth;
-    png_bytep* png_rows;
-	unsigned int i;
-	unsigned int j;
-	
-	png_rows = NULL;
-	file = fopen(name, "rb");
-	
-	png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	png_info = png_create_info_struct(png);
-	png_init_io(png, file);
-	png_read_info(png, png_info);
+    png_byte color_type;
+    png_byte bit_depth;
+    png_bytep *png_rows;
+    unsigned int i;
+    unsigned int j;
 
-	buffer = Donnell_ImageBuffer_Create(png_get_image_width(png, png_info), png_get_image_height(png, png_info), 1);
-	color_type = png_get_color_type(png, png_info);
-	bit_depth  = png_get_bit_depth(png, png_info);
+    png_rows = NULL;
+    file = fopen(name, "rb");
 
-	if(bit_depth == 16) {
-		png_set_strip_16(png);
-	}
-	
-	if(color_type == PNG_COLOR_TYPE_PALETTE) {
-		png_set_palette_to_rgb(png);
-	}
-	
-	if(color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) {
-		png_set_expand_gray_1_2_4_to_8(png);
-	}
-	
-	if(png_get_valid(png, png_info, PNG_INFO_tRNS)) {
-		png_set_tRNS_to_alpha(png);
-	}
+    png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    png_info = png_create_info_struct(png);
+    png_init_io(png, file);
+    png_read_info(png, png_info);
 
-	if(color_type == PNG_COLOR_TYPE_RGB || color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_PALETTE) {
-		png_set_filler(png, 0xff, PNG_FILLER_AFTER);
-	}
-	
-	if(color_type == PNG_COLOR_TYPE_GRAY ||  color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
-		png_set_gray_to_rgb(png);
-	}
-	
-	png_read_update_info(png, png_info);
+    buffer = Donnell_ImageBuffer_Create(png_get_image_width(png, png_info), png_get_image_height(png, png_info), 1);
+    color_type = png_get_color_type(png, png_info);
+    bit_depth = png_get_bit_depth(png, png_info);
 
-	png_rows = malloc(sizeof(png_bytep) * buffer->height);
-	for(i = 0; i < buffer->height; i++) {
-		png_rows[i] = malloc(png_get_rowbytes(png,png_info));
-	}
-	png_read_image(png, png_rows);
+    if (bit_depth == 16) {
+        png_set_strip_16(png);
+    }
 
-	for(i = 0; i < buffer->height; i++) {
-		for(j = 0; j < buffer->width; j++) {
-			DonnellPixel* pixel;
-			
-			pixel = Donnell_Pixel_CreateEasy(png_rows[i][j * 4], png_rows[i][j * 4 + 1], png_rows[i][j * 4 + 2], png_rows[i][j * 4 + 3]);
-			Donnell_ImageBuffer_SetPixel(buffer, j, i, pixel);
-			Donnell_Pixel_Free(pixel);
-		}
-	}	
+    if (color_type == PNG_COLOR_TYPE_PALETTE) {
+        png_set_palette_to_rgb(png);
+    }
 
-	png_destroy_read_struct(&png, &png_info, NULL);
- 	fclose(file);
- 	for(i = 0; i < buffer->height; i++) {
-		free(png_rows[i]);
-	}
-	free(png_rows);
+    if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) {
+        png_set_expand_gray_1_2_4_to_8(png);
+    }
+
+    if (png_get_valid(png, png_info, PNG_INFO_tRNS)) {
+        png_set_tRNS_to_alpha(png);
+    }
+
+    if (color_type == PNG_COLOR_TYPE_RGB || color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_PALETTE) {
+        png_set_filler(png, 0xff, PNG_FILLER_AFTER);
+    }
+
+    if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
+        png_set_gray_to_rgb(png);
+    }
+
+    png_read_update_info(png, png_info);
+
+    png_rows = malloc(sizeof(png_bytep) * buffer->height);
+    for (i = 0; i < buffer->height; i++) {
+        png_rows[i] = malloc(png_get_rowbytes(png, png_info));
+    }
+    png_read_image(png, png_rows);
+
+    for (i = 0; i < buffer->height; i++) {
+        for (j = 0; j < buffer->width; j++) {
+            DonnellPixel *pixel;
+
+            pixel = Donnell_Pixel_CreateEasy(png_rows[i][j * 4], png_rows[i][j * 4 + 1], png_rows[i][j * 4 + 2], png_rows[i][j * 4 + 3]);
+            Donnell_ImageBuffer_SetPixel(buffer, j, i, pixel);
+            Donnell_Pixel_Free(pixel);
+        }
+    }
+
+    png_destroy_read_struct(&png, &png_info, NULL);
+    fclose(file);
+    for (i = 0; i < buffer->height; i++) {
+        free(png_rows[i]);
+    }
+    free(png_rows);
     return buffer;
 }
 
@@ -283,7 +282,7 @@ DONNELL_EXPORT void Donnell_ImageBuffer_DumpAsPNG(DonnellImageBuffer *buffer, ch
 
     png_write_end(png, png_info);
     free(png_rows);
-	png_destroy_write_struct(&png, &png_info);
+    png_destroy_write_struct(&png, &png_info);
     fclose(file);
 }
 
@@ -380,7 +379,7 @@ DonnellImageBuffer *ImageBuffer_ScaleBL(DonnellImageBuffer *buffer, unsigned int
             e->alpha = (DonnellUInt8)ImageBuffer_ScaleBL_BiLinearOp(a->alpha, b->alpha, c->alpha, d->alpha, (gx - ix), (gy - iy));
 
             Donnell_ImageBuffer_SetPixel(ret, j, i, e);
-            
+
             Donnell_Pixel_Free(a);
             Donnell_Pixel_Free(b);
             Donnell_Pixel_Free(c);
@@ -396,7 +395,7 @@ DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Scale(DonnellImageBuffer 
     if ((width < 0) || (height < 0) || (!buffer)) {
         return NULL;
     }
-    
+
     switch (algo) {
     case DONNELL_SCALING_ALGORITHM_BILINEAR:
         return ImageBuffer_ScaleBL(buffer, width, height);
@@ -407,69 +406,71 @@ DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Scale(DonnellImageBuffer 
 }
 
 DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Crop(DonnellImageBuffer *buffer, DonnellRect *rect, DonnellBool ignore_xy) {
-	DonnellImageBuffer* cbuffer;
-	DonnellImageBuffer* rbuffer;
+    DonnellImageBuffer *cbuffer;
+    DonnellImageBuffer *rbuffer;
     unsigned int i;
     unsigned int j;
-	DonnellBool scaled;
-	
-	if ((!buffer) || (!rect)) {
-		return NULL;
-	}
-	
-	scaled = DONNELL_FALSE;
-	cbuffer = buffer;
-	
-	if (rect->w > buffer->width) {
-		cbuffer = Donnell_ImageBuffer_Scale(buffer, rect->w, buffer->height, DONNELL_SCALING_ALGORITHM_BILINEAR);		
-		scaled = DONNELL_TRUE;
-	}
-	
-	if (rect->h > buffer->height)  {
-		unsigned int w;
-		
-		w = cbuffer->width;
-		if (scaled) {
-			Donnell_ImageBuffer_Free(cbuffer);
-		}
-		cbuffer = Donnell_ImageBuffer_Scale(buffer, w, rect->h, DONNELL_SCALING_ALGORITHM_BILINEAR);		
-	}
-	
-	rbuffer = Donnell_ImageBuffer_Create(rect->w, rect->h, 1);
-	
+    DonnellBool scaled;
+
+    if ((!buffer) || (!rect)) {
+        return NULL;
+    }
+
+    scaled = DONNELL_FALSE;
+    cbuffer = buffer;
+
+    if (rect->w > buffer->width) {
+        cbuffer = Donnell_ImageBuffer_Scale(buffer, rect->w, buffer->height, DONNELL_SCALING_ALGORITHM_BILINEAR);
+        scaled = DONNELL_TRUE;
+        puts("scaled");
+    }
+
+    if (rect->h > buffer->height) {
+        unsigned int w;
+
+        w = cbuffer->width;
+        if (scaled) {
+            Donnell_ImageBuffer_Free(cbuffer);
+        }
+        cbuffer = Donnell_ImageBuffer_Scale(buffer, w, rect->h, DONNELL_SCALING_ALGORITHM_BILINEAR);
+        puts("scaled2");
+    }
+
+    rbuffer = Donnell_ImageBuffer_Create(rect->w, rect->h, 1);
+
     for (i = 0; i < rect->h; ++i) {
         for (j = 0; j < rect->w; ++j) {
             DonnellPixel *pixel;
 
-			if (ignore_xy) {
-				pixel = Donnell_ImageBuffer_GetPixel(cbuffer, j, i);				
-			} else {
-				pixel = Donnell_ImageBuffer_GetPixel(cbuffer, j + rect->x, i + rect->y);
-			}
+            if (ignore_xy) {
+                pixel = Donnell_ImageBuffer_GetPixel(cbuffer, j, i);
+            } else {
+                pixel = Donnell_ImageBuffer_GetPixel(cbuffer, j + rect->x, i + rect->y);
+            }
 
             Donnell_ImageBuffer_SetPixel(rbuffer, j, i, pixel);
 
             Donnell_Pixel_Free(pixel);
         }
-    }	
-   
-   	if (scaled) {
-		Donnell_ImageBuffer_Free(cbuffer);
-	} 
+    }
+
+    if (scaled) {
+        Donnell_ImageBuffer_Free(cbuffer);
+    }
     return rbuffer;
 }
 
 DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Copy(DonnellImageBuffer *src) {
-	DonnellImageBuffer* ret;
+    DonnellImageBuffer *ret;
     unsigned int i;
     unsigned int j;
-    
-	if (!src) {
-		return NULL;
-	}
-	
-	ret = Donnell_ImageBuffer_Create(src->width, src->height, src->scale);
-	
+
+    if (!src) {
+        return NULL;
+    }
+
+    ret = Donnell_ImageBuffer_Create(src->width, src->height, src->scale);
+
     for (i = 0; i < src->height; ++i) {
         for (j = 0; j < src->width; ++j) {
             DonnellPixel *pixel;
@@ -481,41 +482,41 @@ DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Copy(DonnellImageBuffer *
             Donnell_Pixel_Free(pixel);
         }
     }
-    
+
     return ret;
 }
 
 DONNELL_EXPORT void Donnell_ImageBuffer_BlendBufferContents(DonnellImageBuffer *buffer, DonnellImageBuffer *cbuffer, DonnellRect *srect, DonnellRect *drect) {
-	DonnellImageBuffer* sbuffer;
-	DonnellImageBuffer* dbuffer;
-	DonnellRect s;
-	DonnellRect d;
+    DonnellImageBuffer *sbuffer;
+    DonnellImageBuffer *dbuffer;
+    DonnellRect s;
+    DonnellRect d;
     unsigned int i;
     unsigned int j;
-    
-	if ((!buffer) || (!cbuffer)) {
-		return;
-	}
 
-	if (!srect) {
-		s.w = cbuffer->width;
-		s.h = cbuffer->height;
-		s.x = 0;
-		s.y = 0;
-		srect = &s;
-	}
-	
-	if (!drect) {
-		d.w = buffer->width;
-		d.h = buffer->height;
-		d.x = 0;
-		d.y = 0;
-		drect = &d;
-	}
-			
-	sbuffer = Donnell_ImageBuffer_Crop(cbuffer, srect, DONNELL_FALSE);
-	dbuffer = Donnell_ImageBuffer_Crop(sbuffer, drect, DONNELL_TRUE);
-	
+    if ((!buffer) || (!cbuffer)) {
+        return;
+    }
+
+    if (!srect) {
+        s.w = cbuffer->width;
+        s.h = cbuffer->height;
+        s.x = 0;
+        s.y = 0;
+        srect = &s;
+    }
+
+    if (!drect) {
+        d.w = buffer->width;
+        d.h = buffer->height;
+        d.x = 0;
+        d.y = 0;
+        drect = &d;
+    }
+
+    sbuffer = Donnell_ImageBuffer_Crop(cbuffer, srect, DONNELL_FALSE);
+    dbuffer = Donnell_ImageBuffer_Crop(sbuffer, drect, DONNELL_TRUE);
+
     for (i = 0; i < drect->h; ++i) {
         for (j = 0; j < drect->w; ++j) {
             DonnellPixel *pixel;
@@ -527,7 +528,7 @@ DONNELL_EXPORT void Donnell_ImageBuffer_BlendBufferContents(DonnellImageBuffer *
             Donnell_Pixel_Free(pixel);
         }
     }
-    
+
     Donnell_ImageBuffer_Free(dbuffer);
     Donnell_ImageBuffer_Free(sbuffer);
 }

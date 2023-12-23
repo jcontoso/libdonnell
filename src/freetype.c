@@ -265,7 +265,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     if (!string) {
         val = face->size->metrics.height / 64 * h_ratio;
         FT_Done_Face(face);
-		FontConfig_FreeFont(font_file);
+        FontConfig_FreeFont(font_file);
         return val;
     }
 
