@@ -159,7 +159,9 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_Icon_Draw(DonnellImageBuffer *buffer, 
 }
 
 DONNELL_EXPORT DonnellNineSlice *Donnell_GuiPrimitives_StockElements_Load(char *name, unsigned int scale) {
+    unsigned int diff;
     unsigned int i;
+    int best;
 
     if (!name) {
         return NULL;
@@ -171,12 +173,24 @@ DONNELL_EXPORT DonnellNineSlice *Donnell_GuiPrimitives_StockElements_Load(char *
         }
     }
 
+    best = -1;
+    diff = abs(scale - stock_guielems[0]->scale);
     for (i = 0; i < stock_guielems_count; i++) {
         if (!strcmp(stock_guielems[i]->name, name)) {
-            return Donnell_GuiPrimitives_NineSlice_Copy(stock_guielems[i]);
-        }
+			unsigned int cdiff;
+
+			cdiff = abs(scale - stock_guielems[i]->scale);
+
+			if (cdiff < diff) {
+				best = i;
+				diff = cdiff;
+			}
+		}
     }
 
+	if (best > 0) {
+		return Donnell_GuiPrimitives_NineSlice_Copy(stock_guielems[best]);		
+	}
     return NULL;
 }
 
@@ -671,7 +685,6 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer,
         }
 
         if (src1_rect.h < ctext_size.h) {
-			puts("good");
             h = (ctext_size.h + dest_rect.y/buffer->scale * 2);
         }
     }
