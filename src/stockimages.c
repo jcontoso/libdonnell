@@ -11,12 +11,10 @@
 #include "icons/Error32.h"
 #include "icons/Error64.h"
 #include "icons/Error96.h"
-
 #include "icons/Info16.h"
 #include "icons/Info32.h"
 #include "icons/Info64.h"
 #include "icons/Info96.h"
-
 #include "icons/Warning16.h"
 #include "icons/Warning32.h"
 #include "icons/Warning64.h"
@@ -25,14 +23,21 @@
 #include "gui/ButtonHover.h"
 #include "gui/ButtonNormal.h"
 #include "gui/ButtonPressed.h"
-
 #include "gui/ButtonHover2x.h"
 #include "gui/ButtonNormal2x.h"
 #include "gui/ButtonPressed2x.h"
-
 #include "gui/ButtonHover3x.h"
 #include "gui/ButtonNormal3x.h"
 #include "gui/ButtonPressed3x.h"
+#include "gui/ButtonSelectedHover.h"
+#include "gui/ButtonSelectedNormal.h"
+#include "gui/ButtonSelectedPressed.h"
+#include "gui/ButtonSelectedHover2x.h"
+#include "gui/ButtonSelectedNormal2x.h"
+#include "gui/ButtonSelectedPressed2x.h"
+#include "gui/ButtonSelectedHover3x.h"
+#include "gui/ButtonSelectedNormal3x.h"
+#include "gui/ButtonSelectedPressed3x.h"
 
 DonnellStockImage **stock_images;
 unsigned int stock_image_count;
@@ -77,176 +82,190 @@ DONNELL_EXPORT DonnellStockImage *Donnell_StockImage_Create(DonnellImageBuffer *
 }
 
 void StockImages_Init() {
-    DonnellStockImage *error_16;
-    DonnellImageBuffer *error_16_img;
-    DonnellStockImage *error_32;
-    DonnellImageBuffer *error_32_img;
-    DonnellStockImage *error_64;
-    DonnellImageBuffer *error_64_img;
-    DonnellStockImage *error_96;
-    DonnellImageBuffer *error_96_img;
-    DonnellStockImage *info_16;
-    DonnellImageBuffer *info_16_img;
-    DonnellStockImage *info_32;
-    DonnellImageBuffer *info_32_img;
-    DonnellStockImage *info_64;
-    DonnellImageBuffer *info_64_img;
-    DonnellStockImage *info_96;
-    DonnellImageBuffer *info_96_img;
-    DonnellStockImage *warning_16;
-    DonnellImageBuffer *warning_16_img;
-    DonnellStockImage *warning_32;
-    DonnellImageBuffer *warning_32_img;
-    DonnellStockImage *warning_64;
-    DonnellImageBuffer *warning_64_img;
-    DonnellStockImage *warning_96;
-    DonnellImageBuffer *warning_96_img;
-    DonnellStockImage *bhover;
-    DonnellImageBuffer *bhover_img;
-    DonnellStockImage *bnormal;
-    DonnellImageBuffer *bnormal_img;
-    DonnellStockImage *bpressed;
-    DonnellImageBuffer *bpressed_img;
-    DonnellStockImage *bhover2x;
-    DonnellImageBuffer *bhover2x_img;
-    DonnellStockImage *bnormal2x;
-    DonnellImageBuffer *bnormal2x_img;
-    DonnellStockImage *bpressed2x;
-    DonnellImageBuffer *bpressed2x_img;
-    DonnellStockImage *bhover3x;
-    DonnellImageBuffer *bhover3x_img;
-    DonnellStockImage *bnormal3x;
-    DonnellImageBuffer *bnormal3x_img;
-    DonnellStockImage *bpressed3x;
-    DonnellImageBuffer *bpressed3x_img;
+    DonnellStockImage *stock;
+    DonnellImageBuffer *stock_img;
 
     stock_image_count = 0;
 
-    error_16_img = Donnell_ImageBuffer_LoadFromInline(Error16);
-    error_16 = Donnell_StockImage_Create(error_16_img, DONNELL_STOCK_IMAGE_ERROR_16);
-    Donnell_StockImages_Add(error_16);
-    Donnell_StockImage_Free(error_16);
-    Donnell_ImageBuffer_Free(error_16_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(Error16);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_ERROR_16);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    error_32_img = Donnell_ImageBuffer_LoadFromInline(Error32);
-    error_32 = Donnell_StockImage_Create(error_32_img, DONNELL_STOCK_IMAGE_ERROR_32);
-    Donnell_StockImages_Add(error_32);
-    Donnell_StockImage_Free(error_32);
-    Donnell_ImageBuffer_Free(error_32_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(Error32);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_ERROR_32);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    error_64_img = Donnell_ImageBuffer_LoadFromInline(Error64);
-    error_64 = Donnell_StockImage_Create(error_64_img, DONNELL_STOCK_IMAGE_ERROR_64);
-    Donnell_StockImages_Add(error_64);
-    Donnell_StockImage_Free(error_64);
-    Donnell_ImageBuffer_Free(error_64_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(Error64);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_ERROR_64);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    error_96_img = Donnell_ImageBuffer_LoadFromInline(Error96);
-    error_96 = Donnell_StockImage_Create(error_96_img, DONNELL_STOCK_IMAGE_ERROR_96);
-    Donnell_StockImages_Add(error_96);
-    Donnell_StockImage_Free(error_96);
-    Donnell_ImageBuffer_Free(error_96_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(Error96);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_ERROR_96);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    info_16_img = Donnell_ImageBuffer_LoadFromInline(Info16);
-    info_16 = Donnell_StockImage_Create(info_16_img, DONNELL_STOCK_IMAGE_INFO_16);
-    Donnell_StockImages_Add(info_16);
-    Donnell_StockImage_Free(info_16);
-    Donnell_ImageBuffer_Free(info_16_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(Info16);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_INFO_16);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    info_32_img = Donnell_ImageBuffer_LoadFromInline(Info32);
-    info_32 = Donnell_StockImage_Create(info_32_img, DONNELL_STOCK_IMAGE_INFO_32);
-    Donnell_StockImages_Add(info_32);
-    Donnell_StockImage_Free(info_32);
-    Donnell_ImageBuffer_Free(info_32_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(Info32);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_INFO_32);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    info_64_img = Donnell_ImageBuffer_LoadFromInline(Info64);
-    info_64 = Donnell_StockImage_Create(info_64_img, DONNELL_STOCK_IMAGE_INFO_64);
-    Donnell_StockImages_Add(info_64);
-    Donnell_StockImage_Free(info_64);
-    Donnell_ImageBuffer_Free(info_64_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(Info64);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_INFO_64);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    info_96_img = Donnell_ImageBuffer_LoadFromInline(Info96);
-    info_96 = Donnell_StockImage_Create(info_96_img, DONNELL_STOCK_IMAGE_INFO_96);
-    Donnell_StockImages_Add(info_96);
-    Donnell_StockImage_Free(info_96);
-    Donnell_ImageBuffer_Free(info_96_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(Info96);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_INFO_96);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    warning_16_img = Donnell_ImageBuffer_LoadFromInline(Warning16);
-    warning_16 = Donnell_StockImage_Create(warning_16_img, DONNELL_STOCK_IMAGE_WARNING_16);
-    Donnell_StockImages_Add(warning_16);
-    Donnell_StockImage_Free(warning_16);
-    Donnell_ImageBuffer_Free(warning_16_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(Warning16);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_WARNING_16);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    warning_32_img = Donnell_ImageBuffer_LoadFromInline(Warning32);
-    warning_32 = Donnell_StockImage_Create(warning_32_img, DONNELL_STOCK_IMAGE_WARNING_32);
-    Donnell_StockImages_Add(warning_32);
-    Donnell_StockImage_Free(warning_32);
-    Donnell_ImageBuffer_Free(warning_32_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(Warning32);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_WARNING_32);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    warning_64_img = Donnell_ImageBuffer_LoadFromInline(Warning64);
-    warning_64 = Donnell_StockImage_Create(warning_64_img, DONNELL_STOCK_IMAGE_WARNING_64);
-    Donnell_StockImages_Add(warning_64);
-    Donnell_StockImage_Free(warning_64);
-    Donnell_ImageBuffer_Free(warning_64_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(Warning64);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_WARNING_64);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    warning_96_img = Donnell_ImageBuffer_LoadFromInline(Warning96);
-    warning_96 = Donnell_StockImage_Create(warning_96_img, DONNELL_STOCK_IMAGE_WARNING_96);
-    Donnell_StockImages_Add(warning_96);
-    Donnell_StockImage_Free(warning_96);
-    Donnell_ImageBuffer_Free(warning_96_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(Warning96);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_WARNING_96);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    bhover_img = Donnell_ImageBuffer_LoadFromInline(ButtonHover);
-    bhover = Donnell_StockImage_Create(bhover_img, DONNELL_STOCK_IMAGE_BUTTON_HOVER);
-    Donnell_StockImages_Add(bhover);
-    Donnell_StockImage_Free(bhover);
-    Donnell_ImageBuffer_Free(bhover_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonHover);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_HOVER);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    bnormal_img = Donnell_ImageBuffer_LoadFromInline(ButtonNormal);
-    bnormal = Donnell_StockImage_Create(bnormal_img, DONNELL_STOCK_IMAGE_BUTTON_NORMAL);
-    Donnell_StockImages_Add(bnormal);
-    Donnell_StockImage_Free(bnormal);
-    Donnell_ImageBuffer_Free(bnormal_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonNormal);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_NORMAL);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    bpressed_img = Donnell_ImageBuffer_LoadFromInline(ButtonPressed);
-    bpressed = Donnell_StockImage_Create(bpressed_img, DONNELL_STOCK_IMAGE_BUTTON_PRESSED);
-    Donnell_StockImages_Add(bpressed);
-    Donnell_StockImage_Free(bpressed);
-    Donnell_ImageBuffer_Free(bpressed_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonPressed);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_PRESSED);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    bhover2x_img = Donnell_ImageBuffer_LoadFromInline(ButtonHover2x);
-    bhover2x = Donnell_StockImage_Create(bhover2x_img, DONNELL_STOCK_IMAGE_BUTTON_HOVER_2X);
-    Donnell_StockImages_Add(bhover2x);
-    Donnell_StockImage_Free(bhover2x);
-    Donnell_ImageBuffer_Free(bhover2x_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonHover2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_HOVER_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    bnormal2x_img = Donnell_ImageBuffer_LoadFromInline(ButtonNormal2x);
-    bnormal2x = Donnell_StockImage_Create(bnormal2x_img, DONNELL_STOCK_IMAGE_BUTTON_NORMAL_2X);
-    Donnell_StockImages_Add(bnormal2x);
-    Donnell_StockImage_Free(bnormal2x);
-    Donnell_ImageBuffer_Free(bnormal2x_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonNormal2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_NORMAL_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    bpressed2x_img = Donnell_ImageBuffer_LoadFromInline(ButtonPressed2x);
-    bpressed2x = Donnell_StockImage_Create(bpressed2x_img, DONNELL_STOCK_IMAGE_BUTTON_PRESSED_2X);
-    Donnell_StockImages_Add(bpressed2x);
-    Donnell_StockImage_Free(bpressed2x);
-    Donnell_ImageBuffer_Free(bpressed2x_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonPressed2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_PRESSED_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    bhover3x_img = Donnell_ImageBuffer_LoadFromInline(ButtonHover3x);
-    bhover3x = Donnell_StockImage_Create(bhover3x_img, DONNELL_STOCK_IMAGE_BUTTON_HOVER_3X);
-    Donnell_StockImages_Add(bhover3x);
-    Donnell_StockImage_Free(bhover3x);
-    Donnell_ImageBuffer_Free(bhover3x_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonHover3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_HOVER_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    bnormal3x_img = Donnell_ImageBuffer_LoadFromInline(ButtonNormal3x);
-    bnormal3x = Donnell_StockImage_Create(bnormal3x_img, DONNELL_STOCK_IMAGE_BUTTON_NORMAL_3X);
-    Donnell_StockImages_Add(bnormal3x);
-    Donnell_StockImage_Free(bnormal3x);
-    Donnell_ImageBuffer_Free(bnormal3x_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonNormal3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_NORMAL_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 
-    bpressed3x_img = Donnell_ImageBuffer_LoadFromInline(ButtonPressed3x);
-    bpressed3x = Donnell_StockImage_Create(bpressed3x_img, DONNELL_STOCK_IMAGE_BUTTON_PRESSED_3X);
-    Donnell_StockImages_Add(bpressed3x);
-    Donnell_StockImage_Free(bpressed3x);
-    Donnell_ImageBuffer_Free(bpressed3x_img);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonPressed3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_PRESSED_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+    
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonSelectedHover);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_SELECTED_HOVER);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonSelectedNormal);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_SELECTED_NORMAL);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonSelectedPressed);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_SELECTED_PRESSED);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonSelectedHover2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_SELECTED_HOVER_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonSelectedNormal2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_SELECTED_NORMAL_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonSelectedPressed2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_SELECTED_PRESSED_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonSelectedHover3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_SELECTED_HOVER_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonSelectedNormal3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_SELECTED_NORMAL_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonSelectedPressed3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_SELECTED_PRESSED_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
 }
 
 void StockImages_Cleanup() {

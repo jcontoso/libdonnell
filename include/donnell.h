@@ -5,6 +5,9 @@
 
 typedef unsigned char DonnellUInt8;
 typedef unsigned short DonnellUInt16;
+typedef unsigned long  DonnellUInt32;
+
+
 typedef enum {
     DONNELL_FALSE,
     DONNELL_TRUE
@@ -106,6 +109,10 @@ typedef enum {
     DONNELL_SCALING_ALGORITHM_BILINEAR,
 } DonnellScalingAlgorithm;
 
+typedef enum {
+    DONNELL_SHM_FORMAT_ARGB8888,
+} DonnellSHMFormat;
+
 #define DONNELL_ICON_SIZE_16 16
 #define DONNELL_ICON_SIZE_32 32
 #define DONNELL_ICON_SIZE_64 64
@@ -138,9 +145,24 @@ typedef enum {
 #define DONNELL_STOCK_IMAGE_BUTTON_NORMAL_3X "button-normal-3x"
 #define DONNELL_STOCK_IMAGE_BUTTON_PRESSED_3X "button-pressed-3x"
 
+#define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_HOVER "button-selected-hover"
+#define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_NORMAL "button-selected-normal"
+#define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_PRESSED "button-selected-pressed"
+
+#define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_HOVER_2X "button-selected-hover-2x"
+#define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_NORMAL_2X "button-selected-normal-2x"
+#define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_PRESSED_2X "button-selected-pressed-2x"
+
+#define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_HOVER_3X "button-selected-hover-3x"
+#define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_NORMAL_3X "button-selected-normal-3x"
+#define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_PRESSED_3X "button-selected-pressed-3x"
+
 #define DONNELL_STOCK_ELEMENT_BUTTON_HOVER "button-hover"
 #define DONNELL_STOCK_ELEMENT_BUTTON_NORMAL "button-normal"
 #define DONNELL_STOCK_ELEMENT_BUTTON_PRESSED "button-pressed"
+#define DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_HOVER "button-selected-hover"
+#define DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_NORMAL "button-selected-normal"
+#define DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_PRESSED "button-selected-pressed"
 
 #define DONNELL_STOCK_ICON_ERROR "error"
 #define DONNELL_STOCK_ICON_WARNING "warning"
@@ -171,6 +193,7 @@ DonnellPixel *Donnell_ImageBuffer_GetPixel(DonnellImageBuffer *buffer, unsigned 
 void Donnell_ImageBuffer_BlendPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellPixel *pixel);
 void Donnell_ImageBuffer_Clear(DonnellImageBuffer *buffer, DonnellPixel *pixel);
 void Donnell_ImageBuffer_DumpAsPNG(DonnellImageBuffer *buffer, char *name);
+void Donnell_ImageBuffer_DumpToSHM(DonnellImageBuffer *buffer, void* shm_data, DonnellSHMFormat format);
 DonnellImageBuffer *Donnell_ImageBuffer_Scale(DonnellImageBuffer *buffer, unsigned int width, unsigned int height, DonnellScalingAlgorithm algo);
 DonnellImageBuffer *Donnell_ImageBuffer_Crop(DonnellImageBuffer *buffer, DonnellRect *rect, DonnellBool ignore_xy);
 void Donnell_ImageBuffer_BlendBufferContents(DonnellImageBuffer *buffer, DonnellImageBuffer *cbuffer, DonnellRect *srect, DonnellRect *drect);

@@ -353,6 +353,90 @@ void GuiPrimitives_Init() {
     Donnell_GuiPrimitives_StockElements_Add(sliced_image);
     Donnell_GuiPrimitives_NineSlice_Free(sliced_image);
     Donnell_StockImage_Free(stock_image);
+
+    rects.top_left = (DonnellRect){7, 6, 0, 0};
+    rects.center_left = (DonnellRect){7, 15, 0, 6};
+    rects.bottom_left = (DonnellRect){7, 6, 0, 21};
+    rects.top_center = (DonnellRect){23, 6, 7, 0};
+    rects.center_center = (DonnellRect){23, 15, 7, 6};
+    rects.bottom_center = (DonnellRect){23, 6, 7, 21};
+    rects.top_right = (DonnellRect){7, 6, 30, 0};
+    rects.center_right = (DonnellRect){7, 15, 30, 6};
+    rects.bottom_right = (DonnellRect){7, 6, 30, 21};
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_BUTTON_SELECTED_NORMAL);
+    sliced_image = Donnell_GuiPrimitives_NineSlice_Create(stock_image->image, &rects, 1, DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_NORMAL);
+    Donnell_GuiPrimitives_StockElements_Add(sliced_image);
+    Donnell_GuiPrimitives_NineSlice_Free(sliced_image);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_BUTTON_SELECTED_HOVER);
+    sliced_image = Donnell_GuiPrimitives_NineSlice_Create(stock_image->image, &rects, 1, DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_HOVER);
+    Donnell_GuiPrimitives_StockElements_Add(sliced_image);
+    Donnell_GuiPrimitives_NineSlice_Free(sliced_image);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_BUTTON_SELECTED_PRESSED);
+    sliced_image = Donnell_GuiPrimitives_NineSlice_Create(stock_image->image, &rects, 1, DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_PRESSED);
+    Donnell_GuiPrimitives_StockElements_Add(sliced_image);
+    Donnell_GuiPrimitives_NineSlice_Free(sliced_image);
+    Donnell_StockImage_Free(stock_image);
+
+    rects.top_left = (DonnellRect){14, 12, 0, 0};
+    rects.center_left = (DonnellRect){7 * 2, 15 * 2, 0, 6 * 2};
+    rects.bottom_left = (DonnellRect){14, 12, 0, 42};
+    rects.top_center = (DonnellRect){46, 12, 14, 0};
+    rects.center_center = (DonnellRect){46, 30, 14, 12};
+    rects.bottom_center = (DonnellRect){46, 12, 14, 42};
+    rects.top_right = (DonnellRect){14, 12, 60, 0};
+    rects.center_right = (DonnellRect){14, 30, 60, 12};
+    rects.bottom_right = (DonnellRect){14, 12, 60, 42};
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_BUTTON_SELECTED_NORMAL_2X);
+    sliced_image = Donnell_GuiPrimitives_NineSlice_Create(stock_image->image, &rects, 2, DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_NORMAL);
+    Donnell_GuiPrimitives_StockElements_Add(sliced_image);
+    Donnell_GuiPrimitives_NineSlice_Free(sliced_image);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_BUTTON_SELECTED_HOVER_2X);
+    sliced_image = Donnell_GuiPrimitives_NineSlice_Create(stock_image->image, &rects, 2, DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_HOVER);
+    Donnell_GuiPrimitives_StockElements_Add(sliced_image);
+    Donnell_GuiPrimitives_NineSlice_Free(sliced_image);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_BUTTON_SELECTED_PRESSED_2X);
+    sliced_image = Donnell_GuiPrimitives_NineSlice_Create(stock_image->image, &rects, 2, DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_PRESSED);
+    Donnell_GuiPrimitives_StockElements_Add(sliced_image);
+    Donnell_GuiPrimitives_NineSlice_Free(sliced_image);
+    Donnell_StockImage_Free(stock_image);
+
+    rects.top_left = (DonnellRect){21, 18, 0, 0};
+    rects.center_left = (DonnellRect){21, 45, 0, 18};
+    rects.bottom_left = (DonnellRect){7 * 3, 6 * 3, 0, 21 * 3};
+    rects.top_center = (DonnellRect){23 * 3, 6 * 3, 7 * 3, 0};
+    rects.center_center = (DonnellRect){23 * 3, 15 * 3, 7 * 3, 6 * 3};
+    rects.bottom_center = (DonnellRect){23 * 3, 6 * 3, 7 * 3, 21 * 3};
+    rects.top_right = (DonnellRect){7 * 3, 6 * 3, 30 * 3, 0};
+    rects.center_right = (DonnellRect){7 * 3, 15 * 3, 30 * 3, 6 * 3};
+    rects.bottom_right = (DonnellRect){7 * 3, 6 * 3, 30 * 3, 21 * 3};
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_BUTTON_SELECTED_NORMAL_3X);
+    sliced_image = Donnell_GuiPrimitives_NineSlice_Create(stock_image->image, &rects, 3, DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_NORMAL);
+    Donnell_GuiPrimitives_StockElements_Add(sliced_image);
+    Donnell_GuiPrimitives_NineSlice_Free(sliced_image);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_BUTTON_SELECTED_HOVER_3X);
+    sliced_image = Donnell_GuiPrimitives_NineSlice_Create(stock_image->image, &rects, 3, DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_HOVER);
+    Donnell_GuiPrimitives_StockElements_Add(sliced_image);
+    Donnell_GuiPrimitives_NineSlice_Free(sliced_image);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_BUTTON_SELECTED_PRESSED_3X);
+    sliced_image = Donnell_GuiPrimitives_NineSlice_Create(stock_image->image, &rects, 3, DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_PRESSED);
+    Donnell_GuiPrimitives_StockElements_Add(sliced_image);
+    Donnell_GuiPrimitives_NineSlice_Free(sliced_image);
+    Donnell_StockImage_Free(stock_image);
 }
 
 void GuiPrimitives_Cleanup() {
@@ -554,11 +638,11 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer,
     button_img = NULL;
 
     if ((state & DONNELL_BUTTON_STATE_NORMAL) && (state & DONNELL_BUTTON_STATE_SELECTED)) {
-
-    } else if ((state & DONNELL_BUTTON_STATE_NORMAL) && (state & DONNELL_BUTTON_STATE_SELECTED)) {
-
-    } else if ((state & DONNELL_BUTTON_STATE_NORMAL) && (state & DONNELL_BUTTON_STATE_SELECTED)) {
-
+        button_img = Donnell_GuiPrimitives_StockElements_Load(DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_NORMAL, buffer->scale);
+    } else if ((state & DONNELL_BUTTON_STATE_HOVER) && (state & DONNELL_BUTTON_STATE_SELECTED)) {
+        button_img = Donnell_GuiPrimitives_StockElements_Load(DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_HOVER, buffer->scale);
+    } else if ((state & DONNELL_BUTTON_STATE_PRESSED) && (state & DONNELL_BUTTON_STATE_SELECTED)) {
+        button_img = Donnell_GuiPrimitives_StockElements_Load(DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_PRESSED, buffer->scale);
     } else if (state & DONNELL_BUTTON_STATE_NORMAL) {
         button_img = Donnell_GuiPrimitives_StockElements_Load(DONNELL_STOCK_ELEMENT_BUTTON_NORMAL, buffer->scale);
     } else if (state & DONNELL_BUTTON_STATE_HOVER) {

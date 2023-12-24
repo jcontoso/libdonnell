@@ -184,6 +184,10 @@ DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_LoadFromPNG(char *name) {
     unsigned int i;
     unsigned int j;
 
+	if (!name) {
+		return NULL;
+	}
+	
     png_rows = NULL;
     file = fopen(name, "rb");
 
@@ -255,6 +259,10 @@ DONNELL_EXPORT void Donnell_ImageBuffer_DumpAsPNG(DonnellImageBuffer *buffer, ch
     unsigned int i;
     unsigned int j;
 
+	if ((!name) || (!buffer)) {
+		return;
+	}
+	
     png_rows = NULL;
     file = fopen(name, "wb");
 
@@ -284,6 +292,38 @@ DONNELL_EXPORT void Donnell_ImageBuffer_DumpAsPNG(DonnellImageBuffer *buffer, ch
     free(png_rows);
     png_destroy_write_struct(&png, &png_info);
     fclose(file);
+}
+
+
+
+void ImageBuffer_DumpToSHM_ARGB8888(DonnellImageBuffer *buffer, DonnellUInt32 *shm_data) { 
+	unsigned int i;
+	unsigned int j;
+	unsigned int c;
+
+	c = 0;
+	
+	for (i = 0; i < buffer->height; i++) {
+		for (j = 0; j < buffer->width; j++) {
+			DonnellPixel *pixel;
+
+			pixel = Donnell_ImageBuffer_GetPixel(buffer, j, i);
+			shm_data[i] = pixel->alpha<<24 + pixel->red<<16 + pixel->green<<8 + pixel->blue;
+			Donnell_Pixel_Free(pixel);
+			c++;
+		}
+	}
+}
+
+DONNELL_EXPORT void Donnell_ImageBuffer_DumpToSHM(DonnellImageBuffer *buffer, void* shm_data, DonnellSHMFormat format) {
+	if (!buffer) {
+		return;
+	}
+	
+    switch (format) {
+    default:
+        ImageBuffer_DumpToSHM_ARGB8888(buffer, (DonnellUInt32*)shm_data);
+    }	
 }
 
 DonnellImageBuffer *ImageBuffer_ScaleNN(DonnellImageBuffer *buffer, unsigned int width, unsigned int height) {
