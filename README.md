@@ -6,5 +6,11 @@ It currently boasts the following features:
 - Supports a vast subset of Unicode text by default (including Arabic text).
 - Can load in HarfBuzz dynamically for even greater Unicode coverage if the system has it installed.
 - Can load in an external SVG renderer for Emoji fonts that use SVG glyphs.
-- Supports some basically GUI rendering features, like buttons and icons.
+- Supports some basic GUI rendering features, like buttons and icons.
 - Supports integer scaling for all GUI rendering operations.
+
+Todo:
+- [ ] More sanity checks
+- [ ] Get HarfBuzz support working
+- [ ] Documentation
+- [ ] Window decoration rendering
