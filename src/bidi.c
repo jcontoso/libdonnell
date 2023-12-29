@@ -65,7 +65,11 @@ FriBidiString *FriBidiString_Copy(FriBidiString *string) {
 DonnellBool FriBidiString_Compare(FriBidiString *a, FriBidiString *b) {
 	unsigned int i;
 	
-    for (i = 0; i<a->len || i<b->len; i++) {
+	if (a->len != b->len) {
+		return DONNELL_FALSE;
+	}
+	
+    for (i = 0; i <a->len ; i++) {
 		if (a->str[i] != b->str[i]) {
 			return DONNELL_FALSE;
 		}
