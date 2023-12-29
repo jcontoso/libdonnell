@@ -1,5 +1,3 @@
-#if (FREETYPE_MINOR >= 12)
-
 #include <dlfcn.h>
 #include <math.h>
 #include <stdint.h>
@@ -7,6 +5,8 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+
+#if (FREETYPE_MINOR >= 12)
 #include FT_OTSVG_H
 
 #include "donnell.h"
