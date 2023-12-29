@@ -109,10 +109,6 @@ typedef enum {
     DONNELL_SCALING_ALGORITHM_BILINEAR,
 } DonnellScalingAlgorithm;
 
-typedef enum {
-    DONNELL_SHM_FORMAT_ARGB8888,
-} DonnellSHMFormat;
-
 #define DONNELL_ICON_SIZE_16 16
 #define DONNELL_ICON_SIZE_32 32
 #define DONNELL_ICON_SIZE_64 64
@@ -193,7 +189,6 @@ DonnellPixel *Donnell_ImageBuffer_GetPixel(DonnellImageBuffer *buffer, unsigned 
 void Donnell_ImageBuffer_BlendPixel(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellPixel *pixel);
 void Donnell_ImageBuffer_Clear(DonnellImageBuffer *buffer, DonnellPixel *pixel);
 void Donnell_ImageBuffer_DumpAsPNG(DonnellImageBuffer *buffer, char *name);
-void Donnell_ImageBuffer_DumpToSHM(DonnellImageBuffer *buffer, void* shm_data, DonnellSHMFormat format);
 DonnellImageBuffer *Donnell_ImageBuffer_Scale(DonnellImageBuffer *buffer, unsigned int width, unsigned int height, DonnellScalingAlgorithm algo);
 DonnellImageBuffer *Donnell_ImageBuffer_Crop(DonnellImageBuffer *buffer, DonnellRect *rect, DonnellBool ignore_xy);
 void Donnell_ImageBuffer_BlendBufferContents(DonnellImageBuffer *buffer, DonnellImageBuffer *cbuffer, DonnellRect *srect, DonnellRect *drect);
