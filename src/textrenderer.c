@@ -85,5 +85,7 @@ void TextRenderer_Cleanup(void) {
     FreeType_Cleanup();
     FontConfig_Cleanup();
     HarfBuzz_Cleanup();
-    SVG_Cleanup();
+    #if (FREETYPE_MINOR >= 12)
+		SVG_Cleanup();
+	#endif
 }
