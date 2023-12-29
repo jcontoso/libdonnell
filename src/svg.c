@@ -10,6 +10,8 @@
 #include "donnell.h"
 #include "svg.h"
 
+#if (FREETYPE_MINOR >= 12)
+
 SVGLibrary *svg_library;
 
 void SVG_Init(void) {
@@ -269,3 +271,5 @@ FT_Error SVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer svg
     svg_library->handle_destroy(handle);
     return FT_Err_Ok;
 }
+
+#endif

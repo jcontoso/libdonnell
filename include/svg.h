@@ -3,6 +3,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#if (FREETYPE_MINOR >= 12)
 #ifndef DONNELL_SVG
 #define DONNELL_SVG
 
@@ -125,4 +126,5 @@ void SVGRenderer_Free(FT_Pointer *svg);
 FT_Error SVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer svg);
 FT_Error SVGRenderer_Render(FT_GlyphSlot slot, FT_Pointer *svg);
 
+#endif
 #endif

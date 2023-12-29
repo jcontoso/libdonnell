@@ -24,6 +24,8 @@ void HarfBuzz_Init(void) {
 
     error = NULL;
     harfbuzz = NULL;
+    return;
+    
     harfbuzz = malloc(sizeof(HarfBuzzLibrary));
     if (!harfbuzz) {
         return;

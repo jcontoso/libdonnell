@@ -66,14 +66,17 @@ int TextRenderer_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size,
 }
 
 void TextRenderer_Init(void) {
-    SVG_Init();
+    #if (FREETYPE_MINOR >= 12)
+		SVG_Init();
+	#endif
     FontConfig_Init();
     FreeType_Init();
 
     text_renderer = &FreeType_MeasureAndRender;
 
-    /*HarfBuzz_Init();*/
+    HarfBuzz_Init();
     if (HarfBuzz_GetLibrary()) {
+		puts("HarfBuzz enabled");
         text_renderer = &HarfBuzz_MeasureAndRender;
     }
 }
