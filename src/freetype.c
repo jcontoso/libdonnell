@@ -290,7 +290,6 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
 	
 	if (cache) {
 		font_file = FontConfig_CopyFont(cache->font);
-		puts("Loading from cache");
 	} else {
 		font_file = FontConfig_SelectFont(string, font_options);
 		
@@ -300,7 +299,6 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
 		cache->options = font_options;
 		cache->size = pixel_size;
 		FreeType_AddToCache(cache);
-		puts("Added to cache");
 	}
 	
 	if (cache) {
