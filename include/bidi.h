@@ -19,6 +19,8 @@ typedef struct {
 
 FriBidiString *FriBidiString_Create(unsigned int size);
 FriBidiString *FriBidiString_ConvertFromUTF8(char *string);
+FriBidiString *FriBidiString_Copy(FriBidiString *string);
+DonnellBool FriBidiString_Compare(FriBidiString *a, FriBidiString *b);
 char *FriBidiString_ConvertToUTF8(FriBidiString *string);
 void FriBidiString_Handle(FriBidiString *string);
 void FriBidiString_Free(FriBidiString *string);

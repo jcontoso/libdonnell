@@ -15,11 +15,12 @@ typedef struct {
     char *font;
     int index;
     DonnellBool embolden;
-} FontConfig_Font;
+} FontConfigFont;
 
 void FontConfig_Init(void);
-FontConfig_Font *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions font_options);
-void FontConfig_FreeFont(FontConfig_Font *font);
+FontConfigFont *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions font_options);
+FontConfigFont *FontConfig_CopyFont(FontConfigFont *font);
+void FontConfig_FreeFont(FontConfigFont *font);
 FT_UInt FontConfig_CharIndex(FT_Face face, FcChar32 chr);
 void FontConfig_Cleanup(void);
 

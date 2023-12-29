@@ -17,6 +17,63 @@
 FT_Library freetype;
 FT_Error freetype_error;
 FT_Int32 flags;
+FreeTypeCache** cache;
+unsigned int cache_count;
+
+void FreeType_CacheFree(FreeTypeCache *cache_elem) {
+	FontConfig_FreeFont(cache_elem->font);
+	FriBidiString_Free(cache_elem->str);
+	free(cache_elem);
+}
+
+FreeTypeCache *FreeType_CacheCopy(FreeTypeCache *cache_elem) {
+    FreeTypeCache *ret;
+
+    ret = malloc(sizeof(FreeTypeCache));
+    if (!ret) {
+        return NULL;
+    }
+	
+	ret->font = FontConfig_CopyFont(cache_elem->font);
+	ret->str = FriBidiString_Copy(cache_elem->str);
+	ret->options = cache_elem->options;
+	ret->size = cache_elem->size;
+	
+	return ret;
+}
+
+
+FreeTypeCache *FreeType_LoadFromCache(FriBidiString *str, DonnellFontOptions options, unsigned int size) {
+    unsigned int i;
+
+    for (i = 0; i < cache_count; i++) {
+        if ((FriBidiString_Compare(cache[i]->str, str)) && (cache[i]->options == options) && (cache[i]->size == size)) {
+            return FreeType_CacheCopy(cache[i]);
+        }
+    }
+
+    return NULL;
+}
+
+void FreeType_AddToCache(FreeTypeCache *cache_elem) {
+    unsigned int i;
+
+    for (i = 0; i < cache_count; i++) {
+        if (FriBidiString_Compare(cache[i]->str, cache_elem->str)) {
+            return;
+        }
+    }
+
+    cache_count++;
+    if (cache_count == 1) {
+        cache = calloc(cache_count, sizeof(FreeTypeCache *));
+    } else {
+        cache = realloc(cache, cache_count * sizeof(FreeTypeCache *));
+    }
+
+    cache[cache_count - 1] = FreeType_CacheCopy(cache_elem);
+}
+
 
 DonnellImageBuffer *FreeType_ConvertToBufferFromRGBABitmap(FT_Bitmap *bitmap, DonnellBool non_ideal_size, unsigned int wanted_size, double w_ratio) {
     DonnellImageBuffer *buffer;
@@ -180,9 +237,17 @@ void FreeType_Init(void) {
 			#endif
 		}
 	#endif
+	
+	cache_count = 0;
 }
 
 void FreeType_Cleanup(void) {
+    unsigned int i;
+
+    for (i = 0; i < cache_count; i++) {
+        FreeType_CacheFree(cache[i]);
+    }
+    free(cache);
     FT_Done_FreeType(freetype);
 }
 
@@ -203,7 +268,8 @@ FT_Int32 FreeType_GetFlags(void) {
 int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellBool return_max_asc, DonnellFontOptions font_options) {
     FT_Face face;
     FT_Int32 cflags;
-    FontConfig_Font *font_file;
+    FontConfigFont *font_file;
+    FreeTypeCache* cache;
     DonnellBool non_ideal_size;
     unsigned int i;
     unsigned int best;
@@ -220,10 +286,24 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
         size->w = 0;
     }
 
-    font_file = FontConfig_SelectFont(string, font_options);
-    if (!font_file) {
-        return 0;
-    }
+	cache = FreeType_LoadFromCache(string, font_options, pixel_size);
+	
+	if (cache) {
+		font_file = FontConfig_CopyFont(cache->font);
+	} else {
+		font_file = FontConfig_SelectFont(string, font_options);
+		
+		cache = malloc(sizeof(FreeTypeCache));
+		cache->font = FontConfig_CopyFont(font_file);
+		cache->str = FriBidiString_Copy(string);
+		cache->options = font_options;
+		cache->size = pixel_size;
+		FreeType_AddToCache(cache);
+	}
+	
+	if (cache) {
+		FreeType_CacheFree(cache);
+	}
 
     FT_New_Face(freetype, font_file->font, font_file->index, &face);
 

@@ -7,7 +7,6 @@ typedef unsigned char DonnellUInt8;
 typedef unsigned short DonnellUInt16;
 typedef unsigned long  DonnellUInt32;
 
-
 typedef enum {
     DONNELL_FALSE,
     DONNELL_TRUE
@@ -198,7 +197,8 @@ void Donnell_GraphicsPrimitives_DrawTextLine(DonnellImageBuffer *buffer, Donnell
 void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFontOptions font_options, unsigned int pixel_scale);
 void Donnell_GraphicsPrimitives_DrawText(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFontOptions font_options);
 void Donnell_GraphicsPrimitives_MeasureText(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFontOptions font_options, unsigned int pixel_scale);
-
+void Donnell_GraphicsPrimitives_DrawRectangle(DonnellImageBuffer *buffer, DonnellPixel *color, DonnellRect *rect, DonnellBool blend);
+	 
 DonnellIcon *Donnell_GuiPrimitives_Icon_Create(DonnellImageBuffer **images, char *name, unsigned int count);
 DonnellIcon *Donnell_GuiPrimitives_Icon_Copy(DonnellIcon *icon);
 void Donnell_GuiPrimitives_Icon_Free(DonnellIcon *icon);

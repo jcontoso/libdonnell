@@ -40,11 +40,16 @@ void convert_to_pixmap() {
 	}
 }
 
-void draw_dialog(DonnellButtonState state) {	
-	Donnell_ImageBuffer_Clear(buffer, bg_color);
-	Donnell_GraphicsPrimitives_DrawTextLine(buffer, text_color, "This is a dialog.", 55, 24, 14, DONNELL_FONT_OPTIONS_SANS_SERIF);
-	Donnell_GuiPrimitives_Icon_Draw(buffer, icon, ico_index, DONNELL_ICON_SIZE_32, 13, 13);
-	Donnell_GuiPrimitives_DrawButton(buffer, "OK", &button_rect, text_color, 14, DONNELL_FONT_OPTIONS_SANS_SERIF, state);	
+void draw_dialog(DonnellButtonState state, Bool first_time) {	
+	if (first_time == True) {
+		Donnell_ImageBuffer_Clear(buffer, bg_color);
+		Donnell_GraphicsPrimitives_DrawTextLine(buffer, text_color, "This is a dialog.", 55, 24, 14, DONNELL_FONT_OPTIONS_SANS_SERIF);
+		Donnell_GuiPrimitives_Icon_Draw(buffer, icon, ico_index, DONNELL_ICON_SIZE_32, 13, 13);
+		Donnell_GuiPrimitives_DrawButton(buffer, "OK", &button_rect, text_color, 14, DONNELL_FONT_OPTIONS_SANS_SERIF, state);			
+	} else {
+		Donnell_GraphicsPrimitives_DrawRectangle(buffer, bg_color, &button_rect, DONNELL_FALSE);
+		Donnell_GuiPrimitives_DrawButton(buffer, "OK", &button_rect, text_color, 14, DONNELL_FONT_OPTIONS_SANS_SERIF, state);			
+	}
 }
  
 void init_dialog_resources() {
@@ -59,8 +64,12 @@ void init_dialog_resources() {
 	ico_index = Donnell_GuiPrimitives_Icon_GetBestForSize(icon, DONNELL_ICON_SIZE_32, buffer->scale);
 }
 
-void blit_to_window(Pixmap pixmap) {
-	XCopyArea(display, contents, window, DefaultGC(display, screen), 0, 0, buffer->width, buffer->height, 0, 0);
+void blit_to_window(Pixmap pixmap, Bool first_time) {
+	if (first_time == True) {
+		XCopyArea(display, contents, window, DefaultGC(display, screen), 0, 0, buffer->width, buffer->height, 0, 0);
+	} else {
+		XCopyArea(display, contents, window, DefaultGC(display, screen), button_rect.x, button_rect.y, button_rect.w, button_rect.h, button_rect.x, button_rect.y);
+	}
 	XFlush(display);
 }
 
@@ -75,9 +84,9 @@ Bool update_dialog(Bool pressed, unsigned int x, unsigned int y) {
 		button_state = DONNELL_BUTTON_STATE_NORMAL | DONNELL_BUTTON_STATE_SELECTED;
 	}	
 	
-	draw_dialog(button_state);
+	draw_dialog(button_state, False);
 	convert_to_pixmap();
-	blit_to_window(contents);	
+	blit_to_window(contents, False);	
 	
 	if (button_state & DONNELL_BUTTON_STATE_PRESSED) {
 		return True;
@@ -99,7 +108,7 @@ int main(void) {
 	button_pressed = False;
 	button_state = DONNELL_BUTTON_STATE_NORMAL | DONNELL_BUTTON_STATE_SELECTED;
 	init_dialog_resources();
-	draw_dialog(button_state);
+	draw_dialog(button_state, True);
 	
     display = XOpenDisplay(NULL);
     screen = DefaultScreen(display);
@@ -142,7 +151,7 @@ int main(void) {
 
 		switch(event.type) {
 			case Expose:
-				blit_to_window(contents);
+				blit_to_window(contents, True);
 				break;
 			case MotionNotify:
 				update_dialog(button_pressed, event.xbutton.x, event.xbutton.y);

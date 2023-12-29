@@ -16,7 +16,7 @@ void FontConfig_Init(void) {
     fontconfig = FcInitLoadConfigAndFonts();
 }
 
-void FontConfig_FreeFont(FontConfig_Font *font) {
+void FontConfig_FreeFont(FontConfigFont *font) {
     if (!font) {
         return;
     }
@@ -28,14 +28,29 @@ void FontConfig_FreeFont(FontConfig_Font *font) {
     free(font);
 }
 
-FontConfig_Font *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions font_options) {
+FontConfigFont *FontConfig_CopyFont(FontConfigFont *font) {
+    FontConfigFont *ret;
+
+    ret = malloc(sizeof(FontConfigFont));
+    if (!ret) {
+        return NULL;
+    }
+	
+	ret->font = strdup(font->font);
+	ret->index = font->index;
+	ret->embolden = font->embolden;
+	
+	return ret;
+}
+
+FontConfigFont *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions font_options) {
     FcPattern *pattern;
     FcPattern *font;
     FcResult result;
     FcChar8 *file;
     FcCharSet *char_set;
     FcBool embolden;
-    FontConfig_Font *ret;
+    FontConfigFont *ret;
     char *font_name;
     unsigned int i;
 
@@ -44,7 +59,7 @@ FontConfig_Font *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions
     }
 
     char_set = NULL;
-    ret = malloc(sizeof(FontConfig_Font));
+    ret = malloc(sizeof(FontConfigFont));
     if (!ret) {
         return NULL;
     }

@@ -431,7 +431,6 @@ DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Crop(DonnellImageBuffer *
     if (rect->w > buffer->width) {
         cbuffer = Donnell_ImageBuffer_Scale(buffer, rect->w, buffer->height, DONNELL_SCALING_ALGORITHM_BILINEAR);
         scaled = DONNELL_TRUE;
-        puts("scaled");
     }
 
     if (rect->h > buffer->height) {
@@ -442,7 +441,6 @@ DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_Crop(DonnellImageBuffer *
             Donnell_ImageBuffer_Free(cbuffer);
         }
         cbuffer = Donnell_ImageBuffer_Scale(buffer, w, rect->h, DONNELL_SCALING_ALGORITHM_BILINEAR);
-        puts("scaled2");
     }
 
     rbuffer = Donnell_ImageBuffer_Create(rect->w, rect->h, 1);

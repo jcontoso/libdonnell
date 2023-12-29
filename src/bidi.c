@@ -48,6 +48,32 @@ FriBidiString *FriBidiString_Create(unsigned int size) {
     return result;
 }
 
+FriBidiString *FriBidiString_Copy(FriBidiString *string) {
+    FriBidiString *result;
+	unsigned int i;
+	
+	result = FriBidiString_Create(string->len);
+	result->direction = string->direction;
+	
+    for (i = 0; i < string->len; i++) {
+		result->str[i] = string->str[i];
+    }
+    
+    return result;
+}
+
+DonnellBool FriBidiString_Compare(FriBidiString *a, FriBidiString *b) {
+	unsigned int i;
+	
+    for (i = 0; i<a->len || i<b->len; i++) {
+		if (a->str[i] != b->str[i]) {
+			return DONNELL_FALSE;
+		}
+    }
+    
+    return DONNELL_TRUE;
+}
+
 FriBidiString *FriBidiString_ConvertFromUTF8(char *string) {
     FriBidiString *result;
 

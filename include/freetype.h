@@ -9,6 +9,13 @@
 #ifndef DONNELL_FREETYPE
 #define DONNELL_FREETYPE
 
+typedef struct {
+	FriBidiString* str;
+    FontConfigFont* font;
+    DonnellFontOptions options;
+    unsigned int size;
+} FreeTypeCache;
+
 void FreeType_Init(void);
 void FreeType_Cleanup(void);
 FT_Library *FreeType_GetLibrary(void);

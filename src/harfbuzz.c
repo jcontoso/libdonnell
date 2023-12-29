@@ -80,7 +80,7 @@ void HarfBuzz_Cleanup(void) {
 int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, DonnellPixel *color, FriBidiString *string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellBool return_max_asc, DonnellFontOptions font_options) {
     FT_Face face;
     FT_Int32 cflags;
-    FontConfig_Font *font_file;
+    FontConfigFont *font_file;
     HarfBuzzBuffer harfbuzz_buffer;
     HarfBuzzFont harfbuzz_font;
     HarfBuzzGlyphPos *harfbuzz_pos;
