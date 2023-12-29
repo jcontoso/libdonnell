@@ -2,7 +2,9 @@
 #include FT_FREETYPE_H
 #include FT_BITMAP_H
 #include FT_LCD_FILTER_H
-#include FT_OTSVG_H
+#if (FREETYPE_MINOR >= 12)
+	#include FT_OTSVG_H
+#endif
 #include FT_MODULE_H
 
 #include "bidi.h"
