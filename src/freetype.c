@@ -162,20 +162,22 @@ void FreeType_Init(void) {
     FT_Init_FreeType(&freetype);
     flags = FT_LOAD_RENDER | FT_LOAD_TARGET_NORMAL;
 
-    if (SVG_GetLibrary()) {
-        SVG_RendererHooks funcs;
+	#if (FREETYPE_MINOR >= 12)
+		if (SVG_GetLibrary()) {
+			SVG_RendererHooks funcs;
 
-        funcs.init_svg = (SVG_Lib_Init_Func)SVGRenderer_Init;
-        funcs.free_svg = (SVG_Lib_Free_Func)SVGRenderer_Free;
-        funcs.render_svg = (SVG_Lib_Render_Func)SVGRenderer_Render;
-        funcs.preset_slot = (SVG_Lib_Preset_Slot_Func)SVGRenderer_PresetSlot;
+			funcs.init_svg = (SVG_Lib_Init_Func)SVGRenderer_Init;
+			funcs.free_svg = (SVG_Lib_Free_Func)SVGRenderer_Free;
+			funcs.render_svg = (SVG_Lib_Render_Func)SVGRenderer_Render;
+			funcs.preset_slot = (SVG_Lib_Preset_Slot_Func)SVGRenderer_PresetSlot;
 
-        FT_Property_Set(freetype, "ot-svg", "svg-hooks", &funcs);
-    } else {
-#if ((FREETYPE_MINOR >= 13) && (FREETYPE_PATCH >= 1))
-        cflags |= FT_LOAD_NO_SVG;
-#endif
-    }
+			FT_Property_Set(freetype, "ot-svg", "svg-hooks", &funcs);
+		} else {
+			#if ((FREETYPE_MINOR >= 13) && (FREETYPE_PATCH >= 1))
+				cflags |= FT_LOAD_NO_SVG;
+			#endif
+		}
+	#endif
 }
 
 void FreeType_Cleanup(void) {

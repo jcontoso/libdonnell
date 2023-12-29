@@ -1,3 +1,5 @@
+#if (FREETYPE_MINOR >= 12)
+
 #include <dlfcn.h>
 #include <math.h>
 #include <stdint.h>
@@ -10,7 +12,6 @@
 #include "donnell.h"
 #include "svg.h"
 
-#if (FREETYPE_MINOR >= 12)
 
 SVGLibrary *svg_library;
 
