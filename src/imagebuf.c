@@ -1,8 +1,8 @@
+#include <png.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
-#include <png.h>
 
 #include "donnell.h"
 #include "misc.h"
@@ -185,10 +185,10 @@ DONNELL_EXPORT DonnellImageBuffer *Donnell_ImageBuffer_LoadFromPNG(char *name) {
     unsigned int i;
     unsigned int j;
 
-	if (!name) {
-		return NULL;
-	}
-	
+    if (!name) {
+        return NULL;
+    }
+
     png_rows = NULL;
     file = fopen(name, "rb");
 
@@ -260,10 +260,10 @@ DONNELL_EXPORT void Donnell_ImageBuffer_DumpAsPNG(DonnellImageBuffer *buffer, ch
     unsigned int i;
     unsigned int j;
 
-	if ((!name) || (!buffer)) {
-		return;
-	}
-	
+    if ((!name) || (!buffer)) {
+        return;
+    }
+
     png_rows = NULL;
     file = fopen(name, "wb");
 

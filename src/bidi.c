@@ -50,31 +50,31 @@ FriBidiString *FriBidiString_Create(unsigned int size) {
 
 FriBidiString *FriBidiString_Copy(FriBidiString *string) {
     FriBidiString *result;
-	unsigned int i;
-	
-	result = FriBidiString_Create(string->len);
-	result->direction = string->direction;
-	
+    unsigned int i;
+
+    result = FriBidiString_Create(string->len);
+    result->direction = string->direction;
+
     for (i = 0; i < string->len; i++) {
-		result->str[i] = string->str[i];
+        result->str[i] = string->str[i];
     }
-    
+
     return result;
 }
 
 DonnellBool FriBidiString_Compare(FriBidiString *a, FriBidiString *b) {
-	unsigned int i;
-	
-	if (a->len != b->len) {
-		return DONNELL_FALSE;
-	}
-	
-    for (i = 0; i <a->len ; i++) {
-		if (a->str[i] != b->str[i]) {
-			return DONNELL_FALSE;
-		}
+    unsigned int i;
+
+    if (a->len != b->len) {
+        return DONNELL_FALSE;
     }
-    
+
+    for (i = 0; i < a->len; i++) {
+        if (a->str[i] != b->str[i]) {
+            return DONNELL_FALSE;
+        }
+    }
+
     return DONNELL_TRUE;
 }
 

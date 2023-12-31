@@ -10,8 +10,10 @@
 
 DonnellIcon **stock_icons;
 DonnellNineSlice **stock_guielems;
+DonnellStockElementStandard **stock_stdguielems;
 unsigned int stock_icons_count;
 unsigned int stock_guielems_count;
+unsigned int stock_stdguielems_count;
 
 DONNELL_EXPORT DonnellIcon *Donnell_GuiPrimitives_Icon_Create(DonnellImageBuffer **images, char *name, unsigned int count) {
     DonnellIcon *icon;
@@ -177,20 +179,20 @@ DONNELL_EXPORT DonnellNineSlice *Donnell_GuiPrimitives_StockElements_Load(char *
     diff = abs(scale - stock_guielems[0]->scale);
     for (i = 0; i < stock_guielems_count; i++) {
         if (!strcmp(stock_guielems[i]->name, name)) {
-			unsigned int cdiff;
+            unsigned int cdiff;
 
-			cdiff = abs(scale - stock_guielems[i]->scale);
+            cdiff = abs(scale - stock_guielems[i]->scale);
 
-			if (cdiff < diff) {
-				best = i;
-				diff = cdiff;
-			}
-		}
+            if (cdiff < diff) {
+                best = i;
+                diff = cdiff;
+            }
+        }
     }
 
-	if (best > 0) {
-		return Donnell_GuiPrimitives_NineSlice_Copy(stock_guielems[best]);		
-	}
+    if (best > 0) {
+        return Donnell_GuiPrimitives_NineSlice_Copy(stock_guielems[best]);
+    }
     return NULL;
 }
 
@@ -227,8 +229,10 @@ void GuiPrimitives_Init() {
     DonnellStockImage *stock_image;
     DonnellNineSlice *sliced_image;
     DonnellNineSliceRects rects;
+    DonnellStockElementStandard *std;
 
     stock_icons_count = 0;
+    stock_stdguielems_count = 0;
     stock_guielems_count = 0;
     images = calloc(4, sizeof(DonnellImageBuffer *));
 
@@ -451,8 +455,25 @@ void GuiPrimitives_Init() {
     Donnell_GuiPrimitives_StockElements_Add(sliced_image);
     Donnell_GuiPrimitives_NineSlice_Free(sliced_image);
     Donnell_StockImage_Free(stock_image);
+    
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 1, DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+    
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND_2X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 2, DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+       
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND_3X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 3, DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
 }
-
 void GuiPrimitives_Cleanup() {
     unsigned int i;
 
@@ -657,13 +678,13 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer,
         button_img = Donnell_GuiPrimitives_StockElements_Load(DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_HOVER, buffer->scale);
     } else if ((state & DONNELL_BUTTON_STATE_PRESSED) && (state & DONNELL_BUTTON_STATE_SELECTED)) {
         button_img = Donnell_GuiPrimitives_StockElements_Load(DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_PRESSED, buffer->scale);
-    } else if (state & DONNELL_BUTTON_STATE_NORMAL) {
-        button_img = Donnell_GuiPrimitives_StockElements_Load(DONNELL_STOCK_ELEMENT_BUTTON_NORMAL, buffer->scale);
     } else if (state & DONNELL_BUTTON_STATE_HOVER) {
         button_img = Donnell_GuiPrimitives_StockElements_Load(DONNELL_STOCK_ELEMENT_BUTTON_HOVER, buffer->scale);
     } else if (state & DONNELL_BUTTON_STATE_PRESSED) {
         button_img = Donnell_GuiPrimitives_StockElements_Load(DONNELL_STOCK_ELEMENT_BUTTON_PRESSED, buffer->scale);
-    }
+    } else {
+        button_img = Donnell_GuiPrimitives_StockElements_Load(DONNELL_STOCK_ELEMENT_BUTTON_NORMAL, buffer->scale);
+	}
 
     src1_rect.w = w * buffer->scale;
     src1_rect.h = h * buffer->scale;
@@ -680,12 +701,12 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer,
 
         Donnell_Rect_Center(&dest_rect, &src1_rect, &src2_rect);
 
-        if (src1_rect.w  < ctext_size.w) {
-            w = (ctext_size.w + dest_rect.x/buffer->scale * 2);
+        if (src1_rect.w < ctext_size.w) {
+            w = (ctext_size.w + dest_rect.x / buffer->scale * 2);
         }
 
         if (src1_rect.h < ctext_size.h) {
-            h = (ctext_size.h + dest_rect.y/buffer->scale * 2);
+            h = (ctext_size.h + dest_rect.y / buffer->scale * 2);
         }
     }
 
@@ -697,10 +718,186 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer,
     Donnell_GuiPrimitives_NineSlice_Draw(buffer, button_img, &draw_rect);
 
     if (text) {
-        Donnell_GraphicsPrimitives_DrawTextLine(buffer, color, text, rect->x + dest_rect.x/buffer->scale, rect->y + dest_rect.y/buffer->scale-1, text_size, text_font_options);
+        Donnell_GraphicsPrimitives_DrawTextLine(buffer, color, text, rect->x + dest_rect.x / buffer->scale, rect->y + dest_rect.y / buffer->scale - 1, text_size, text_font_options);
     }
 
     if (button_img) {
         Donnell_GuiPrimitives_NineSlice_Free(button_img);
     }
 }
+
+
+
+DONNELL_EXPORT DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockElement_Create(DonnellImageBuffer *image, unsigned int scale, char *name) {
+    DonnellStockElementStandard *ns_image;
+
+    if (!image) {
+        return NULL;
+    }
+
+    ns_image = malloc(sizeof(DonnellStockElementStandard));
+    if (!ns_image) {
+        return NULL;
+    }
+    ns_image->scale = scale;
+    ns_image->img = Donnell_ImageBuffer_Copy(image);
+    
+    if (name) {
+        ns_image->alloced_name = DONNELL_TRUE;
+        ns_image->name = strdup(name);
+    } else {
+        ns_image->alloced_name = DONNELL_FALSE;
+        ns_image->name = "";
+    }
+
+    return ns_image;
+}
+
+DONNELL_EXPORT void Donnell_GuiPrimitives_StandardStockElement_Free(DonnellStockElementStandard *image) {
+    if (!image) {
+        return;
+    }
+
+    if (image->alloced_name) {
+        free(image->name);
+    }
+
+    Donnell_ImageBuffer_Free(image->img);
+
+    free(image);
+}
+
+DONNELL_EXPORT DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockElement_Copy(DonnellStockElementStandard *image) {
+    DonnellStockElementStandard *ns_image;
+
+    if (!image) {
+        return NULL;
+    }
+
+    ns_image = malloc(sizeof(DonnellStockElementStandard));
+    if (!ns_image) {
+        return NULL;
+    }
+
+    ns_image->scale = image->scale;
+    if (image->name) {
+        ns_image->alloced_name = DONNELL_TRUE;
+        ns_image->name = strdup(image->name);
+    }
+
+    ns_image->img = Donnell_ImageBuffer_Copy(image->img);
+
+    return ns_image;
+}
+
+DONNELL_EXPORT DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockElements_Load(char *name, unsigned int scale) {
+    unsigned int diff;
+    unsigned int i;
+    int best;
+
+    if (!name) {
+        return NULL;
+    }
+
+    for (i = 0; i < stock_stdguielems_count; i++) {
+        if ((!strcmp(stock_stdguielems[i]->name, name)) && (stock_stdguielems[i]->scale == scale)) {
+            return Donnell_GuiPrimitives_StandardStockElement_Copy(stock_stdguielems[i]);
+        }
+    }
+
+	for (i = 0; i < stock_stdguielems_count; i++) {
+		if ((!strcmp(stock_stdguielems[i]->name, name)) && (stock_stdguielems[i]->scale == 1)) {
+			DonnellStockElementStandard *ret;
+			DonnellImageBuffer* buf;
+			
+			ret = Donnell_GuiPrimitives_StandardStockElement_Copy(stock_stdguielems[i]);
+			ret->scale = scale;
+			buf = Donnell_ImageBuffer_Copy(ret->img);
+			Donnell_ImageBuffer_Free(ret->img);
+			ret->img = Donnell_ImageBuffer_Scale(buf, buf->width*scale, buf->height*scale, DONNELL_SCALING_ALGORITHM_BILINEAR);
+			Donnell_ImageBuffer_Free(buf);
+			
+			return ret;
+   		}
+	}
+	
+    return NULL;
+}
+
+DONNELL_EXPORT void Donnell_GuiPrimitives_StandardStockElements_Add(DonnellStockElementStandard *elem) {
+    unsigned int i;
+
+    if (!elem) {
+        return;
+    }
+
+    for (i = 0; i < stock_stdguielems_count; i++) {
+        if ((!strcmp(stock_stdguielems[i]->name, elem->name)) && (stock_stdguielems[i]->scale == elem->scale)) {
+            return;
+        }
+    }
+
+    stock_stdguielems_count++;
+    if (stock_stdguielems_count == 1) {
+        stock_stdguielems = calloc(stock_stdguielems_count, sizeof(DonnellStockElementStandard *));
+    } else {
+        stock_stdguielems = realloc(stock_stdguielems, stock_stdguielems_count * sizeof(DonnellStockElementStandard *));
+    }
+
+    stock_stdguielems[stock_stdguielems_count - 1] = Donnell_GuiPrimitives_StandardStockElement_Copy(elem);
+}
+
+DONNELL_EXPORT void Donnell_GuiPrimitives_StandardStockElement_Draw(DonnellImageBuffer *buffer, DonnellStockElementStandard *elem, DonnellRect *rect, DonnellBool stretch_w, DonnellBool stretch_h) {
+	DonnellImageBuffer *cbuffer;
+	DonnellRect draw_rect;
+	
+    if ((!buffer) || (!elem) || (!rect)) {
+        return;
+    }
+
+	draw_rect.x = rect->x*buffer->scale;
+	draw_rect.y = rect->y*buffer->scale;
+	if (stretch_w) {
+		draw_rect.w = rect->w*buffer->scale;	
+	} else {
+		draw_rect.w = elem->img->width;	
+	}
+	if (stretch_h) {
+		draw_rect.h = rect->h*buffer->scale;	
+	} else {
+		draw_rect.h = elem->img->height;
+	}
+	
+	if (stretch_h || stretch_w)  {
+		cbuffer = Donnell_ImageBuffer_Scale(elem->img, draw_rect.w, draw_rect.h, DONNELL_SCALING_ALGORITHM_BILINEAR);
+	} else {
+		cbuffer = elem->img;
+	}
+	
+	Donnell_ImageBuffer_BlendBufferContents(buffer, cbuffer, NULL, &draw_rect);
+	
+	if (stretch_h || stretch_w)  {
+		Donnell_ImageBuffer_Free(cbuffer);
+	}
+}
+
+void Donnell_GuiPrimitives_DrawTitlebarButton(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellButtonState state) {
+	DonnellStockElementStandard *elem;
+	DonnellRect draw_rect;
+
+    if (!buffer) {
+        return;
+    }
+
+    if (state & DONNELL_BUTTON_STATE_HOVER) {
+        elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND, buffer->scale);
+    } else if (state & DONNELL_BUTTON_STATE_PRESSED) {
+        elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND, buffer->scale);
+    } else {
+        elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND, buffer->scale);
+	}	
+	 
+}
+
+
+

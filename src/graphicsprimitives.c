@@ -190,31 +190,30 @@ DONNELL_EXPORT void Donnell_GraphicsPrimitives_MeasureText(DonnellSize *size, ch
     MeasureAndRender(NULL, size, NULL, utf8string, 0, 0, pixel_size * pixel_scale, font_options);
 }
 
-
 DONNELL_EXPORT void Donnell_GraphicsPrimitives_DrawRectangle(DonnellImageBuffer *buffer, DonnellPixel *color, DonnellRect *rect, DonnellBool blend) {
-	unsigned int x;
-	unsigned int y;
-	unsigned int w;
-	unsigned int h;
-	unsigned int i;
-	unsigned int j;
+    unsigned int x;
+    unsigned int y;
+    unsigned int w;
+    unsigned int h;
+    unsigned int i;
+    unsigned int j;
 
-	if ((!buffer) || (!color) || (!rect)) {
+    if ((!buffer) || (!color) || (!rect)) {
         return;
     }
-	
-	x = rect->x*buffer->scale;
-	w = rect->w*buffer->scale;
-	y = rect->y*buffer->scale;
-	h = rect->h*buffer->scale;
-	
+
+    x = rect->x * buffer->scale;
+    w = rect->w * buffer->scale;
+    y = rect->y * buffer->scale;
+    h = rect->h * buffer->scale;
+
     for (i = 0; i < h; ++i) {
         for (j = 0; j < w; ++j) {
-			if (blend) {
-				Donnell_ImageBuffer_BlendPixel(buffer, x+j, y+i, color);
-			} else {
-				Donnell_ImageBuffer_SetPixel(buffer, x+j, y+i, color);			
-			}
+            if (blend) {
+                Donnell_ImageBuffer_BlendPixel(buffer, x + j, y + i, color);
+            } else {
+                Donnell_ImageBuffer_SetPixel(buffer, x + j, y + i, color);
+            }
         }
     }
 }

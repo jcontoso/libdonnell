@@ -3,7 +3,7 @@
 #include FT_BITMAP_H
 #include FT_LCD_FILTER_H
 #if (FREETYPE_MINOR >= 12)
-	#include FT_OTSVG_H
+#include FT_OTSVG_H
 #endif
 #include FT_MODULE_H
 
@@ -17,13 +17,13 @@
 FT_Library freetype;
 FT_Error freetype_error;
 FT_Int32 flags;
-FreeTypeCache** cache;
+FreeTypeCache **cache;
 unsigned int cache_count;
 
 void FreeType_CacheFree(FreeTypeCache *cache_elem) {
-	FontConfig_FreeFont(cache_elem->font);
-	FriBidiString_Free(cache_elem->str);
-	free(cache_elem);
+    FontConfig_FreeFont(cache_elem->font);
+    FriBidiString_Free(cache_elem->str);
+    free(cache_elem);
 }
 
 FreeTypeCache *FreeType_CacheCopy(FreeTypeCache *cache_elem) {
@@ -33,15 +33,14 @@ FreeTypeCache *FreeType_CacheCopy(FreeTypeCache *cache_elem) {
     if (!ret) {
         return NULL;
     }
-	
-	ret->font = FontConfig_CopyFont(cache_elem->font);
-	ret->str = FriBidiString_Copy(cache_elem->str);
-	ret->options = cache_elem->options;
-	ret->size = cache_elem->size;
-	
-	return ret;
-}
 
+    ret->font = FontConfig_CopyFont(cache_elem->font);
+    ret->str = FriBidiString_Copy(cache_elem->str);
+    ret->options = cache_elem->options;
+    ret->size = cache_elem->size;
+
+    return ret;
+}
 
 FreeTypeCache *FreeType_LoadFromCache(FriBidiString *str, DonnellFontOptions options, unsigned int size) {
     unsigned int i;
@@ -73,7 +72,6 @@ void FreeType_AddToCache(FreeTypeCache *cache_elem) {
 
     cache[cache_count - 1] = FreeType_CacheCopy(cache_elem);
 }
-
 
 DonnellImageBuffer *FreeType_ConvertToBufferFromRGBABitmap(FT_Bitmap *bitmap, DonnellBool non_ideal_size, unsigned int wanted_size, double w_ratio) {
     DonnellImageBuffer *buffer;
@@ -221,24 +219,24 @@ void FreeType_Init(void) {
     FT_Init_FreeType(&freetype);
     flags = FT_LOAD_RENDER | FT_LOAD_TARGET_NORMAL;
 
-	#if (FREETYPE_MINOR >= 12)
-		if (SVG_GetLibrary()) {
-			SVG_RendererHooks funcs;
+#if (FREETYPE_MINOR >= 12)
+    if (SVG_GetLibrary()) {
+        SVG_RendererHooks funcs;
 
-			funcs.init_svg = (SVG_Lib_Init_Func)SVGRenderer_Init;
-			funcs.free_svg = (SVG_Lib_Free_Func)SVGRenderer_Free;
-			funcs.render_svg = (SVG_Lib_Render_Func)SVGRenderer_Render;
-			funcs.preset_slot = (SVG_Lib_Preset_Slot_Func)SVGRenderer_PresetSlot;
+        funcs.init_svg = (SVG_Lib_Init_Func)SVGRenderer_Init;
+        funcs.free_svg = (SVG_Lib_Free_Func)SVGRenderer_Free;
+        funcs.render_svg = (SVG_Lib_Render_Func)SVGRenderer_Render;
+        funcs.preset_slot = (SVG_Lib_Preset_Slot_Func)SVGRenderer_PresetSlot;
 
-			FT_Property_Set(freetype, "ot-svg", "svg-hooks", &funcs);
-		} else {
-			#if ((FREETYPE_MINOR >= 13) && (FREETYPE_PATCH >= 1))
-				cflags |= FT_LOAD_NO_SVG;
-			#endif
-		}
-	#endif
-	
-	cache_count = 0;
+        FT_Property_Set(freetype, "ot-svg", "svg-hooks", &funcs);
+    } else {
+#if ((FREETYPE_MINOR >= 13) && (FREETYPE_PATCH >= 1))
+        cflags |= FT_LOAD_NO_SVG;
+#endif
+    }
+#endif
+
+    cache_count = 0;
 }
 
 void FreeType_Cleanup(void) {
@@ -269,7 +267,7 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     FT_Face face;
     FT_Int32 cflags;
     FontConfigFont *font_file;
-    FreeTypeCache* cache;
+    FreeTypeCache *cache;
     DonnellBool non_ideal_size;
     unsigned int i;
     unsigned int best;
@@ -286,25 +284,25 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
         size->w = 0;
     }
 
-	cache = FreeType_LoadFromCache(string, font_options, pixel_size);
-	
-	if (cache) {
-		font_file = FontConfig_CopyFont(cache->font);
-	} else {
-		font_file = FontConfig_SelectFont(string, font_options);
-		
-		cache = malloc(sizeof(FreeTypeCache));
-		cache->font = FontConfig_CopyFont(font_file);
-		cache->str = FriBidiString_Copy(string);
-		cache->options = font_options;
-		cache->size = pixel_size;
-		FreeType_AddToCache(cache);
-	}
-	
-	if (cache) {
-		FreeType_CacheFree(cache);
-	}
-	
+    cache = FreeType_LoadFromCache(string, font_options, pixel_size);
+
+    if (cache) {
+        font_file = FontConfig_CopyFont(cache->font);
+    } else {
+        font_file = FontConfig_SelectFont(string, font_options);
+
+        cache = malloc(sizeof(FreeTypeCache));
+        cache->font = FontConfig_CopyFont(font_file);
+        cache->str = FriBidiString_Copy(string);
+        cache->options = font_options;
+        cache->size = pixel_size;
+        FreeType_AddToCache(cache);
+    }
+
+    if (cache) {
+        FreeType_CacheFree(cache);
+    }
+
     FT_New_Face(freetype, font_file->font, font_file->index, &face);
 
     cflags = flags;

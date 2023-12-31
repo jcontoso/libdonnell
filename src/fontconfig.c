@@ -35,12 +35,12 @@ FontConfigFont *FontConfig_CopyFont(FontConfigFont *font) {
     if (!ret) {
         return NULL;
     }
-	
-	ret->font = strdup(font->font);
-	ret->index = font->index;
-	ret->embolden = font->embolden;
-	
-	return ret;
+
+    ret->font = strdup(font->font);
+    ret->index = font->index;
+    ret->embolden = font->embolden;
+
+    return ret;
 }
 
 FontConfigFont *FontConfig_SelectFont(FriBidiString *string, DonnellFontOptions font_options) {

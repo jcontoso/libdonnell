@@ -5,7 +5,7 @@
 
 typedef unsigned char DonnellUInt8;
 typedef unsigned short DonnellUInt16;
-typedef unsigned long  DonnellUInt32;
+typedef unsigned long DonnellUInt32;
 
 typedef enum {
     DONNELL_FALSE,
@@ -79,14 +79,11 @@ typedef struct {
 } DonnellNineSlice;
 
 typedef struct {
-    DonnellNineSlice *button_normal;
-    DonnellNineSlice *button_hover;
-    DonnellNineSlice *button_pressed;
-
-    DonnellNineSlice *button_selected_normal;
-    DonnellNineSlice *button_selected_hover;
-    DonnellNineSlice *button_selected_pressed;
-} DonnellStyle;
+    DonnellImageBuffer *img;
+    unsigned int scale;
+    char *name;
+    DonnellBool alloced_name;
+} DonnellStockElementStandard;
 
 typedef enum {
     DONNELL_FONT_OPTIONS_SERIF = 1 << 0,
@@ -104,6 +101,13 @@ typedef enum {
 } DonnellButtonState;
 
 typedef enum {
+    DONNELL_WINDOW_DECORATION_BUTTONS_MINIMIZE = 1 << 0,
+    DONNELL_WINDOW_DECORATION_BUTTONS_MAXIMIZE = 1 << 1,
+    DONNELL_WINDOW_DECORATION_BUTTONS_CLOSE = 1 << 2
+} DonnellWindowDecorationButtons;
+
+
+typedef enum {
     DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR,
     DONNELL_SCALING_ALGORITHM_BILINEAR,
 } DonnellScalingAlgorithm;
@@ -117,12 +121,10 @@ typedef enum {
 #define DONNELL_STOCK_IMAGE_ERROR_32 "error-32"
 #define DONNELL_STOCK_IMAGE_ERROR_64 "error-64"
 #define DONNELL_STOCK_IMAGE_ERROR_96 "error-96"
-
 #define DONNELL_STOCK_IMAGE_INFO_16 "info-16"
 #define DONNELL_STOCK_IMAGE_INFO_32 "info-32"
 #define DONNELL_STOCK_IMAGE_INFO_64 "info-64"
 #define DONNELL_STOCK_IMAGE_INFO_96 "info-96"
-
 #define DONNELL_STOCK_IMAGE_WARNING_16 "warning-16"
 #define DONNELL_STOCK_IMAGE_WARNING_32 "warning-32"
 #define DONNELL_STOCK_IMAGE_WARNING_64 "warning-64"
@@ -131,26 +133,32 @@ typedef enum {
 #define DONNELL_STOCK_IMAGE_BUTTON_HOVER "button-hover"
 #define DONNELL_STOCK_IMAGE_BUTTON_NORMAL "button-normal"
 #define DONNELL_STOCK_IMAGE_BUTTON_PRESSED "button-pressed"
-
 #define DONNELL_STOCK_IMAGE_BUTTON_HOVER_2X "button-hover-2x"
 #define DONNELL_STOCK_IMAGE_BUTTON_NORMAL_2X "button-normal-2x"
 #define DONNELL_STOCK_IMAGE_BUTTON_PRESSED_2X "button-pressed-2x"
-
 #define DONNELL_STOCK_IMAGE_BUTTON_HOVER_3X "button-hover-3x"
 #define DONNELL_STOCK_IMAGE_BUTTON_NORMAL_3X "button-normal-3x"
 #define DONNELL_STOCK_IMAGE_BUTTON_PRESSED_3X "button-pressed-3x"
-
 #define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_HOVER "button-selected-hover"
 #define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_NORMAL "button-selected-normal"
 #define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_PRESSED "button-selected-pressed"
-
 #define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_HOVER_2X "button-selected-hover-2x"
 #define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_NORMAL_2X "button-selected-normal-2x"
 #define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_PRESSED_2X "button-selected-pressed-2x"
-
 #define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_HOVER_3X "button-selected-hover-3x"
 #define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_NORMAL_3X "button-selected-normal-3x"
 #define DONNELL_STOCK_IMAGE_BUTTON_SELECTED_PRESSED_3X "button-selected-pressed-3x"
+#define DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND "caption-background"
+#define DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND_2X "caption-background-2x"
+#define DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND_3X "caption-background-3x"
+
+#define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_PRESSED "caption-close-pressed"
+#define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_PRESSED_2X "caption-close-pressed-2x"
+#define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_PRESSED_3X "caption-close-pressed-3x"
+
+#define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_NORMAL "caption-close-normal"
+#define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_NORMAL_2X "caption-close-normal-2x"
+#define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_NORMAL_3X "caption-close-normal-3x"
 
 #define DONNELL_STOCK_ELEMENT_BUTTON_HOVER "button-hover"
 #define DONNELL_STOCK_ELEMENT_BUTTON_NORMAL "button-normal"
@@ -158,6 +166,9 @@ typedef enum {
 #define DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_HOVER "button-selected-hover"
 #define DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_NORMAL "button-selected-normal"
 #define DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_PRESSED "button-selected-pressed"
+
+
+#define DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND "caption-background"
 
 #define DONNELL_STOCK_ICON_ERROR "error"
 #define DONNELL_STOCK_ICON_WARNING "warning"
@@ -198,7 +209,7 @@ void Donnell_GraphicsPrimitives_MeasureTextLine(DonnellSize *size, char *utf8str
 void Donnell_GraphicsPrimitives_DrawText(DonnellImageBuffer *buffer, DonnellPixel *color, char *utf8string, unsigned int x, unsigned int y, unsigned int pixel_size, DonnellFontOptions font_options);
 void Donnell_GraphicsPrimitives_MeasureText(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFontOptions font_options, unsigned int pixel_scale);
 void Donnell_GraphicsPrimitives_DrawRectangle(DonnellImageBuffer *buffer, DonnellPixel *color, DonnellRect *rect, DonnellBool blend);
-	 
+
 DonnellIcon *Donnell_GuiPrimitives_Icon_Create(DonnellImageBuffer **images, char *name, unsigned int count);
 DonnellIcon *Donnell_GuiPrimitives_Icon_Copy(DonnellIcon *icon);
 void Donnell_GuiPrimitives_Icon_Free(DonnellIcon *icon);
@@ -216,6 +227,15 @@ void Donnell_GuiPrimitives_NineSlice_Free(DonnellNineSlice *image);
 DonnellNineSlice *Donnell_GuiPrimitives_NineSlice_Copy(DonnellNineSlice *image);
 void Donnell_GuiPrimitives_NineSlice_Draw(DonnellImageBuffer *buffer, DonnellNineSlice *image, DonnellRect *rect);
 
+DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockElement_Create(DonnellImageBuffer *image, unsigned int scale, char *name);
+void Donnell_GuiPrimitives_StandardStockElement_Free(DonnellStockElementStandard *image);
+DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockElement_Copy(DonnellStockElementStandard *image);
+void Donnell_GuiPrimitives_StandardStockElement_Draw(DonnellImageBuffer *buffer, DonnellStockElementStandard *elem, DonnellRect *rect, DonnellBool stretch_w, DonnellBool stretch_h);
+	
+void Donnell_GuiPrimitives_StandardStockElements_Add(DonnellStockElementStandard *elem);
+DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockElements_Load(char *name, unsigned int scale);
+
 void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer, char *text, DonnellRect *rect, DonnellPixel *color, unsigned int text_size, DonnellFontOptions text_font_options, DonnellButtonState state);
+void Donnell_GuiPrimitives_DrawTitlebarButton(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellButtonState state);
 
 #endif

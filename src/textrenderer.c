@@ -66,9 +66,9 @@ int TextRenderer_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size,
 }
 
 void TextRenderer_Init(void) {
-    #if (FREETYPE_MINOR >= 12)
-		SVG_Init();
-	#endif
+#if (FREETYPE_MINOR >= 12)
+    SVG_Init();
+#endif
     FontConfig_Init();
     FreeType_Init();
 
@@ -76,7 +76,7 @@ void TextRenderer_Init(void) {
 
     HarfBuzz_Init();
     if (HarfBuzz_GetLibrary()) {
-		puts("HarfBuzz enabled");
+        puts("HarfBuzz enabled");
         text_renderer = &HarfBuzz_MeasureAndRender;
     }
 }
@@ -85,7 +85,7 @@ void TextRenderer_Cleanup(void) {
     FreeType_Cleanup();
     FontConfig_Cleanup();
     HarfBuzz_Cleanup();
-    #if (FREETYPE_MINOR >= 12)
-		SVG_Cleanup();
-	#endif
+#if (FREETYPE_MINOR >= 12)
+    SVG_Cleanup();
+#endif
 }

@@ -21,23 +21,28 @@
 #include "icons/Warning96.h"
 
 #include "gui/ButtonHover.h"
-#include "gui/ButtonNormal.h"
-#include "gui/ButtonPressed.h"
 #include "gui/ButtonHover2x.h"
-#include "gui/ButtonNormal2x.h"
-#include "gui/ButtonPressed2x.h"
 #include "gui/ButtonHover3x.h"
+#include "gui/ButtonNormal.h"
+#include "gui/ButtonNormal2x.h"
 #include "gui/ButtonNormal3x.h"
+#include "gui/ButtonPressed.h"
+#include "gui/ButtonPressed2x.h"
 #include "gui/ButtonPressed3x.h"
 #include "gui/ButtonSelectedHover.h"
-#include "gui/ButtonSelectedNormal.h"
-#include "gui/ButtonSelectedPressed.h"
 #include "gui/ButtonSelectedHover2x.h"
-#include "gui/ButtonSelectedNormal2x.h"
-#include "gui/ButtonSelectedPressed2x.h"
 #include "gui/ButtonSelectedHover3x.h"
+#include "gui/ButtonSelectedNormal.h"
+#include "gui/ButtonSelectedNormal2x.h"
 #include "gui/ButtonSelectedNormal3x.h"
+#include "gui/ButtonSelectedPressed.h"
+#include "gui/ButtonSelectedPressed2x.h"
 #include "gui/ButtonSelectedPressed3x.h"
+
+#include "gui/CaptionBackground.h"
+#include "gui/CaptionBackground2x.h"
+#include "gui/CaptionBackground3x.h"
+
 
 DonnellStockImage **stock_images;
 unsigned int stock_image_count;
@@ -212,7 +217,7 @@ void StockImages_Init() {
     Donnell_StockImages_Add(stock);
     Donnell_StockImage_Free(stock);
     Donnell_ImageBuffer_Free(stock_img);
-    
+
     stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonSelectedHover);
     stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_SELECTED_HOVER);
     Donnell_StockImages_Add(stock);
@@ -263,6 +268,24 @@ void StockImages_Init() {
 
     stock_img = Donnell_ImageBuffer_LoadFromInline(ButtonSelectedPressed3x);
     stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_SELECTED_PRESSED_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);  
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionBackground);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionBackground2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+    
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionBackground3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND_3X);
     Donnell_StockImages_Add(stock);
     Donnell_StockImage_Free(stock);
     Donnell_ImageBuffer_Free(stock_img);

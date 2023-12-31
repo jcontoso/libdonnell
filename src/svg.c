@@ -12,7 +12,6 @@
 #include "donnell.h"
 #include "svg.h"
 
-
 SVGLibrary *svg_library;
 
 void SVG_Init(void) {

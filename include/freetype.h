@@ -10,8 +10,8 @@
 #define DONNELL_FREETYPE
 
 typedef struct {
-	FriBidiString* str;
-    FontConfigFont* font;
+    FriBidiString *str;
+    FontConfigFont *font;
     DonnellFontOptions options;
     unsigned int size;
 } FreeTypeCache;
