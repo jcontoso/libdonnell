@@ -31,8 +31,9 @@ int main() {
 	Donnell_GraphicsPrimitives_DrawTextLine(buffer, border_color, "Titlebar", 7, 9, 11, DONNELL_FONT_OPTIONS_SANS_SERIF);
 	
 	// buttons
-	Donnell_GuiPrimitives_DrawTitlebarButton(buffer, 50, 1, DONNELL_TITLEBAR_BUTTON_CLOSE, DONNELL_BUTTON_STATE_NORMAL);
-		Donnell_GuiPrimitives_DrawTitlebarButton(buffer, 80, 1, DONNELL_TITLEBAR_BUTTON_CLOSE, DONNELL_BUTTON_STATE_HOVER);
+	Donnell_GuiPrimitives_DrawTitlebarButton(buffer, 139, 4, DONNELL_TITLEBAR_BUTTON_MINIMIZE, DONNELL_BUTTON_STATE_NORMAL);
+	Donnell_GuiPrimitives_DrawTitlebarButton(buffer, 158, 4, DONNELL_TITLEBAR_BUTTON_MAXIMIZE, DONNELL_BUTTON_STATE_NORMAL);
+	Donnell_GuiPrimitives_DrawTitlebarButton(buffer, 177, 4, DONNELL_TITLEBAR_BUTTON_CLOSE, DONNELL_BUTTON_STATE_NORMAL);
 
 	Donnell_ImageBuffer_DumpAsPNG(buffer, "titlebar.png");
 	

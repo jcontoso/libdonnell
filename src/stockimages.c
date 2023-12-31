@@ -427,55 +427,55 @@ void StockImages_Init() {
     Donnell_StockImage_Free(stock);
     Donnell_ImageBuffer_Free(stock_img);
 
-    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseNormal);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMinimizeNormal);
     stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_NORMAL);
     Donnell_StockImages_Add(stock);
     Donnell_StockImage_Free(stock);
     Donnell_ImageBuffer_Free(stock_img);
 
-    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseNormal2x);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMinimizeNormal2x);
     stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_NORMAL_2X);
     Donnell_StockImages_Add(stock);
     Donnell_StockImage_Free(stock);
     Donnell_ImageBuffer_Free(stock_img);
 
-    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseNormal3x);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMinimizeNormal3x);
     stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_NORMAL_3X);
     Donnell_StockImages_Add(stock);
     Donnell_StockImage_Free(stock);
     Donnell_ImageBuffer_Free(stock_img);
 
-    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseActive);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMinimizeActive);
     stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_PRESSED);
     Donnell_StockImages_Add(stock);
     Donnell_StockImage_Free(stock);
     Donnell_ImageBuffer_Free(stock_img);
 
-    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseActive2x);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMinimizeActive2x);
     stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_PRESSED_2X);
     Donnell_StockImages_Add(stock);
     Donnell_StockImage_Free(stock);
     Donnell_ImageBuffer_Free(stock_img);
 
-    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseActive3x);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMinimizeActive3x);
     stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_PRESSED_3X);
     Donnell_StockImages_Add(stock);
     Donnell_StockImage_Free(stock);
     Donnell_ImageBuffer_Free(stock_img);
 
-    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseHover);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMinimizeHover);
     stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_HOVER);
     Donnell_StockImages_Add(stock);
     Donnell_StockImage_Free(stock);
     Donnell_ImageBuffer_Free(stock_img);
 
-    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseHover2x);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMinimizeHover2x);
     stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_HOVER_2X);
     Donnell_StockImages_Add(stock);
     Donnell_StockImage_Free(stock);
     Donnell_ImageBuffer_Free(stock_img);
 
-    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseHover3x);
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMinimizeHover3x);
     stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_HOVER_3X);
     Donnell_StockImages_Add(stock);
     Donnell_StockImage_Free(stock);
