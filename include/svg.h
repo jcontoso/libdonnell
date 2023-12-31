@@ -11,7 +11,8 @@ typedef void *SVGHandle;
 typedef void *SVGSurface;
 typedef void *SVGCtx;
 
-typedef enum {
+typedef enum
+{
     SVG_UNIT_PERCENT,
     SVG_UNIT_PX,
     SVG_UNIT_EM,
@@ -57,13 +58,15 @@ typedef struct {
     double y;
 } SVGRenderer;
 
-typedef enum {
+typedef enum
+{
     CONTENT_COLOR = 0x1000,
     CONTENT_ALPHA = 0x2000,
     CONTENT_COLOR_ALPHA = 0x3000
 } SVGCtxContent;
 
-typedef enum {
+typedef enum
+{
     FORMAT_INVALID = -1,
     FORMAT_ARGB32 = 0,
     FORMAT_RGB24 = 1,

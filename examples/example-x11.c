@@ -45,10 +45,10 @@ void draw_dialog(DonnellButtonState state, Bool first_time) {
 		Donnell_ImageBuffer_Clear(buffer, bg_color);
 		Donnell_GraphicsPrimitives_DrawTextLine(buffer, text_color, "This is a dialog.", 55, 24, 14, DONNELL_FONT_OPTIONS_SANS_SERIF);
 		Donnell_GuiPrimitives_Icon_Draw(buffer, icon, ico_index, DONNELL_ICON_SIZE_32, 13, 13);
-		Donnell_GuiPrimitives_DrawButton(buffer, "OK", &button_rect, text_color, 14, DONNELL_FONT_OPTIONS_SANS_SERIF, state);			
+		Donnell_GuiPrimitives_DrawButton(buffer, "OK", &button_rect, text_color, 14, DONNELL_FONT_OPTIONS_SANS_SERIF, state, DONNELL_FALSE);			
 	} else {
 		Donnell_GraphicsPrimitives_DrawRectangle(buffer, bg_color, &button_rect, DONNELL_FALSE);
-		Donnell_GuiPrimitives_DrawButton(buffer, "OK", &button_rect, text_color, 14, DONNELL_FONT_OPTIONS_SANS_SERIF, state);			
+		Donnell_GuiPrimitives_DrawButton(buffer, "OK", &button_rect, text_color, 14, DONNELL_FONT_OPTIONS_SANS_SERIF, state, DONNELL_FALSE);			
 	}
 }
  

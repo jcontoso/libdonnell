@@ -27,7 +27,7 @@ int main() {
 
 	Donnell_GraphicsPrimitives_DrawTextLine(buffer, text_color, "Sample text!", 55, 24, 12, DONNELL_FONT_OPTIONS_SANS_SERIF);
 	Donnell_GuiPrimitives_Icon_Draw(buffer, icon, index, DONNELL_ICON_SIZE_32, 13, 13);
-	Donnell_GuiPrimitives_DrawButton(buffer, "OK", &button_rect, text_color, 12, DONNELL_FONT_OPTIONS_SANS_SERIF, DONNELL_BUTTON_STATE_NORMAL);
+	Donnell_GuiPrimitives_DrawButton(buffer, "OK", &button_rect, text_color, 12, DONNELL_FONT_OPTIONS_SANS_SERIF, DONNELL_BUTTON_STATE_NORMAL, DONNELL_FALSE);
 	
 	Donnell_ImageBuffer_DumpAsPNG(buffer, "example.png");
 	

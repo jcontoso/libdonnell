@@ -7,7 +7,8 @@ typedef unsigned char DonnellUInt8;
 typedef unsigned short DonnellUInt16;
 typedef unsigned long DonnellUInt32;
 
-typedef enum {
+typedef enum
+{
     DONNELL_FALSE,
     DONNELL_TRUE
 } DonnellBool;
@@ -85,7 +86,8 @@ typedef struct {
     DonnellBool alloced_name;
 } DonnellStockElementStandard;
 
-typedef enum {
+typedef enum
+{
     DONNELL_FONT_OPTIONS_SERIF = 1 << 0,
     DONNELL_FONT_OPTIONS_SANS_SERIF = 1 << 1,
     DONNELL_FONT_OPTIONS_MONOSPACE = 1 << 2,
@@ -93,21 +95,23 @@ typedef enum {
     DONNELL_FONT_OPTIONS_ITALIC = 1 << 4
 } DonnellFontOptions;
 
-typedef enum {
+typedef enum
+{
     DONNELL_BUTTON_STATE_NORMAL = 1 << 0,
     DONNELL_BUTTON_STATE_HOVER = 1 << 1,
     DONNELL_BUTTON_STATE_PRESSED = 1 << 2,
     DONNELL_BUTTON_STATE_SELECTED = 1 << 3
 } DonnellButtonState;
 
-typedef enum {
-    DONNELL_WINDOW_DECORATION_BUTTONS_MINIMIZE = 1 << 0,
-    DONNELL_WINDOW_DECORATION_BUTTONS_MAXIMIZE = 1 << 1,
-    DONNELL_WINDOW_DECORATION_BUTTONS_CLOSE = 1 << 2
-} DonnellWindowDecorationButtons;
+typedef enum
+{	
+	DONNELL_TITLEBAR_BUTTON_MINIMIZE,
+	DONNELL_TITLEBAR_BUTTON_MAXIMIZE,
+	DONNELL_TITLEBAR_BUTTON_CLOSE
+} DonnellTitlebarButton;
 
-
-typedef enum {
+typedef enum
+{
     DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR,
     DONNELL_SCALING_ALGORITHM_BILINEAR,
 } DonnellScalingAlgorithm;
@@ -116,7 +120,6 @@ typedef enum {
 #define DONNELL_ICON_SIZE_32 32
 #define DONNELL_ICON_SIZE_64 64
 #define DONNELL_ICON_SIZE_96 96
-
 #define DONNELL_STOCK_IMAGE_ERROR_16 "error-16"
 #define DONNELL_STOCK_IMAGE_ERROR_32 "error-32"
 #define DONNELL_STOCK_IMAGE_ERROR_64 "error-64"
@@ -129,7 +132,6 @@ typedef enum {
 #define DONNELL_STOCK_IMAGE_WARNING_32 "warning-32"
 #define DONNELL_STOCK_IMAGE_WARNING_64 "warning-64"
 #define DONNELL_STOCK_IMAGE_WARNING_96 "warning-96"
-
 #define DONNELL_STOCK_IMAGE_BUTTON_HOVER "button-hover"
 #define DONNELL_STOCK_IMAGE_BUTTON_NORMAL "button-normal"
 #define DONNELL_STOCK_IMAGE_BUTTON_PRESSED "button-pressed"
@@ -151,25 +153,50 @@ typedef enum {
 #define DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND "caption-background"
 #define DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND_2X "caption-background-2x"
 #define DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND_3X "caption-background-3x"
-
 #define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_PRESSED "caption-close-pressed"
 #define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_PRESSED_2X "caption-close-pressed-2x"
 #define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_PRESSED_3X "caption-close-pressed-3x"
-
 #define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_NORMAL "caption-close-normal"
 #define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_NORMAL_2X "caption-close-normal-2x"
 #define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_NORMAL_3X "caption-close-normal-3x"
-
+#define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_HOVER "caption-close-hover"
+#define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_HOVER_2X "caption-close-hover-2x"
+#define DONNELL_STOCK_IMAGE_CAPTION_CLOSE_HOVER_3X "caption-close-hover-3x"
+#define DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_PRESSED "caption-maximize-pressed"
+#define DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_PRESSED_2X "caption-maximize-pressed-2x"
+#define DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_PRESSED_3X "caption-maximize-pressed-3x"
+#define DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_NORMAL "caption-maximize-normal"
+#define DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_NORMAL_2X "caption-maximize-normal-2x"
+#define DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_NORMAL_3X "caption-maximize-normal-3x"
+#define DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_HOVER "caption-maximize-hover"
+#define DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_HOVER_2X "caption-maximize-hover-2x"
+#define DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_HOVER_3X "caption-maximize-hover-3x"
+#define DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_PRESSED "caption-minimize-pressed"
+#define DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_PRESSED_2X "caption-minimize-pressed-2x"
+#define DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_PRESSED_3X "caption-minimize-pressed-3x"
+#define DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_NORMAL "caption-minimize-normal"
+#define DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_NORMAL_2X "caption-minimize-normal-2x"
+#define DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_NORMAL_3X "caption-minimize-normal-3x"
+#define DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_HOVER "caption-minimize-hover"
+#define DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_HOVER_2X "caption-minimize-hover-2x"
+#define DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_HOVER_3X "caption-minimize-hover-3x"
 #define DONNELL_STOCK_ELEMENT_BUTTON_HOVER "button-hover"
 #define DONNELL_STOCK_ELEMENT_BUTTON_NORMAL "button-normal"
 #define DONNELL_STOCK_ELEMENT_BUTTON_PRESSED "button-pressed"
 #define DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_HOVER "button-selected-hover"
 #define DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_NORMAL "button-selected-normal"
 #define DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_PRESSED "button-selected-pressed"
-
-
 #define DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND "caption-background"
-
+#define DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_HOVER "caption-close-hover"
+#define DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_HOVER "caption-minimize-hover"
+#define DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_HOVER "caption-maximize-hover"
+#define DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_NORMAL "caption-close-normal"
+#define DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_NORMAL "caption-minimize-normal"
+#define DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_NORMAL "caption-maximize-normal"
+#define DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_PRESSED "caption-close-pressed"
+#define DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_PRESSED "caption-minimize-pressed"
+#define DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_PRESSED "caption-maximize-pressed"
+#define DONNELL_STOCK_ELEMENT_TITLEBAR_BACKGROUND DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND
 #define DONNELL_STOCK_ICON_ERROR "error"
 #define DONNELL_STOCK_ICON_WARNING "warning"
 #define DONNELL_STOCK_ICON_INFO "info"
@@ -231,11 +258,11 @@ DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockElement_Create(D
 void Donnell_GuiPrimitives_StandardStockElement_Free(DonnellStockElementStandard *image);
 DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockElement_Copy(DonnellStockElementStandard *image);
 void Donnell_GuiPrimitives_StandardStockElement_Draw(DonnellImageBuffer *buffer, DonnellStockElementStandard *elem, DonnellRect *rect, DonnellBool stretch_w, DonnellBool stretch_h);
-	
+
 void Donnell_GuiPrimitives_StandardStockElements_Add(DonnellStockElementStandard *elem);
 DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockElements_Load(char *name, unsigned int scale);
 
-void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer, char *text, DonnellRect *rect, DonnellPixel *color, unsigned int text_size, DonnellFontOptions text_font_options, DonnellButtonState state);
-void Donnell_GuiPrimitives_DrawTitlebarButton(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellButtonState state);
+void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer, char *text, DonnellRect *rect, DonnellPixel *color, unsigned int text_size, DonnellFontOptions text_font_options, DonnellButtonState state, DonnellBool text_stretch);
+void Donnell_GuiPrimitives_DrawTitlebarButton(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellTitlebarButton button, DonnellButtonState state);
 
 #endif

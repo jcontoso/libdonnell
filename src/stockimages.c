@@ -43,6 +43,35 @@
 #include "gui/CaptionBackground2x.h"
 #include "gui/CaptionBackground3x.h"
 
+#include "gui/CaptionCloseHover.h"
+#include "gui/CaptionCloseHover2x.h"
+#include "gui/CaptionCloseHover3x.h"
+#include "gui/CaptionCloseNormal.h"
+#include "gui/CaptionCloseNormal2x.h"
+#include "gui/CaptionCloseNormal3x.h"
+#include "gui/CaptionClosePressed.h"
+#include "gui/CaptionClosePressed2x.h"
+#include "gui/CaptionClosePressed3x.h"
+
+#include "gui/CaptionMaximizeHover.h"
+#include "gui/CaptionMaximizeHover2x.h"
+#include "gui/CaptionMaximizeHover3x.h"
+#include "gui/CaptionMaximizeNormal.h"
+#include "gui/CaptionMaximizeNormal2x.h"
+#include "gui/CaptionMaximizeNormal3x.h"
+#include "gui/CaptionMaximizePressed.h"
+#include "gui/CaptionMaximizePressed2x.h"
+#include "gui/CaptionMaximizePressed3x.h"
+
+#include "gui/CaptionMinimizeHover.h"
+#include "gui/CaptionMinimizeHover2x.h"
+#include "gui/CaptionMinimizeHover3x.h"
+#include "gui/CaptionMinimizeNormal.h"
+#include "gui/CaptionMinimizeNormal2x.h"
+#include "gui/CaptionMinimizeNormal3x.h"
+#include "gui/CaptionMinimizePressed.h"
+#include "gui/CaptionMinimizePressed2x.h"
+#include "gui/CaptionMinimizePressed3x.h"
 
 DonnellStockImage **stock_images;
 unsigned int stock_image_count;
@@ -270,7 +299,7 @@ void StockImages_Init() {
     stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_BUTTON_SELECTED_PRESSED_3X);
     Donnell_StockImages_Add(stock);
     Donnell_StockImage_Free(stock);
-    Donnell_ImageBuffer_Free(stock_img);  
+    Donnell_ImageBuffer_Free(stock_img);
 
     stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionBackground);
     stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND);
@@ -283,9 +312,171 @@ void StockImages_Init() {
     Donnell_StockImages_Add(stock);
     Donnell_StockImage_Free(stock);
     Donnell_ImageBuffer_Free(stock_img);
-    
+
     stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionBackground3x);
     stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseNormal);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_CLOSE_NORMAL);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseNormal2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_CLOSE_NORMAL_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseNormal3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_CLOSE_NORMAL_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseActive);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_CLOSE_PRESSED);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseActive2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_CLOSE_PRESSED_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseActive3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_CLOSE_PRESSED_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseHover);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_CLOSE_HOVER);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseHover2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_CLOSE_HOVER_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseHover3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_CLOSE_HOVER_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMaximizeNormal);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_NORMAL);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMaximizeNormal2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_NORMAL_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMaximizeNormal3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_NORMAL_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMaximizeActive);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_PRESSED);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMaximizeActive2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_PRESSED_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMaximizeActive3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_PRESSED_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMaximizeHover);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_HOVER);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMaximizeHover2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_HOVER_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionMaximizeHover3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_HOVER_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseNormal);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_NORMAL);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseNormal2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_NORMAL_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseNormal3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_NORMAL_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseActive);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_PRESSED);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseActive2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_PRESSED_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseActive3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_PRESSED_3X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseHover);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_HOVER);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseHover2x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_HOVER_2X);
+    Donnell_StockImages_Add(stock);
+    Donnell_StockImage_Free(stock);
+    Donnell_ImageBuffer_Free(stock_img);
+
+    stock_img = Donnell_ImageBuffer_LoadFromInline(CaptionCloseHover3x);
+    stock = Donnell_StockImage_Create(stock_img, DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_HOVER_3X);
     Donnell_StockImages_Add(stock);
     Donnell_StockImage_Free(stock);
     Donnell_ImageBuffer_Free(stock_img);

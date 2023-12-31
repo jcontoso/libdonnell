@@ -14,7 +14,7 @@ int main() {
 	bg_color = Donnell_Pixel_CreateEasy(255, 255, 255, 255);
 	border_color = Donnell_Pixel_CreateEasy(109, 109, 109, 255);
 
-	buffer = Donnell_ImageBuffer_Create(200, 200, 2);
+	buffer = Donnell_ImageBuffer_Create(200, 200, 1);
 	
 	// border and background
 	Donnell_ImageBuffer_Clear(buffer, border_color);
@@ -30,6 +30,10 @@ int main() {
 	Donnell_GraphicsPrimitives_DrawTextLine(buffer, bg_color, "Titlebar", 7, 10, 11, DONNELL_FONT_OPTIONS_SANS_SERIF);
 	Donnell_GraphicsPrimitives_DrawTextLine(buffer, border_color, "Titlebar", 7, 9, 11, DONNELL_FONT_OPTIONS_SANS_SERIF);
 	
+	// buttons
+	Donnell_GuiPrimitives_DrawTitlebarButton(buffer, 50, 1, DONNELL_TITLEBAR_BUTTON_CLOSE, DONNELL_BUTTON_STATE_NORMAL);
+		Donnell_GuiPrimitives_DrawTitlebarButton(buffer, 80, 1, DONNELL_TITLEBAR_BUTTON_CLOSE, DONNELL_BUTTON_STATE_HOVER);
+
 	Donnell_ImageBuffer_DumpAsPNG(buffer, "titlebar.png");
 	
 	Donnell_ImageBuffer_Free(buffer);

@@ -455,25 +455,188 @@ void GuiPrimitives_Init() {
     Donnell_GuiPrimitives_StockElements_Add(sliced_image);
     Donnell_GuiPrimitives_NineSlice_Free(sliced_image);
     Donnell_StockImage_Free(stock_image);
-    
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_CLOSE_NORMAL);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 1, DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_NORMAL);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_CLOSE_NORMAL_2X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 2, DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_NORMAL);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_CLOSE_NORMAL_3X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 3, DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_NORMAL);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_CLOSE_PRESSED);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 1, DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_PRESSED);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_CLOSE_PRESSED_2X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 2, DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_PRESSED);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_CLOSE_PRESSED_3X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 3, DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_PRESSED);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_CLOSE_HOVER);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 1, DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_HOVER);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_CLOSE_HOVER_2X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 2, DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_HOVER);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_CLOSE_HOVER_3X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 3, DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_HOVER);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_NORMAL);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 1, DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_NORMAL);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_NORMAL_2X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 2, DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_NORMAL);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_NORMAL_3X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 3, DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_NORMAL);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_PRESSED);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 1, DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_PRESSED);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_PRESSED_2X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 2, DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_PRESSED);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_PRESSED_3X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 3, DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_PRESSED);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_HOVER);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 1, DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_HOVER);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_HOVER_2X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 2, DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_HOVER);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MAXIMIZE_HOVER_3X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 3, DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_HOVER);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_NORMAL);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 1, DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_NORMAL);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_NORMAL_2X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 2, DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_NORMAL);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_NORMAL_3X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 3, DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_NORMAL);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_PRESSED);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 1, DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_PRESSED);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_PRESSED_2X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 2, DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_PRESSED);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_PRESSED_3X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 3, DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_PRESSED);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_HOVER);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 1, DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_HOVER);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_HOVER_2X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 2, DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_HOVER);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
+    stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_MINIMIZE_HOVER_3X);
+    std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 3, DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_HOVER);
+    Donnell_GuiPrimitives_StandardStockElements_Add(std);
+    Donnell_GuiPrimitives_StandardStockElement_Free(std);
+    Donnell_StockImage_Free(stock_image);
+
     stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND);
     std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 1, DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND);
     Donnell_GuiPrimitives_StandardStockElements_Add(std);
     Donnell_GuiPrimitives_StandardStockElement_Free(std);
     Donnell_StockImage_Free(stock_image);
-    
+
     stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND_2X);
     std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 2, DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND);
     Donnell_GuiPrimitives_StandardStockElements_Add(std);
     Donnell_GuiPrimitives_StandardStockElement_Free(std);
     Donnell_StockImage_Free(stock_image);
-       
+
     stock_image = Donnell_StockImages_Load(DONNELL_STOCK_IMAGE_CAPTION_BACKGROUND_3X);
     std = Donnell_GuiPrimitives_StandardStockElement_Create(stock_image->image, 3, DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND);
     Donnell_GuiPrimitives_StandardStockElements_Add(std);
     Donnell_GuiPrimitives_StandardStockElement_Free(std);
     Donnell_StockImage_Free(stock_image);
 }
+
 void GuiPrimitives_Cleanup() {
     unsigned int i;
 
@@ -654,13 +817,14 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_NineSlice_Draw(DonnellImageBuffer *buf
     Donnell_ImageBuffer_BlendBufferContents(buffer, image->bottom_right, NULL, &i_rect);
 }
 
-DONNELL_EXPORT void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer, char *text, DonnellRect *rect, DonnellPixel *color, unsigned int text_size, DonnellFontOptions text_font_options, DonnellButtonState state) {
+DONNELL_EXPORT void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer, char *text, DonnellRect *rect, DonnellPixel *color, unsigned int text_size, DonnellFontOptions text_font_options, DonnellButtonState state, DonnellBool text_stretch) {
     DonnellSize ctext_size;
     DonnellRect dest_rect;
     DonnellRect src1_rect;
     DonnellRect src2_rect;
     DonnellRect draw_rect;
     DonnellNineSlice *button_img;
+    DonnellBool should_be_stretched;
     unsigned int w;
     unsigned int h;
 
@@ -670,7 +834,7 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer,
 
     w = rect->w;
     h = rect->h;
-    button_img = NULL;
+    should_be_stretched = DONNELL_FALSE;
 
     if ((state & DONNELL_BUTTON_STATE_NORMAL) && (state & DONNELL_BUTTON_STATE_SELECTED)) {
         button_img = Donnell_GuiPrimitives_StockElements_Load(DONNELL_STOCK_ELEMENT_BUTTON_SELECTED_NORMAL, buffer->scale);
@@ -684,7 +848,7 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer,
         button_img = Donnell_GuiPrimitives_StockElements_Load(DONNELL_STOCK_ELEMENT_BUTTON_PRESSED, buffer->scale);
     } else {
         button_img = Donnell_GuiPrimitives_StockElements_Load(DONNELL_STOCK_ELEMENT_BUTTON_NORMAL, buffer->scale);
-	}
+    }
 
     src1_rect.w = w * buffer->scale;
     src1_rect.h = h * buffer->scale;
@@ -703,10 +867,12 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer,
 
         if (src1_rect.w < ctext_size.w) {
             w = (ctext_size.w + dest_rect.x / buffer->scale * 2);
+            should_be_stretched = DONNELL_TRUE;
         }
 
         if (src1_rect.h < ctext_size.h) {
             h = (ctext_size.h + dest_rect.y / buffer->scale * 2);
+            should_be_stretched = DONNELL_TRUE;
         }
     }
 
@@ -718,15 +884,35 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_DrawButton(DonnellImageBuffer *buffer,
     Donnell_GuiPrimitives_NineSlice_Draw(buffer, button_img, &draw_rect);
 
     if (text) {
-        Donnell_GraphicsPrimitives_DrawTextLine(buffer, color, text, rect->x + dest_rect.x / buffer->scale, rect->y + dest_rect.y / buffer->scale - 1, text_size, text_font_options);
+        if ((text_stretch) && (should_be_stretched)) {
+            DonnellImageBuffer *textbuf;
+            DonnellRect textrect;
+            DonnellRect ctextrect;
+
+            textrect.w = rect->w;
+            textrect.h = rect->h;
+            textrect.x = textrect.y = 0;
+
+            ctextrect.w = rect->w;
+            ctextrect.h = rect->h;
+            ctextrect.x = rect->x + dest_rect.x / buffer->scale;
+            ctextrect.y = rect->y + dest_rect.y / buffer->scale - 1;
+
+            textbuf = Donnell_ImageBuffer_Create(ctext_size.w, ctext_size.h, 1);
+            Donnell_GraphicsPrimitives_DrawTextLine(textbuf, color, text, 0, 0, text_size, text_font_options);
+
+            Donnell_ImageBuffer_BlendBufferContents(buffer, textbuf, &textrect, &ctextrect);
+            Donnell_ImageBuffer_Free(textbuf);
+
+        } else {
+            Donnell_GraphicsPrimitives_DrawTextLine(buffer, color, text, rect->x + dest_rect.x / buffer->scale, rect->y + dest_rect.y / buffer->scale - 1, text_size, text_font_options);
+        }
     }
 
     if (button_img) {
         Donnell_GuiPrimitives_NineSlice_Free(button_img);
     }
 }
-
-
 
 DONNELL_EXPORT DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockElement_Create(DonnellImageBuffer *image, unsigned int scale, char *name) {
     DonnellStockElementStandard *ns_image;
@@ -741,7 +927,7 @@ DONNELL_EXPORT DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockE
     }
     ns_image->scale = scale;
     ns_image->img = Donnell_ImageBuffer_Copy(image);
-    
+
     if (name) {
         ns_image->alloced_name = DONNELL_TRUE;
         ns_image->name = strdup(name);
@@ -805,22 +991,22 @@ DONNELL_EXPORT DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockE
         }
     }
 
-	for (i = 0; i < stock_stdguielems_count; i++) {
-		if ((!strcmp(stock_stdguielems[i]->name, name)) && (stock_stdguielems[i]->scale == 1)) {
-			DonnellStockElementStandard *ret;
-			DonnellImageBuffer* buf;
-			
-			ret = Donnell_GuiPrimitives_StandardStockElement_Copy(stock_stdguielems[i]);
-			ret->scale = scale;
-			buf = Donnell_ImageBuffer_Copy(ret->img);
-			Donnell_ImageBuffer_Free(ret->img);
-			ret->img = Donnell_ImageBuffer_Scale(buf, buf->width*scale, buf->height*scale, DONNELL_SCALING_ALGORITHM_BILINEAR);
-			Donnell_ImageBuffer_Free(buf);
-			
-			return ret;
-   		}
-	}
-	
+    for (i = 0; i < stock_stdguielems_count; i++) {
+        if ((!strcmp(stock_stdguielems[i]->name, name)) && (stock_stdguielems[i]->scale == 1)) {
+            DonnellStockElementStandard *ret;
+            DonnellImageBuffer *buf;
+
+            ret = Donnell_GuiPrimitives_StandardStockElement_Copy(stock_stdguielems[i]);
+            ret->scale = scale;
+            buf = Donnell_ImageBuffer_Copy(ret->img);
+            Donnell_ImageBuffer_Free(ret->img);
+            ret->img = Donnell_ImageBuffer_Scale(buf, buf->width * scale, buf->height * scale, DONNELL_SCALING_ALGORITHM_BILINEAR);
+            Donnell_ImageBuffer_Free(buf);
+
+            return ret;
+        }
+    }
+
     return NULL;
 }
 
@@ -848,56 +1034,81 @@ DONNELL_EXPORT void Donnell_GuiPrimitives_StandardStockElements_Add(DonnellStock
 }
 
 DONNELL_EXPORT void Donnell_GuiPrimitives_StandardStockElement_Draw(DonnellImageBuffer *buffer, DonnellStockElementStandard *elem, DonnellRect *rect, DonnellBool stretch_w, DonnellBool stretch_h) {
-	DonnellImageBuffer *cbuffer;
-	DonnellRect draw_rect;
-	
+    DonnellImageBuffer *cbuffer;
+    DonnellRect draw_rect;
+
     if ((!buffer) || (!elem) || (!rect)) {
         return;
     }
 
-	draw_rect.x = rect->x*buffer->scale;
-	draw_rect.y = rect->y*buffer->scale;
-	if (stretch_w) {
-		draw_rect.w = rect->w*buffer->scale;	
-	} else {
-		draw_rect.w = elem->img->width;	
-	}
-	if (stretch_h) {
-		draw_rect.h = rect->h*buffer->scale;	
-	} else {
-		draw_rect.h = elem->img->height;
-	}
-	
-	if (stretch_h || stretch_w)  {
-		cbuffer = Donnell_ImageBuffer_Scale(elem->img, draw_rect.w, draw_rect.h, DONNELL_SCALING_ALGORITHM_BILINEAR);
-	} else {
-		cbuffer = elem->img;
-	}
-	
-	Donnell_ImageBuffer_BlendBufferContents(buffer, cbuffer, NULL, &draw_rect);
-	
-	if (stretch_h || stretch_w)  {
-		Donnell_ImageBuffer_Free(cbuffer);
-	}
+    draw_rect.x = rect->x * buffer->scale;
+    draw_rect.y = rect->y * buffer->scale;
+    if (stretch_w) {
+        draw_rect.w = rect->w * buffer->scale;
+    } else {
+        draw_rect.w = elem->img->width;
+    }
+    if (stretch_h) {
+        draw_rect.h = rect->h * buffer->scale;
+    } else {
+        draw_rect.h = elem->img->height;
+    }
+
+    if (stretch_h || stretch_w) {
+        cbuffer = Donnell_ImageBuffer_Scale(elem->img, draw_rect.w, draw_rect.h, DONNELL_SCALING_ALGORITHM_BILINEAR);
+    } else {
+        cbuffer = elem->img;
+    }
+
+    Donnell_ImageBuffer_BlendBufferContents(buffer, cbuffer, NULL, &draw_rect);
+
+    if (stretch_h || stretch_w) {
+        Donnell_ImageBuffer_Free(cbuffer);
+    }
 }
 
-void Donnell_GuiPrimitives_DrawTitlebarButton(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellButtonState state) {
-	DonnellStockElementStandard *elem;
-	DonnellRect draw_rect;
+DONNELL_EXPORT void Donnell_GuiPrimitives_DrawTitlebarButton(DonnellImageBuffer *buffer, unsigned int x, unsigned int y, DonnellTitlebarButton button, DonnellButtonState state) {
+    DonnellStockElementStandard *elem;
+    DonnellRect draw_rect;
 
     if (!buffer) {
         return;
     }
 
-    if (state & DONNELL_BUTTON_STATE_HOVER) {
-        elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND, buffer->scale);
-    } else if (state & DONNELL_BUTTON_STATE_PRESSED) {
-        elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND, buffer->scale);
-    } else {
-        elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_BACKGROUND, buffer->scale);
-	}	
-	 
+    switch (button) {
+    case DONNELL_TITLEBAR_BUTTON_MINIMIZE:
+        if (state & DONNELL_BUTTON_STATE_HOVER) {
+            elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_HOVER, buffer->scale);
+        } else if (state & DONNELL_BUTTON_STATE_PRESSED) {
+            elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_PRESSED, buffer->scale);
+        } else {
+            elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_MINIMIZE_BUTTON_NORMAL, buffer->scale);
+        }
+        break;
+    case DONNELL_TITLEBAR_BUTTON_MAXIMIZE:
+        if (state & DONNELL_BUTTON_STATE_HOVER) {
+            elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_HOVER, buffer->scale);
+        } else if (state & DONNELL_BUTTON_STATE_PRESSED) {
+            elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_PRESSED, buffer->scale);
+        } else {
+            elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_MAXIMIZE_BUTTON_NORMAL, buffer->scale);
+        }
+        break;
+    default:
+        if (state & DONNELL_BUTTON_STATE_HOVER) {
+            elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_HOVER, buffer->scale);
+        } else if (state & DONNELL_BUTTON_STATE_PRESSED) {
+            elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_PRESSED, buffer->scale);
+        } else {
+            elem = Donnell_GuiPrimitives_StandardStockElements_Load(DONNELL_STOCK_ELEMENT_CAPTION_CLOSE_BUTTON_NORMAL, buffer->scale);
+        }
+    }
+
+    draw_rect.w = elem->img->width;
+    draw_rect.h = elem->img->height;
+    draw_rect.x = x * buffer->scale;
+    draw_rect.y = y * buffer->scale;
+
+    Donnell_ImageBuffer_BlendBufferContents(buffer, elem->img, NULL, &draw_rect);
+    Donnell_GuiPrimitives_StandardStockElement_Free(elem);
 }
-
-
-
