@@ -53,7 +53,7 @@ all: $(LIBTARGET) $(PCTARGET)
 
 clean:
 	rm -f $(OBJECTS) $(LIBTARGET) $(PCTARGET)
-	rm -f $(EXAMPLE) $(EXAMPLE_X11)
+	rm -f $(EXAMPLES) $(EXAMPLE_X11)
 	rm -f donnell.pc
 	rm -f example.png
 	rm -f examples/example2.png	
