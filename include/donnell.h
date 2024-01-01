@@ -202,6 +202,8 @@ typedef enum
 #define DONNELL_STOCK_ICON_INFO "info"
 
 void Donnell_Init(void);
+unsigned int Donnell_GetVersionMajor(void);
+unsigned int Donnell_GetVersionMinor(void);
 void Donnell_Cleanup(void);
 
 void Donnell_Rect_Center(DonnellRect *dest, DonnellRect *src1, DonnellRect *src2);
