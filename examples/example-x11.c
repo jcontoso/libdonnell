@@ -23,19 +23,33 @@ DonnellButtonState button_state;
 Bool button_pressed;
 unsigned int ico_index;
 
-void convert_to_pixmap() {
+void convert_to_pixmap(Bool first_time) {
     unsigned int j;
     unsigned int i;
 
-	for (i = 0; i < buffer->height; i++) {
-		for (j = 0; j < buffer->width; j++) {
-			DonnellPixel *pixel;
+	if (first_time == True) {
+		for (i = 0; i < buffer->height; i++) {
+			for (j = 0; j < buffer->width; j++) {
+				DonnellPixel *pixel;
 
-			pixel = Donnell_ImageBuffer_GetPixel(buffer, j, i);			
-			XSetForeground(display, contents_gc, ((pixel->red & 0xFF) << 16) + ((pixel->green & 0xFF) << 8) + (pixel->blue & 0xFF));
-			XDrawPoint(display, contents, contents_gc, j, i);
-			
-			Donnell_Pixel_Free(pixel);
+				pixel = Donnell_ImageBuffer_GetPixel(buffer, j, i);			
+				XSetForeground(display, contents_gc, ((pixel->red & 0xFF) << 16) + ((pixel->green & 0xFF) << 8) + (pixel->blue & 0xFF));
+				XDrawPoint(display, contents, contents_gc, j, i);
+				
+				Donnell_Pixel_Free(pixel);
+			}
+		}
+	} else {
+		for (i = button_rect.y*buffer->scale; i < (button_rect.h+button_rect.y)*buffer->scale; i++) {
+			for (j = button_rect.x*buffer->scale; j < (button_rect.w+button_rect.x)*buffer->scale; j++) {
+				DonnellPixel *pixel;
+
+				pixel = Donnell_ImageBuffer_GetPixel(buffer, j, i);			
+				XSetForeground(display, contents_gc, ((pixel->red & 0xFF) << 16) + ((pixel->green & 0xFF) << 8) + (pixel->blue & 0xFF));
+				XDrawPoint(display, contents, contents_gc, j, i);
+				
+				Donnell_Pixel_Free(pixel);
+			}
 		}
 	}
 }
@@ -68,13 +82,13 @@ void blit_to_window(Pixmap pixmap, Bool first_time) {
 	if (first_time == True) {
 		XCopyArea(display, contents, window, DefaultGC(display, screen), 0, 0, buffer->width, buffer->height, 0, 0);
 	} else {
-		XCopyArea(display, contents, window, DefaultGC(display, screen), button_rect.x, button_rect.y, button_rect.w, button_rect.h, button_rect.x, button_rect.y);
+		XCopyArea(display, contents, window, DefaultGC(display, screen), button_rect.x*buffer->scale, button_rect.y*buffer->scale, button_rect.w*buffer->scale, button_rect.h*buffer->scale, button_rect.x*buffer->scale, button_rect.y*buffer->scale);
 	}
 	XFlush(display);
 }
 
 Bool update_dialog(Bool pressed, unsigned int x, unsigned int y) {
-	if (((x >= 160) && (x <= 222)) && ((y >= 59) && (y <= 59+27))) {
+	if (((x >= 160*buffer->scale) && (x <= 222*buffer->scale)) && ((y >= 59*buffer->scale) && (y <= (59+27)*buffer->scale))) {
 		if (pressed == True) {
 			button_state = DONNELL_BUTTON_STATE_PRESSED  | DONNELL_BUTTON_STATE_SELECTED;	
 		} else {
@@ -85,7 +99,7 @@ Bool update_dialog(Bool pressed, unsigned int x, unsigned int y) {
 	}	
 	
 	draw_dialog(button_state, False);
-	convert_to_pixmap();
+	convert_to_pixmap(False);
 	blit_to_window(contents, False);	
 	
 	if (button_state & DONNELL_BUTTON_STATE_PRESSED) {
@@ -144,7 +158,7 @@ int main(void) {
 
     contents = XCreatePixmap(display, window, buffer->width, buffer->height, DefaultDepth(display, screen));
 	contents_gc = XCreateGC(display, contents, 0, NULL);
-	convert_to_pixmap();
+	convert_to_pixmap(True);
 			
     for (;;) {
         XNextEvent(display, &event);
