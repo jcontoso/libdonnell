@@ -13,4 +13,5 @@ Todo:
 - [ ] More sanity checks
 - [ ] Get HarfBuzz support working
 - [ ] Documentation
-- [ ] Window decoration rendering
+- [X] Window decoration rendering
+- [ ] Box blurring
