@@ -43,8 +43,8 @@ EXAMPLES = $(basename $(EXAMPLES_SOURCES))
 EXAMPLE_CFLAGS = -g $(shell $(PKGCONFIG) --cflags $(NAME))
 EXAMPLE_LIBS = $(shell $(PKGCONFIG) --libs $(NAME))
 
-EXAMPLE_X11_SOURCES = examples/example-x11.c
-EXAMPLE_X11 = $(basename $(EXAMPLE_X11_SOURCES))
+EXAMPLES_X11_SOURCES = examples/example-titlebar-x11.c examples/example-x11.c
+EXAMPLES_X11 = $(basename $(EXAMPLES_X11_SOURCES))
 EXAMPLE_X11_CFLAGS = -g $(shell $(PKGCONFIG) --cflags $(NAME) x11)
 EXAMPLE_X11_LIBS = $(shell $(PKGCONFIG) --libs $(NAME) x11)
 
@@ -53,7 +53,7 @@ all: $(LIBTARGET) $(PCTARGET)
 
 clean:
 	rm -f $(OBJECTS) $(LIBTARGET) $(PCTARGET)
-	rm -f $(EXAMPLES) $(EXAMPLE_X11)
+	rm -f $(EXAMPLES) $(EXAMPLES_X11)
 	rm -f donnell.pc
 	rm -f example.png
 	rm -f examples/example2.png	
@@ -72,7 +72,7 @@ install: all $(PKGCONFIG_PATH)
 	install include/donnell.h $(PREFIX)/include/donnell.h
 	install $(LIBTARGET) $(PREFIX)/lib/$(LIBTARGET)
 	
-examples: $(EXAMPLES) $(EXAMPLE_X11)
+examples: $(EXAMPLES) $(EXAMPLES_X11)
 	
 $(LIBTARGET): $(SOURCES)
 	$(CC) $(^) -o ${LIBTARGET} ${CFLAGS} ${LIBS}
@@ -83,8 +83,8 @@ $(PCTARGET):
 $(EXAMPLES): %: %.c
 	$(CC) $< -o $@ ${EXAMPLE_CFLAGS} ${EXAMPLE_LIBS}
 
-$(EXAMPLE_X11): $(EXAMPLE_X11_SOURCES)
-	$(CC) $(^) -o ${EXAMPLE_X11} ${EXAMPLE_X11_CFLAGS} ${EXAMPLE_X11_LIBS}
+$(EXAMPLES_X11): %: %.c
+	$(CC) $< -o $@ ${EXAMPLE_X11_CFLAGS} ${EXAMPLE_X11_LIBS}
 
 $(PKGCONFIG_PATH):
 	mkdir -p $(PKGCONFIG_PATH)
