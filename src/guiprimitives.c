@@ -978,8 +978,8 @@ DONNELL_EXPORT DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockE
 
 DONNELL_EXPORT DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockElements_Load(char *name, unsigned int scale) {
     unsigned int diff;
+    unsigned int best;
     unsigned int i;
-    int best;
 
     if (!name) {
         return NULL;
@@ -991,18 +991,36 @@ DONNELL_EXPORT DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockE
         }
     }
 
+    best = 0;
+    diff = abs(scale - stock_stdguielems[0]->scale);
+    for (i = 0; i < stock_stdguielems_count; i++) {
+        if (!strcmp(stock_stdguielems[i]->name, name)) {
+            unsigned int cdiff;
+
+            cdiff = abs(scale - stock_stdguielems[i]->scale);
+
+            if (cdiff < diff) {
+                best = i;
+                diff = cdiff;
+            }
+        }
+    }
+
     for (i = 0; i < stock_stdguielems_count; i++) {
         if ((!strcmp(stock_stdguielems[i]->name, name)) && (stock_stdguielems[i]->scale == 1)) {
             DonnellStockElementStandard *ret;
+            DonnellStockElementStandard *celem;
             DonnellImageBuffer *buf;
 
+            celem = Donnell_GuiPrimitives_StandardStockElement_Copy(stock_stdguielems[best]);
             ret = Donnell_GuiPrimitives_StandardStockElement_Copy(stock_stdguielems[i]);
             ret->scale = scale;
             buf = Donnell_ImageBuffer_Copy(ret->img);
             Donnell_ImageBuffer_Free(ret->img);
-            ret->img = Donnell_ImageBuffer_Scale(buf, buf->width * scale, buf->height * scale, DONNELL_SCALING_ALGORITHM_BILINEAR);
+            ret->img = Donnell_ImageBuffer_Scale(celem->img, buf->width * scale, buf->height * scale, DONNELL_SCALING_ALGORITHM_BILINEAR);
             Donnell_ImageBuffer_Free(buf);
-
+			Donnell_GuiPrimitives_StandardStockElement_Free(celem);
+			
             return ret;
         }
     }

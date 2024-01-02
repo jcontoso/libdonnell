@@ -9,8 +9,7 @@
  
 Display *display;
 Window window;
-Pixmap contents;
-GC contents_gc;
+GC gc;
 XEvent event;
 int screen;
 
@@ -23,7 +22,7 @@ DonnellButtonState button_state;
 Bool button_pressed;
 unsigned int ico_index;
 
-void convert_to_pixmap(Bool first_time) {
+void blit_to_window(Bool first_time) {
     unsigned int j;
     unsigned int i;
 
@@ -33,8 +32,8 @@ void convert_to_pixmap(Bool first_time) {
 				DonnellPixel *pixel;
 
 				pixel = Donnell_ImageBuffer_GetPixel(buffer, j, i);			
-				XSetForeground(display, contents_gc, ((pixel->red & 0xFF) << 16) + ((pixel->green & 0xFF) << 8) + (pixel->blue & 0xFF));
-				XDrawPoint(display, contents, contents_gc, j, i);
+				XSetForeground(display, gc, ((pixel->red & 0xFF) << 16) + ((pixel->green & 0xFF) << 8) + (pixel->blue & 0xFF));
+				XDrawPoint(display, window, gc, j, i);
 				
 				Donnell_Pixel_Free(pixel);
 			}
@@ -45,13 +44,14 @@ void convert_to_pixmap(Bool first_time) {
 				DonnellPixel *pixel;
 
 				pixel = Donnell_ImageBuffer_GetPixel(buffer, j, i);			
-				XSetForeground(display, contents_gc, ((pixel->red & 0xFF) << 16) + ((pixel->green & 0xFF) << 8) + (pixel->blue & 0xFF));
-				XDrawPoint(display, contents, contents_gc, j, i);
+				XSetForeground(display, gc, ((pixel->red & 0xFF) << 16) + ((pixel->green & 0xFF) << 8) + (pixel->blue & 0xFF));
+				XDrawPoint(display, window, gc, j, i);
 				
 				Donnell_Pixel_Free(pixel);
 			}
 		}
 	}
+	XFlush(display);
 }
 
 void draw_dialog(DonnellButtonState state, Bool first_time) {	
@@ -78,15 +78,6 @@ void init_dialog_resources() {
 	ico_index = Donnell_GuiPrimitives_Icon_GetBestForSize(icon, DONNELL_ICON_SIZE_32, buffer->scale);
 }
 
-void blit_to_window(Pixmap pixmap, Bool first_time) {
-	if (first_time == True) {
-		XCopyArea(display, contents, window, DefaultGC(display, screen), 0, 0, buffer->width, buffer->height, 0, 0);
-	} else {
-		XCopyArea(display, contents, window, DefaultGC(display, screen), button_rect.x*buffer->scale, button_rect.y*buffer->scale, button_rect.w*buffer->scale, button_rect.h*buffer->scale, button_rect.x*buffer->scale, button_rect.y*buffer->scale);
-	}
-	XFlush(display);
-}
-
 Bool update_dialog(Bool pressed, unsigned int x, unsigned int y) {
 	if (((x >= 160*buffer->scale) && (x <= 222*buffer->scale)) && ((y >= 59*buffer->scale) && (y <= (59+27)*buffer->scale))) {
 		if (pressed == True) {
@@ -99,8 +90,7 @@ Bool update_dialog(Bool pressed, unsigned int x, unsigned int y) {
 	}	
 	
 	draw_dialog(button_state, False);
-	convert_to_pixmap(False);
-	blit_to_window(contents, False);	
+	blit_to_window(False);	
 	
 	if (button_state & DONNELL_BUTTON_STATE_PRESSED) {
 		return True;
@@ -127,7 +117,8 @@ int main(void) {
     display = XOpenDisplay(NULL);
     screen = DefaultScreen(display);
 	
-    window = XCreateSimpleWindow(display, RootWindow(display, screen), 10, 10, buffer->width, buffer->height, 0, BlackPixel(display, screen), WhitePixel(display, screen));
+    window = XCreateSimpleWindow(display, RootWindow(display, screen), 10, 10, buffer->width, buffer->height, 0, 0xC7C7C7, 0xC7C7C7);
+	gc = XCreateGC(display, window, 0, NULL);
     XSelectInput(display, window, ExposureMask | KeyPressMask | ButtonPressMask | StructureNotifyMask | ButtonReleaseMask | PointerMotionMask);
     
     XStoreName(display, window, "Information");
@@ -155,17 +146,13 @@ int main(void) {
 	XSetWMProtocols(display, window, &delete, 1);
 	
     XMapWindow(display, window);
-
-    contents = XCreatePixmap(display, window, buffer->width, buffer->height, DefaultDepth(display, screen));
-	contents_gc = XCreateGC(display, contents, 0, NULL);
-	convert_to_pixmap(True);
 			
     for (;;) {
         XNextEvent(display, &event);
 
 		switch(event.type) {
 			case Expose:
-				blit_to_window(contents, True);
+				blit_to_window(True);
 				break;
 			case MotionNotify:
 				update_dialog(button_pressed, event.xbutton.x, event.xbutton.y);
@@ -196,8 +183,7 @@ int main(void) {
  
 end:
 	XDestroyWindow(display, window);
-	XFreePixmap(display, contents);
-	XFreeGC(display, contents_gc);
+	XFreeGC(display, gc);
     XCloseDisplay(display);
 	Donnell_ImageBuffer_Free(buffer);
 	Donnell_GuiPrimitives_Icon_Free(icon);

@@ -7,19 +7,18 @@
 #include <unistd.h>
 #include <donnell.h>
  
-typedef struct motif_hints
+typedef struct MotifHints
 {
     unsigned long   flags;
     unsigned long   functions;
     unsigned long   decorations;
     long            inputMode;
     unsigned long   status;
-} motif_hints;
+} MotifHints;
 
 Display *display;
 Window window;
-Pixmap contents;
-GC contents_gc;
+GC gc;
 XEvent event;
 int screen;
 
@@ -29,23 +28,6 @@ DonnellPixel* border_color;
 DonnellStockElementStandard *titlebar_background;
 DonnellRect rect;
 DonnellSize size;
-
-void convert_to_pixmap() {
-    unsigned int j;
-    unsigned int i;
-
-	for (i = 0; i < buffer->height; i++) {
-		for (j = 0; j < buffer->width; j++) {
-			DonnellPixel *pixel;
-
-			pixel = Donnell_ImageBuffer_GetPixel(buffer, j, i);			
-			XSetForeground(display, contents_gc, ((pixel->red & 0xFF) << 16) + ((pixel->green & 0xFF) << 8) + (pixel->blue & 0xFF));
-			XDrawPoint(display, contents, contents_gc, j, i);
-			
-			Donnell_Pixel_Free(pixel);
-		}
-	}
-}
 
 void draw() {	
 	Donnell_ImageBuffer_Clear(buffer, border_color);
@@ -68,13 +50,26 @@ void init_resources() {
 }
 
 void blit_to_window() {
-	XCopyArea(display, contents, window, DefaultGC(display, screen), 0, 0, buffer->width, buffer->height, 0, 0);
+    unsigned int j;
+    unsigned int i;
+
+	for (i = 0; i < buffer->height; i++) {
+		for (j = 0; j < buffer->width; j++) {
+			DonnellPixel *pixel;
+
+			pixel = Donnell_ImageBuffer_GetPixel(buffer, j, i);			
+			XSetForeground(display, gc, ((pixel->red & 0xFF) << 16) + ((pixel->green & 0xFF) << 8) + (pixel->blue & 0xFF));
+			XDrawPoint(display, window, gc, j, i);
+			
+			Donnell_Pixel_Free(pixel);
+		}
+	}
 	XFlush(display);
 }
 
 int main(void) {
 	XSizeHints* size_hints;
-	motif_hints hints;
+	MotifHints hints;
 	Atom prop;
 	
 	Donnell_Init();
@@ -85,9 +80,12 @@ int main(void) {
     display = XOpenDisplay(NULL);
     screen = DefaultScreen(display);
 	
-    window = XCreateSimpleWindow(display, RootWindow(display, screen), 0, 0, buffer->width, buffer->height, 0, BlackPixel(display, screen), WhitePixel(display, screen));
+    window = XCreateSimpleWindow(display, RootWindow(display, screen), 0, 0, buffer->width, buffer->height, 0, 0xFFFFFF, 0xFFFFFF);
+	gc = XCreateGC(display, window, 0, NULL);
     XSelectInput(display, window, ExposureMask | KeyPressMask | ButtonPressMask | StructureNotifyMask | ButtonReleaseMask | PointerMotionMask);
-        
+   
+    XStoreName(display, window, "Titlebar");
+     
     size_hints = XAllocSizeHints();
     size_hints->flags = PResizeInc | PMaxSize | PMinSize | PWinGravity;
     size_hints->width_inc = 0;
@@ -110,10 +108,6 @@ int main(void) {
 	
     XMapWindow(display, window);
 	XMoveWindow(display, window, (DisplayWidth(display, screen) - buffer->width)/2, (DisplayHeight(display, screen) - buffer->height)/2);
-
-    contents = XCreatePixmap(display, window, buffer->width, buffer->height, DefaultDepth(display, screen));
-	contents_gc = XCreateGC(display, contents, 0, NULL);
-	convert_to_pixmap();
 			
     for (;;) {
         XNextEvent(display, &event);
@@ -131,8 +125,7 @@ int main(void) {
  
 end:
 	XDestroyWindow(display, window);
-	XFreePixmap(display, contents);
-	XFreeGC(display, contents_gc);
+	XFreeGC(display, gc);
     XCloseDisplay(display);
 	Donnell_ImageBuffer_Free(buffer);
 	Donnell_GuiPrimitives_StandardStockElement_Free(titlebar_background);
