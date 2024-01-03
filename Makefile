@@ -19,11 +19,6 @@ PKGCONFIG_PATHS = $(shell  $(PKGCONFIG) --variable pc_path pkg-config)
 PKGCONFIG_PATHS_LIST := $(subst :, ,$(PKGCONFIG_PATHS:v%=%))
 PKGCONFIG_PATH = $(word 1,$(PKGCONFIG_PATHS_LIST))
 
-# VERSION INFORMATION
-MAJOR_VERSION = 0
-MINOR_VERSION = 0
-VERSION_CFLAGS = -DMAJOR_VERSION=$(MAJOR_VERSION) -DMINOR_VERSION=$(MINOR_VERSION)
-
 # PKGCONFIG FILE
 define PCFILE
 prefix=$(PREFIX)
@@ -33,7 +28,7 @@ libdir=$${prefix}/lib
 
 Name: $(TARGET)
 Description: A simple C library for drawing graphics
-Version: $(MAJOR_VERSION).$(MINOR_VERSION)
+Version: 0.0
 Cflags: -I$${includedir}
 Libs: -L$${libdir} -ldonnell
 endef
@@ -76,7 +71,7 @@ install: all $(PKGCONFIG_PATH)
 examples: $(EXAMPLES) $(EXAMPLES_X11)
 	
 $(LIBTARGET): $(SOURCES)
-	$(CC) $(^) -o ${LIBTARGET} ${CFLAGS} ${VERSION_CFLAGS} ${LIBS}
+	$(CC) $(^) -o ${LIBTARGET} ${CFLAGS} ${LIBS}
 
 $(PCTARGET):
 	$(file > $@,$(PCFILE))

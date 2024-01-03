@@ -3,6 +3,9 @@
 #ifndef DONNELL
 #define DONNELL
 
+#define DONNELL_MAJOR_VERSION 0
+#define DONNELL_MINOR_VERSION 0
+
 typedef unsigned char DonnellUInt8;
 typedef unsigned short DonnellUInt16;
 typedef unsigned long DonnellUInt32;

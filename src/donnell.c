@@ -22,11 +22,11 @@ DONNELL_EXPORT void Donnell_Cleanup(void) {
 }
 
 DONNELL_EXPORT unsigned int Donnell_GetVersionMajor(void) {
-	return MAJOR_VERSION;
+	return DONNELL_MAJOR_VERSION;
 }
 
 DONNELL_EXPORT unsigned int Donnell_GetVersionMinor(void) {
-	return MINOR_VERSION;
+	return DONNELL_MINOR_VERSION;
 }
 
 DONNELL_EXPORT void Donnell_Rect_Center(DonnellRect *dest, DonnellRect *src1, DonnellRect *src2) {
