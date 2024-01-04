@@ -10,8 +10,8 @@ It currently boasts the following features:
 - Supports integer scaling for all GUI rendering operations.
 
 Todo:
-- [ ] More sanity checks
+- [X] More sanity checks
 - [ ] Get HarfBuzz support working
 - [ ] Documentation
 - [X] Window decoration rendering
-- [ ] Box blurring
+- [ ] Blurring
