@@ -91,8 +91,8 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
 
     longest_rtl_width = 0;
     t = -1;
-    x = buffer->scale * x;
-    y = buffer->scale * y;
+    x = scale * x;
+    y = scale * y;
 	pixel_size = pixel_size *scale;
 	
     paragraphs = TextUtils_Paragraphs_Create(utf8string);
