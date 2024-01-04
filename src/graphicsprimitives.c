@@ -167,7 +167,7 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
     }
 
     if (csize) {
-        TextRenderer_MeasureAndRender(NULL, &size, NULL, fribidi_paragraphs->str[i - 1], 0, 0, pixel_size * buffer->scale, DONNELL_FALSE, font_options);
+        TextRenderer_MeasureAndRender(NULL, &size, NULL, fribidi_paragraphs->str[i - 1], 0, 0, pixel_size, DONNELL_FALSE, font_options);
         csize->h = y - line_height + size.h;
     }
 
