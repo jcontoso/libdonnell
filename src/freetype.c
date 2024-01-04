@@ -29,6 +29,10 @@ void FreeType_CacheFree(FreeTypeCache *cache_elem) {
 FreeTypeCache *FreeType_CacheCopy(FreeTypeCache *cache_elem) {
     FreeTypeCache *ret;
 
+    if (!cache_elem) {
+        return NULL;
+    }
+
     ret = malloc(sizeof(FreeTypeCache));
     if (!ret) {
         return NULL;
@@ -45,6 +49,10 @@ FreeTypeCache *FreeType_CacheCopy(FreeTypeCache *cache_elem) {
 FreeTypeCache *FreeType_LoadFromCache(FriBidiString *str, DonnellFontOptions options, unsigned int size) {
     unsigned int i;
 
+    if (!str) {
+        return NULL;
+    }
+    
     for (i = 0; i < cache_count; i++) {
         if ((FriBidiString_Compare(cache[i]->str, str)) && (cache[i]->options == options) && (cache[i]->size == size)) {
             return FreeType_CacheCopy(cache[i]);
@@ -57,6 +65,10 @@ FreeTypeCache *FreeType_LoadFromCache(FriBidiString *str, DonnellFontOptions opt
 void FreeType_AddToCache(FreeTypeCache *cache_elem) {
     unsigned int i;
 
+    if (!cache_elem) {
+        return;
+    }
+    
     for (i = 0; i < cache_count; i++) {
         if (FriBidiString_Compare(cache[i]->str, cache_elem->str)) {
             return;

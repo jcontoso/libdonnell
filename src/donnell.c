@@ -9,16 +9,29 @@
 #include "textrenderer.h"
 #include "textutils.h"
 
+DonnellBool initialized = DONNELL_FALSE;
+
 DONNELL_EXPORT void Donnell_Init(void) {
+	if (initialized) {
+		return;	
+	}
+	
     TextRenderer_Init();
     StockImages_Init();
     GuiPrimitives_Init();
+    
+    initialized = DONNELL_TRUE;
 }
 
 DONNELL_EXPORT void Donnell_Cleanup(void) {
+	if (!initialized) {
+		return;	
+	}
+	
     TextRenderer_Cleanup();
     StockImages_Cleanup();
     GuiPrimitives_Cleanup();
+    initialized = DONNELL_FALSE;
 }
 
 DONNELL_EXPORT unsigned int Donnell_GetVersionMajor(void) {

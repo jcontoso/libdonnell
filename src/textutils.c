@@ -70,6 +70,10 @@ Paragraphs *TextUtils_Paragraphs_Create(char *original_string) {
 void TextUtils_Paragraphs_Free(Paragraphs *paragraphs) {
     unsigned int i;
 
+	if (!paragraphs) {
+		return;
+	}
+	
     for (i = 0; i < paragraphs->count; i++) {
         free(paragraphs->str[i]);
     }
