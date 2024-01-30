@@ -132,7 +132,6 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
     }
 
     runs->count = c;
-    printf("%d\n", c);
     return runs;
 }
 
