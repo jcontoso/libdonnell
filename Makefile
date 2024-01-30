@@ -28,7 +28,7 @@ libdir=$${prefix}/lib
 
 Name: $(TARGET)
 Description: A simple C library for drawing graphics
-Version: 0.0
+Version: 1.0
 Cflags: -I$${includedir}
 Libs: -L$${libdir} -ldonnell
 endef
