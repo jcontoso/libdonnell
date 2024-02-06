@@ -1,10 +1,9 @@
 /* Public API for libdonnell */
-
 #ifndef DONNELL
 #define DONNELL
 
 #define DONNELL_MAJOR_VERSION 1
-#define DONNELL_MINOR_VERSION 0
+#define DONNELL_MINOR_VERSION 2
 
 typedef unsigned char DonnellUInt8;
 typedef unsigned short DonnellUInt16;

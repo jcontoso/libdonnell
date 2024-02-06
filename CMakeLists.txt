@@ -25,6 +25,12 @@ if(NOT LIBC_HAS_ROUNDF)
 endif()
 cmake_pop_check_state(RESET)
 
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/include/donnell.h" version)
+string(REGEX MATCH "DONNELL_MAJOR_VERSION ([0-9]*)" _ ${version})
+set(VERSION_MAJOR ${CMAKE_MATCH_1})
+string(REGEX MATCH "DONNELL_MINOR_VERSION ([0-9]*)" _ ${version})
+set(VERSION_MINOR ${CMAKE_MATCH_1})
+
 add_library(libdonnell
     src/bidi.c
     src/donnell.c

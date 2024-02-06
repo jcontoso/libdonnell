@@ -6,7 +6,7 @@ libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
 Name: donnell
 Description: A simple C library for drawing graphics
 Requires.Private: @REQUIRES_PRIVATE@
-Version: 1.0
+Version: @VERSION_MAJOR@.@VERSION_MINOR@
 Cflags: -I${includedir}
 Libs: -L${libdir} -ldonnell
 Libs.Private: -lunistring
