@@ -23,6 +23,7 @@ DONNELL_EXPORT void Donnell_Init(void) {
     initialized = DONNELL_TRUE;
 }
 
+
 DONNELL_EXPORT void Donnell_Cleanup(void) {
 	if (!initialized) {
 		return;	
@@ -34,6 +35,7 @@ DONNELL_EXPORT void Donnell_Cleanup(void) {
     initialized = DONNELL_FALSE;
 }
 
+
 DONNELL_EXPORT unsigned int Donnell_GetVersionMajor(void) {
 	return DONNELL_MAJOR_VERSION;
 }
@@ -41,6 +43,7 @@ DONNELL_EXPORT unsigned int Donnell_GetVersionMajor(void) {
 DONNELL_EXPORT unsigned int Donnell_GetVersionMinor(void) {
 	return DONNELL_MINOR_VERSION;
 }
+
 
 DONNELL_EXPORT void Donnell_Rect_Center(DonnellRect *dest, DonnellRect *src1, DonnellRect *src2) {
     if ((!dest) || (!src1) || (!src2)) {
