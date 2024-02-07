@@ -9,7 +9,7 @@ include(GNUInstallDirs)
 
 option(BUILD_SHARED_LIBS "Build libdonnell as a shared library" TRUE)
 option(LIBDONNELL_EXAMPLES "Build libdonnell examples" TRUE)
-option(BUILD_DOC "Build documentation" TRUE)
+option(BUILD_DOC "Build documentation" FALSE)
 
 find_package(PkgConfig REQUIRED)
 
@@ -89,14 +89,16 @@ if(LIBDONNELL_EXAMPLES)
     endif()
 endif()
 
-find_package(Doxygen)
-if(DOXYGEN_FOUND)
-    set(DOXYGEN_IN "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Doxyfile.cmake")
-    set(DOXYGEN_OUT "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile")
+if(BUILD_DOC)
+	find_package(Doxygen)
+	if(DOXYGEN_FOUND)
+		set(DOXYGEN_IN "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Doxyfile.cmake")
+		set(DOXYGEN_OUT "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile")
 
-    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-
-    add_custom_target(doc_doxygen ALL COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMENT "Generate API documentation with Doxygen" VERBATIM)
-else()
-	message("Doxygen needs to be installed to generate the documentation")
+		configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+	
+		add_custom_target(doc_doxygen ALL COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMENT "Generate API documentation with Doxygen" VERBATIM)
+	else()
+		message("Doxygen needs to be installed to generate the documentation")
+	endif()
 endif()

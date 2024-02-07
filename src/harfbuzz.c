@@ -24,7 +24,6 @@ void HarfBuzz_Init(void) {
 
     error = NULL;
     harfbuzz = NULL;
-    return;
 
     harfbuzz = malloc(sizeof(HarfBuzzLibrary));
     if (!harfbuzz) {
@@ -43,6 +42,7 @@ void HarfBuzz_Init(void) {
     harfbuzz->buffer_add_utf8 = dlsym(harfbuzz->library, "hb_buffer_add_utf8");
     harfbuzz->buffer_guess = dlsym(harfbuzz->library, "hb_buffer_guess_segment_properties");
     harfbuzz->buffer_destroy = dlsym(harfbuzz->library, "hb_buffer_destroy");
+    harfbuzz->buffer_set_direction = dlsym(harfbuzz->library, "hb_buffer_set_direction");
 
     harfbuzz->font_create = dlsym(harfbuzz->library, "hb_ft_font_create");
     harfbuzz->font_setup = dlsym(harfbuzz->library, "hb_ft_font_set_funcs");
@@ -153,7 +153,9 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     harfbuzz_buffer = harfbuzz->buffer_create();
     harfbuzz->buffer_add(harfbuzz_buffer, string->str, string->len, 0, string->len);
     harfbuzz->buffer_guess(harfbuzz_buffer);
-
+	/* Dubious hack, I dont know if this is the correct thing to do */
+	harfbuzz->buffer_set_direction(harfbuzz_buffer, HB_DIRECTION_LTR);
+	
     harfbuzz_font = harfbuzz->font_create(face, NULL);
     harfbuzz->font_setup(harfbuzz_font);
 
