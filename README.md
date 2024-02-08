@@ -8,3 +8,7 @@ It currently boasts the following features:
 - Can load in an external SVG renderer for Emoji fonts that use SVG glyphs (Currently, only librsvg and NanoSVG built with position independent code are supported).
 - Supports some basic GUI rendering features, like buttons and icons.
 - Supports integer scaling for all GUI rendering operations.
+
+# Notes for users
+- You can force disable librsvg support by setting the LIBDONNELL_DISABLE_RSVG environment variable to 1.
+- You can force disable HarfBuzz support by setting the LIBDONNELL_DISABLE_HB environment variable to 1.
