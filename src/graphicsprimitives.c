@@ -93,8 +93,8 @@ void MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *csize, DonnellPix
     t = -1;
     x = scale * x;
     y = scale * y;
-	pixel_size = pixel_size *scale;
-	
+    pixel_size = pixel_size * scale;
+
     paragraphs = TextUtils_Paragraphs_Create(utf8string);
     fribidi_paragraphs = FriBidiParagraphs_ConvertFromParagraphs(paragraphs);
 
@@ -184,10 +184,9 @@ DONNELL_EXPORT void Donnell_GraphicsPrimitives_DrawText(DonnellImageBuffer *buff
 }
 
 DONNELL_EXPORT void Donnell_GraphicsPrimitives_MeasureText(DonnellSize *size, char *utf8string, unsigned int pixel_size, DonnellFontOptions font_options, unsigned int pixel_scale) {
-	    if ((!size) || (!utf8string) || (pixel_size < 0)) {
+    if ((!size) || (!utf8string) || (pixel_size < 0)) {
         return;
     }
-    
 
     MeasureAndRender(NULL, size, NULL, utf8string, 0, 0, pixel_size, font_options, pixel_scale);
 }

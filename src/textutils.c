@@ -70,10 +70,10 @@ Paragraphs *TextUtils_Paragraphs_Create(char *original_string) {
 void TextUtils_Paragraphs_Free(Paragraphs *paragraphs) {
     unsigned int i;
 
-	if (!paragraphs) {
-		return;
-	}
-	
+    if (!paragraphs) {
+        return;
+    }
+
     for (i = 0; i < paragraphs->count; i++) {
         free(paragraphs->str[i]);
     }
@@ -103,32 +103,32 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
         return NULL;
     }
 
-	iscript = uc_script(str->str[0]);
+    iscript = uc_script(str->str[0]);
     for (i = 0; i < str->len; i++) {
-		script = uc_script(str->str[i]);
-		if ((!strcmp(iscript->name, script->name)) || (!strcmp(cscript->name, script->name))) {
-			if (!c) {
-				c = 1;
-				runs->str = calloc(c, sizeof(FriBidiString*));
-				runs->str[c-1] = FriBidiString_Create(j+1);
-			}
-			
-			if (j) {
-                runs->str[c-1]->str = realloc(runs->str[c-1]->str, (j+1) * sizeof(FriBidiChar));				
-			}
-					
-			runs->str[c-1]->str[j] = str->str[i];
-            runs->str[c-1]->len = j+1;			
-			j++;
-		} else {
-			c++;
-			j = 1;
+        script = uc_script(str->str[i]);
+        if ((!strcmp(iscript->name, script->name)) || (!strcmp(cscript->name, script->name))) {
+            if (!c) {
+                c = 1;
+                runs->str = calloc(c, sizeof(FriBidiString *));
+                runs->str[c - 1] = FriBidiString_Create(j + 1);
+            }
+
+            if (j) {
+                runs->str[c - 1]->str = realloc(runs->str[c - 1]->str, (j + 1) * sizeof(FriBidiChar));
+            }
+
+            runs->str[c - 1]->str[j] = str->str[i];
+            runs->str[c - 1]->len = j + 1;
+            j++;
+        } else {
+            c++;
+            j = 1;
             runs->str = realloc(runs->str, c * sizeof(FriBidiString *));
-			runs->str[c-1] = FriBidiString_Create(2);
-			runs->str[c-1]->str[0] = str->str[i];
-            runs->str[c-1]->len = 1;	
-     	}
-		iscript = uc_script(str->str[i]);
+            runs->str[c - 1] = FriBidiString_Create(2);
+            runs->str[c - 1]->str[0] = str->str[i];
+            runs->str[c - 1]->len = 1;
+        }
+        iscript = uc_script(str->str[i]);
     }
 
     runs->count = c;

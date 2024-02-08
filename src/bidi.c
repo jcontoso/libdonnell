@@ -52,10 +52,10 @@ FriBidiString *FriBidiString_Copy(FriBidiString *string) {
     FriBidiString *result;
     unsigned int i;
 
-	if (!string) {
-		return NULL;
-	}
-	
+    if (!string) {
+        return NULL;
+    }
+
     result = FriBidiString_Create(string->len);
     result->direction = string->direction;
 
@@ -69,10 +69,10 @@ FriBidiString *FriBidiString_Copy(FriBidiString *string) {
 DonnellBool FriBidiString_Compare(FriBidiString *a, FriBidiString *b) {
     unsigned int i;
 
-	if ((!a) || (!b)) {
-        return DONNELL_FALSE;	
-	}
-	
+    if ((!a) || (!b)) {
+        return DONNELL_FALSE;
+    }
+
     if (a->len != b->len) {
         return DONNELL_FALSE;
     }

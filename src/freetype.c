@@ -52,7 +52,7 @@ FreeTypeCache *FreeType_LoadFromCache(FriBidiString *str, DonnellFontOptions opt
     if (!str) {
         return NULL;
     }
-    
+
     for (i = 0; i < cache_count; i++) {
         if ((FriBidiString_Compare(cache[i]->str, str)) && (cache[i]->options == options) && (cache[i]->size == size)) {
             return FreeType_CacheCopy(cache[i]);
@@ -68,7 +68,7 @@ void FreeType_AddToCache(FreeTypeCache *cache_elem) {
     if (!cache_elem) {
         return;
     }
-    
+
     for (i = 0; i < cache_count; i++) {
         if (FriBidiString_Compare(cache[i]->str, cache_elem->str)) {
             return;
@@ -228,13 +228,15 @@ void FreeType_CopyToBuffer(DonnellImageBuffer *buffer, DonnellPixel *color, FT_B
 }
 
 void FreeType_Init(void) {
+#if (FREETYPE_MINOR >= 12)
+    SVG_RendererHooks funcs;
+#endif
+
     FT_Init_FreeType(&freetype);
     flags = FT_LOAD_RENDER | FT_LOAD_TARGET_NORMAL;
 
 #if (FREETYPE_MINOR >= 12)
     if (SVG_GetLibrary()) {
-        SVG_RendererHooks funcs;
-
         funcs.init_svg = (SVG_Lib_Init_Func)SVGRenderer_Init;
         funcs.free_svg = (SVG_Lib_Free_Func)SVGRenderer_Free;
         funcs.render_svg = (SVG_Lib_Render_Func)SVGRenderer_Render;
@@ -242,8 +244,17 @@ void FreeType_Init(void) {
 
         FT_Property_Set(freetype, "ot-svg", "svg-hooks", &funcs);
     } else {
+#ifdef HAS_NANOSVG
+        funcs.init_svg = (SVG_Lib_Init_Func)NanoSVGRenderer_Init;
+        funcs.free_svg = (SVG_Lib_Free_Func)NanoSVGRenderer_Free;
+        funcs.render_svg = (SVG_Lib_Render_Func)NanoSVGRenderer_Render;
+        funcs.preset_slot = (SVG_Lib_Preset_Slot_Func)NanoSVGRenderer_PresetSlot;
+
+        FT_Property_Set(freetype, "ot-svg", "svg-hooks", &funcs);
+#else
 #if ((FREETYPE_MINOR >= 13) && (FREETYPE_PATCH >= 1))
         cflags |= FT_LOAD_NO_SVG;
+#endif
 #endif
     }
 #endif

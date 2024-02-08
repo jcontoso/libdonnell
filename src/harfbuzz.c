@@ -153,9 +153,9 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     harfbuzz_buffer = harfbuzz->buffer_create();
     harfbuzz->buffer_add(harfbuzz_buffer, string->str, string->len, 0, string->len);
     harfbuzz->buffer_guess(harfbuzz_buffer);
-	/* Dubious hack, I dont know if this is the correct thing to do */
-	harfbuzz->buffer_set_direction(harfbuzz_buffer, HB_DIRECTION_LTR);
-	
+    /* Dubious hack, I dont know if this is the correct thing to do */
+    harfbuzz->buffer_set_direction(harfbuzz_buffer, HB_DIRECTION_LTR);
+
     harfbuzz_font = harfbuzz->font_create(face, NULL);
     harfbuzz->font_setup(harfbuzz_font);
 

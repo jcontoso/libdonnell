@@ -1019,8 +1019,8 @@ DONNELL_EXPORT DonnellStockElementStandard *Donnell_GuiPrimitives_StandardStockE
             Donnell_ImageBuffer_Free(ret->img);
             ret->img = Donnell_ImageBuffer_Scale(celem->img, buf->width * scale, buf->height * scale, DONNELL_SCALING_ALGORITHM_BILINEAR);
             Donnell_ImageBuffer_Free(buf);
-			Donnell_GuiPrimitives_StandardStockElement_Free(celem);
-			
+            Donnell_GuiPrimitives_StandardStockElement_Free(celem);
+
             return ret;
         }
     }

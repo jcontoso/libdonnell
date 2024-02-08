@@ -125,5 +125,5 @@ void FontConfig_Cleanup(void) {
     if (fontconfig) {
         FcConfigDestroy(fontconfig);
     }
-    //FcFini();
+    // FcFini();
 }

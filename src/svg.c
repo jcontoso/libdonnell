@@ -280,39 +280,38 @@ FT_Error SVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer svg
     return FT_Err_Ok;
 }
 
-
 #ifdef HAS_NANOSVG
-void NanoSVG_Finalize(void *object) {
+void NanoSVGRenderer_Finalize(void *object) {
     FT_GlyphSlot slot;
     NanoSVGRenderer *state;
-	
-	slot = (FT_GlyphSlot)object;
-	state = (NanoSVGRenderer*)slot->generic.data;
 
-	if (state && (state->cookie == COOKIE)) {
-		free(state);
-		slot->generic.data = NULL;
-		slot->generic.finalizer = NULL;		
-	}
+    slot = (FT_GlyphSlot)object;
+    state = (NanoSVGRenderer *)slot->generic.data;
+
+    if (state && (state->cookie == COOKIE)) {
+        free(state);
+        slot->generic.data = NULL;
+        slot->generic.finalizer = NULL;
+    }
 }
 
 FT_Error NanoSVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer svg) {
     NanoSVGRenderer *state;
     NanoSVGRenderer state_dummy;
     const struct NSVGshape *shape;
-	FT_SVG_Document document;
-	FT_Size_Metrics metrics;
-	char *svg_copy;
+    FT_SVG_Document document;
+    FT_Size_Metrics metrics;
+    char *svg_copy;
     float min_x;
     float min_y;
     float max_x;
     float max_y;
     float svg_width;
-    float svg_height;  
-	float x_scale;
-	float y_scale;   
-	float width;
-	float height;
+    float svg_height;
+    float x_scale;
+    float y_scale;
+    float width;
+    float height;
     float x;
     float y;
     float xx;
@@ -321,29 +320,29 @@ FT_Error NanoSVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer
     float yy;
     float x0;
     float y0;
-	float ascender;
+    float ascender;
     float hbearing_x;
     float hbearing_y;
     float vbearing_x;
     float vbearing_y;
-             
-	min_y = min_x = 1;
-	max_x = max_y = 0;
-	memset(&state_dummy, 0, sizeof(NanoSVGRenderer));
-	document = (FT_SVG_Document)slot->other;
-	metrics = document->metrics;
+
+    min_y = min_x = 1;
+    max_x = max_y = 0;
+    memset(&state_dummy, 0, sizeof(NanoSVGRenderer));
+    document = (FT_SVG_Document)slot->other;
+    metrics = document->metrics;
 
     if (cache) {
         if (!slot->generic.data) {
             slot->generic.data = calloc(1, sizeof(NanoSVGRenderer));
-            slot->generic.finalizer = NanoSVG_Finalize;
-            ((NanoSVGRenderer*)slot->generic.data)->cookie = COOKIE;
+            slot->generic.finalizer = NanoSVGRenderer_Finalize;
+            ((NanoSVGRenderer *)slot->generic.data)->cookie = COOKIE;
         }
         state = slot->generic.data;
         state->error = FT_Err_Ok;
     } else {
         state = &state_dummy;
-	}
+    }
 
     if (document->start_glyph_id != document->end_glyph_id) {
         state->error = FT_Err_Unimplemented_Feature;
@@ -363,7 +362,7 @@ FT_Error NanoSVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer
         return FT_Err_Invalid_SVG_Document;
     }
 
-    for (shape = state->svg->shapes; shape; shape = shape->next)  {
+    for (shape = state->svg->shapes; shape; shape = shape->next) {
         min_x = min(min_x, shape->bounds[0]);
         min_y = min(min_y, shape->bounds[1]);
         max_x = max(max_x, shape->bounds[2]);
@@ -371,7 +370,7 @@ FT_Error NanoSVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer
     }
     state->x_ofs = -min_x;
     state->y_ofs = -min_y;
-    
+
     svg_width = max_x - min_x;
     svg_height = max_y - min_y;
     if (!svg_width || !svg_height) {
@@ -379,15 +378,15 @@ FT_Error NanoSVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer
         svg_height = document->units_per_EM;
     }
 
-	x_scale = (float)metrics.x_ppem / floorf(svg_width);
-	y_scale = (float)metrics.y_ppem / floorf(svg_height);
+    x_scale = (float)metrics.x_ppem / floorf(svg_width);
+    y_scale = (float)metrics.y_ppem / floorf(svg_height);
     state->scale = x_scale < y_scale ? x_scale : y_scale;
     width = floorf(svg_width) * state->scale;
-	height = floorf(svg_height) * state->scale;
-    xx =  (float)document->transform.xx / ( 1 << 16 );
-    xy = -(float)document->transform.xy / ( 1 << 16 );
-    yx = -(float)document->transform.yx / ( 1 << 16 );
-    yy =  (float)document->transform.yy / ( 1 << 16 );
+    height = floorf(svg_height) * state->scale;
+    xx = (float)document->transform.xx / (1 << 16);
+    xy = -(float)document->transform.xy / (1 << 16);
+    yx = -(float)document->transform.yx / (1 << 16);
+    yy = (float)document->transform.yy / (1 << 16);
     x0 = (float)document->delta.x / 64 * svg_width / metrics.x_ppem;
     y0 = -(float)document->delta.y / 64 * svg_height / metrics.y_ppem;
     ascender = slot->face->size->metrics.ascender / 64.;
@@ -401,8 +400,8 @@ FT_Error NanoSVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer
     hbearing_x = 0.;
     hbearing_y = -slot->bitmap_top;
     vbearing_x = slot->metrics.horiBearingX / 64.0f - slot->metrics.horiAdvance / 64.0f / 2;
-	vbearing_y = (slot->metrics.vertAdvance / 64.0f - slot->metrics.height / 64.0f) / 2;
-    slot->metrics.width  = roundf(width * 64);
+    vbearing_y = (slot->metrics.vertAdvance / 64.0f - slot->metrics.height / 64.0f) / 2;
+    slot->metrics.width = roundf(width * 64);
     slot->metrics.height = roundf(height * 64);
     slot->metrics.horiBearingX = hbearing_x * 64;
     slot->metrics.horiBearingY = hbearing_y * 64;
@@ -411,13 +410,74 @@ FT_Error NanoSVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer
 
     if (!slot->metrics.vertAdvance) {
         slot->metrics.vertAdvance = height * 1.2f * 64;
-	}
-	
+    }
+
     if (!cache) {
         nsvgDelete(state->svg);
     }
     return FT_Err_Ok;
 }
+
+FT_Error NanoSVGRenderer_Init(FT_Pointer *svg) {
+    *svg = NULL;
+    return FT_Err_Ok;
+}
+
+void NanoSVGRenderer_Free(FT_Pointer *svg) {
+    /* Do nothing. */
+}
+
+FT_Error NanoSVGRenderer_Render(FT_GlyphSlot slot, FT_Pointer *svg) {
+    NanoSVGRenderer *state;
+    FT_Bitmap *bitmap;
+    NSVGrasterizer *rast;
+    unsigned int i;
+    unsigned int j;
+
+    state = (NanoSVGRenderer *)slot->generic.data;
+
+    bitmap = &slot->bitmap;
+
+    rast = nsvgCreateRasterizer();
+    nsvgRasterize(rast, state->svg, state->x_ofs * state->scale, state->y_ofs * state->scale, state->scale, bitmap->buffer, bitmap->width, bitmap->rows, bitmap->pitch);
+    nsvgDeleteRasterizer(rast);
+    nsvgDelete(state->svg);
+
+    bitmap->pixel_mode = FT_PIXEL_MODE_BGRA;
+    bitmap->num_grays = 256;
+    slot->format = FT_GLYPH_FORMAT_BITMAP;
+
+    for (i = 0; i < bitmap->rows; i++) {
+        for (j = 0; j < bitmap->pitch; j += 4) {
+            DonnellUInt8 *pixel;
+            DonnellUInt8 red;
+            DonnellUInt8 green;
+            DonnellUInt8 blue;
+            DonnellUInt8 alpha;
+
+            pixel = &bitmap->buffer[i * bitmap->pitch + j];
+            red = pixel[0];
+            green = pixel[1];
+            blue = pixel[2];
+            alpha = pixel[3];
+
+            if (alpha == 0x00) {
+                blue = green = red = 0x00;
+            } else {
+                blue = blue * alpha / 0xff;
+                green = green * alpha / 0xff;
+                red = red * alpha / 0xff;
+            }
+
+            pixel[0] = blue;
+            pixel[1] = green;
+            pixel[2] = red;
+            pixel[3] = alpha;
+        }
+    }
+    return FT_Err_Ok;
+}
+
 #endif
 
 #endif

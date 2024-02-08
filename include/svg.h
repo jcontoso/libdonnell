@@ -151,6 +151,5 @@ void NanoSVGRenderer_Free(FT_Pointer *svg);
 FT_Error NanoSVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer svg);
 FT_Error NanoSVGRenderer_Render(FT_GlyphSlot slot, FT_Pointer *svg);
 
-
 #endif
 #endif

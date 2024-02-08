@@ -106,10 +106,10 @@ typedef enum
 } DonnellButtonState;
 
 typedef enum
-{	
-	DONNELL_TITLEBAR_BUTTON_MINIMIZE,
-	DONNELL_TITLEBAR_BUTTON_MAXIMIZE,
-	DONNELL_TITLEBAR_BUTTON_CLOSE
+{
+    DONNELL_TITLEBAR_BUTTON_MINIMIZE,
+    DONNELL_TITLEBAR_BUTTON_MAXIMIZE,
+    DONNELL_TITLEBAR_BUTTON_CLOSE
 } DonnellTitlebarButton;
 
 typedef enum
@@ -203,34 +203,34 @@ typedef enum
 #define DONNELL_STOCK_ICON_WARNING "warning"
 #define DONNELL_STOCK_ICON_INFO "info"
 
-/** 
+/**
  * Initializes the library.
-*/
+ */
 void Donnell_Init(void);
 
-/** 
+/**
  * Gets the major version of the library
  * @param[out] Major version number
-*/
+ */
 unsigned int Donnell_GetVersionMajor(void);
 
-/** 
+/**
  * Gets the minor version of the library
  * @param[out] Minor version number
-*/
+ */
 unsigned int Donnell_GetVersionMinor(void);
 
-/** 
+/**
  * Frees all of the resources created when the library is initialized
-*/
+ */
 void Donnell_Cleanup(void);
 
-/** 
+/**
  * Centers a rectangle inside another rectangle, and sets the values in the "destination" rectangle appropriately
  * @param[in] The rectangle where the results will be stored
  * @param[in] Parent rectangle
  * @param[in] Child rectangle
-*/
+ */
 void Donnell_Rect_Center(DonnellRect *dest, DonnellRect *src1, DonnellRect *src2);
 
 DonnellPixel *Donnell_Pixel_Create();
