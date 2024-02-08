@@ -12,10 +12,10 @@ option(LIBDONNELL_EXAMPLES "Build libdonnell examples" TRUE)
 option(BUILD_DOC "Build documentation" FALSE)
 
 find_package(PkgConfig REQUIRED)
-
 set(libdonnell_PKGCONFIG_DEPS fribidi fontconfig freetype2 libpng)
 pkg_check_modules(PC_LIBDONNELL_DEPS REQUIRED IMPORTED_TARGET fribidi fontconfig freetype2 libpng)
 find_package(Libunistring REQUIRED)
+find_package(NanoSVG)
 
 cmake_push_check_state(RESET)
 set(src_roundf_test "#include <math.h>\nint main(int argc){return roundf(0.4f * (float)argc);}\n")
@@ -49,12 +49,15 @@ add_library(libdonnell
     src/textutils.c
 )
 add_library(libdonnell::libdonnell ALIAS libdonnell)
+if(NanoSVG_FOUND)
+	add_compile_definitions(HAS_NANOSVG)
+endif()
 set_property(TARGET libdonnell PROPERTY OUTPUT_NAME "donnell")
 set_property(TARGET libdonnell PROPERTY C_VISIBILITY_PRESET "hidden")
 target_include_directories(libdonnell PRIVATE "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/assets>")
 target_include_directories(libdonnell PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>")
 target_include_directories(libdonnell PUBLIC "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
-target_link_libraries(libdonnell PRIVATE PkgConfig::PC_LIBDONNELL_DEPS Libunistring::Libunistring ${CMAKE_DL_LIBS})
+target_link_libraries(libdonnell PRIVATE PkgConfig::PC_LIBDONNELL_DEPS Libunistring::Libunistring NanoSVG::nanosvg NanoSVG::nanosvgrast ${CMAKE_DL_LIBS})
 if(LIBM_HAS_ROUNDF AND NOT LIBC_HAS_ROUNDF)
     target_link_libraries(libdonnell PRIVATE m)
 endif()

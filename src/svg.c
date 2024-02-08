@@ -6,6 +6,14 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#ifdef HAS_NANOSVG
+#include <nanosvg.h>
+#include <nanosvgrast.h>
+#define COOKIE 0xfcf77fcf
+#define min(x, y) ((x) < (y) ? (x) : (y))
+#define max(x, y) ((x) > (y) ? (x) : (y))
+#endif
+
 #if (FREETYPE_MINOR >= 12)
 #include FT_OTSVG_H
 
@@ -271,5 +279,145 @@ FT_Error SVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer svg
     svg_library->handle_destroy(handle);
     return FT_Err_Ok;
 }
+
+
+#ifdef HAS_NANOSVG
+void NanoSVG_Finalize(void *object) {
+    FT_GlyphSlot slot;
+    NanoSVGRenderer *state;
+	
+	slot = (FT_GlyphSlot)object;
+	state = (NanoSVGRenderer*)slot->generic.data
+
+	if (state && (state->cookie == COOKIE)) {
+		free(state);
+		slot->generic.data = NULL;
+		slot->generic.finalizer = NULL;		
+	}
+}
+
+FT_Error NanoSVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer svg) {
+    NanoSVGRenderer *state;
+    NanoSVGRenderer state_dummy;
+    const struct NSVGshape *shape;
+	FT_SVG_Document document;
+	FT_Size_Metrics metrics;
+	char *svg_copy;
+    float min_x;
+    float min_y;
+    float max_x;
+    float max_y;
+    float svg_width;
+    float svg_height;  
+	float x_scale;
+	float y_scale;   
+	float width;
+	float height;
+    float x;
+    float y;
+    float xx;
+    float xy;
+    float yx;
+    float yy;
+    float x0;
+    float y0;
+	float ascender;
+    float hbearing_x;
+    float hbearing_y;
+    float vbearing_x;
+    float vbearing_y;
+             
+	min_y = min_x = 1;
+	max_x = max_y = 0;
+	memset(&state_dummy, 0 sizeof(NanoSVGRenderer));
+	document = (FT_SVG_Document)slot->other;
+	metrics = document->metrics;
+
+    if (cache) {
+        if (!slot->generic.data) {
+            slot->generic.data = calloc(1, sizeof(NanoSVGRenderer));
+            slot->generic.finalizer = NanoSVG_Finalize;
+            ((NanoSVGRenderer*)slot->generic.data)->cookie = COOKIE;
+        }
+        state = slot->generic.data;
+        state->error = FT_Err_Ok;
+    } else {
+        state = &state_dummy;
+	}
+
+    if (document->start_glyph_id != document->end_glyph_id) {
+        state->error = FT_Err_Unimplemented_Feature;
+        return FT_Err_Unimplemented_Feature;
+    }
+
+    state->glyph_id_start = document->start_glyph_id;
+    state->glyph_id_end = document->end_glyph_id;
+
+    svg_copy = malloc(document->svg_document_length + 1);
+    memcpy(svg_copy, document->svg_document, document->svg_document_length);
+    svg_copy[document->svg_document_length] = '\0';
+    state->svg = nsvgParse(svg_copy, "px", 0.);
+    free(svg_copy);
+    if (!state->svg) {
+        state->error = FT_Err_Invalid_SVG_Document;
+        return FT_Err_Invalid_SVG_Document;
+    }
+
+    for (shape = state->svg->shapes; shape; shape = shape->next)  {
+        min_x = min(min_x, shape->bounds[0]);
+        min_y = min(min_y, shape->bounds[1]);
+        max_x = max(max_x, shape->bounds[2]);
+        max_y = max(max_y, shape->bounds[3]);
+    }
+    state->x_ofs = -min_x;
+    state->y_ofs = -min_y;
+    
+    svg_width = max_x - min_x;
+    svg_height = max_y - min_y;
+    if (!svg_width || !svg_height) {
+        svg_width = document->units_per_EM;
+        svg_height = document->units_per_EM;
+    }
+
+	x_scale = (float)metrics.x_ppem / floorf(svg_width);
+	y_scale = (float)metrics.y_ppem / floorf(svg_height);
+    state->scale = x_scale < y_scale ? x_scale : y_scale;
+    width = floorf(svg_width) * state->scale;
+	height = floorf(svg_height) * state->scale;
+    xx =  (float)document->transform.xx / ( 1 << 16 );
+    xy = -(float)document->transform.xy / ( 1 << 16 );
+    yx = -(float)document->transform.yx / ( 1 << 16 );
+    yy =  (float)document->transform.yy / ( 1 << 16 );
+    x0 = (float)document->delta.x / 64 * svg_width / metrics.x_ppem;
+    y0 = -(float)document->delta.y / 64 * svg_height / metrics.y_ppem;
+    ascender = slot->face->size->metrics.ascender / 64.;
+    slot->bitmap.rows = ceilf(height);
+    slot->bitmap.width = ceilf(width);
+    slot->bitmap_left = min_x * state->scale + (metrics.x_ppem - (int)slot->bitmap.width) / 2;
+    slot->bitmap_top = min_y != 0. ? -min_y * state->scale : ascender;
+    slot->bitmap.width = ceilf(width);
+    slot->bitmap.pitch = slot->bitmap.width * 4;
+    slot->bitmap.pixel_mode = FT_PIXEL_MODE_BGRA;
+    hbearing_x = 0.;
+    hbearing_y = -slot->bitmap_top;
+    vbearing_x = slot->metrics.horiBearingX / 64.0f - slot->metrics.horiAdvance / 64.0f / 2;
+	vbearing_y = (slot->metrics.vertAdvance / 64.0f - slot->metrics.height / 64.0f) / 2;
+    slot->metrics.width  = roundf(width * 64);
+    slot->metrics.height = roundf(height * 64);
+
+    slot->metrics.horiBearingX = hbearing_x * 64;
+    slot->metrics.horiBearingY = hbearing_y * 64;
+    slot->metrics.vertBearingX = vbearing_x * 64;
+    slot->metrics.vertBearingY = vbearing_y * 64;
+
+    if (!slot->metrics.vertAdvance)
+        slot->metrics.vertAdvance = height * 1.2f * 64;
+
+    if (!cache) {
+        nsvgDelete(state->svg);
+    }
+    return FT_Err_Ok;
+}
+#endif
 
 #endif

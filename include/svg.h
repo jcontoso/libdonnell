@@ -3,6 +3,11 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#ifdef HAS_NANOSVG
+#include <nanosvg.h>
+#include <nanosvgrast.h>
+#endif
+
 #if (FREETYPE_MINOR >= 12)
 #ifndef DONNELL_SVG
 #define DONNELL_SVG
@@ -95,7 +100,6 @@ typedef void (*SVGCtxTranslate)(SVGCtx, double, double);
 typedef void (*SVGCtxSetSrcSurface)(SVGCtx, SVGSurface, double, double);
 typedef void (*SVGCtxPaint)(SVGCtx);
 typedef void (*SVGCtxDestroy)(SVGCtx);
-typedef void (*SVGCtxDestroy)(SVGCtx);
 
 typedef struct {
     SVGHandleCreate handle_create;
@@ -120,6 +124,19 @@ typedef struct {
     void *library;
 } SVGLibrary;
 
+#ifdef HAS_NANOSVG
+typedef struct {
+    DonnellUInt32 cookie;
+    NSVGimage *svg;
+    float scale;
+    DonnellUInt16 glyph_id_start;
+    DonnellUInt16 glyph_id_end;
+    float x_ofs;
+    float y_ofs;
+    FT_Error error;
+} NanoSVGRenderer;
+#endif
+
 void SVG_Init(void);
 void SVG_Cleanup(void);
 SVGLibrary *SVG_GetLibrary(void);
@@ -128,6 +145,12 @@ FT_Error SVGRenderer_Init(FT_Pointer *svg);
 void SVGRenderer_Free(FT_Pointer *svg);
 FT_Error SVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer svg);
 FT_Error SVGRenderer_Render(FT_GlyphSlot slot, FT_Pointer *svg);
+
+FT_Error NanoSVGRenderer_Init(FT_Pointer *svg);
+void NanoSVGRenderer_Free(FT_Pointer *svg);
+FT_Error NanoSVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer svg);
+FT_Error NanoSVGRenderer_Render(FT_GlyphSlot slot, FT_Pointer *svg);
+
 
 #endif
 #endif

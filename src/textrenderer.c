@@ -76,7 +76,6 @@ void TextRenderer_Init(void) {
 
     HarfBuzz_Init();
     if (HarfBuzz_GetLibrary()) {
-        puts("HarfBuzz enabled");
         text_renderer = &HarfBuzz_MeasureAndRender;
     }
 }
