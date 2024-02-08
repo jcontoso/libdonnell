@@ -10,6 +10,5 @@ It currently boasts the following features:
 - Supports integer scaling for all GUI rendering operations.
 
 Todo for version 1.1+:
-- [ ] Get HarfBuzz support working
-- [ ] Documentation
-- [ ] Blurring
+- [X] Get HarfBuzz support working
+- [-] Documentation
