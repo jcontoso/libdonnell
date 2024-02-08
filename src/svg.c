@@ -1,6 +1,5 @@
 #include <dlfcn.h>
 #include <math.h>
-#include <stdint.h>
 #include <stdlib.h>
 
 #include <ft2build.h>
@@ -24,9 +23,20 @@ SVGLibrary *svg_library;
 
 void SVG_Init(void) {
     char *error;
+    char *env;
 
     error = NULL;
     svg_library = NULL;
+
+    env = getenv("LIBDONNELL_DISABLE_RSVG");
+    if (env && atoi(env)) {
+#ifdef HAS_NANOSVG
+        puts("LIBDONNELL: Using NanoSVG instead of librsvg.");
+#else
+        puts("LIBDONNELL: Disabling SVG support.");
+#endif
+        return;
+    }
 
     svg_library = malloc(sizeof(SVGLibrary));
     if (!svg_library) {

@@ -338,6 +338,12 @@ int FreeType_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
         cflags |= FT_LOAD_COLOR;
     }
 
+#if (FREETYPE_MINOR >= 12)
+    if (FT_HAS_SVG(face)) {
+        cflags |= FT_LOAD_COLOR;
+    }
+#endif
+
     freetype_error = FT_Set_Pixel_Sizes(face, 0, pixel_size);
     if (freetype_error) {
         unsigned int diff;

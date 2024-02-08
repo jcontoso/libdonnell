@@ -11,6 +11,8 @@
 
 typedef void *HarfBuzzBuffer;
 typedef void *HarfBuzzFont;
+typedef void *HarfBuzzBlob;
+typedef void *HarfBuzzFace;
 
 typedef union {
     FT_UInt32 u32;
@@ -37,8 +39,7 @@ typedef struct {
     HarfBuzzVarInt var2;
 } HarfBuzzGlyphInfo;
 
-typedef enum
-{
+typedef enum {
     HB_DIRECTION_INVALID = 0,
     HB_DIRECTION_LTR = 4,
     HB_DIRECTION_RTL,
@@ -53,9 +54,15 @@ typedef void (*HarfBuzzBufferDestroy)(HarfBuzzBuffer);
 typedef void (*HarfBuzzBufferGuess)(HarfBuzzBuffer);
 typedef void (*HarfBuzzBufferSetDirecton)(HarfBuzzBuffer, HarfBuzzDirection);
 
+typedef HarfBuzzBlob (*HarfBuzzBlobCreate)(const char *);
+
+typedef HarfBuzzFace (*HarfBuzzFaceCreate)(HarfBuzzBlob, unsigned int);
+
 typedef HarfBuzzFont (*HarfBuzzFontCreate)(FT_Face, void *);
+typedef HarfBuzzFont (*HarfBuzzFontCreateFromFace)(HarfBuzzFace);
 typedef void (*HarfBuzzFontSetup)(HarfBuzzFont);
 typedef void (*HarfBuzzFontDestroy)(HarfBuzzFont);
+typedef void (*HarfBuzzFontSetupOT)(HarfBuzzFont);
 
 typedef void (*HarfBuzzShape)(HarfBuzzFont, HarfBuzzBuffer, void *, unsigned int);
 
@@ -70,8 +77,14 @@ typedef struct {
     HarfBuzzBufferDestroy buffer_destroy;
     HarfBuzzBufferSetDirecton buffer_set_direction;
 
+    HarfBuzzBlobCreate blob_create;
+
+    HarfBuzzFaceCreate face_create;
+
     HarfBuzzFontCreate font_create;
+    HarfBuzzFontCreateFromFace font_create_from_face;
     HarfBuzzFontSetup font_setup;
+    HarfBuzzFontSetupOT font_setup_ot;
     HarfBuzzFontDestroy font_destroy;
 
     HarfBuzzShape shape;

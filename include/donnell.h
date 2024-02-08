@@ -9,8 +9,7 @@ typedef unsigned char DonnellUInt8;
 typedef unsigned short DonnellUInt16;
 typedef unsigned long DonnellUInt32;
 
-typedef enum
-{
+typedef enum {
     DONNELL_FALSE,
     DONNELL_TRUE
 } DonnellBool;
@@ -88,8 +87,7 @@ typedef struct {
     DonnellBool alloced_name;
 } DonnellStockElementStandard;
 
-typedef enum
-{
+typedef enum {
     DONNELL_FONT_OPTIONS_SERIF = 1 << 0,
     DONNELL_FONT_OPTIONS_SANS_SERIF = 1 << 1,
     DONNELL_FONT_OPTIONS_MONOSPACE = 1 << 2,
@@ -97,23 +95,20 @@ typedef enum
     DONNELL_FONT_OPTIONS_ITALIC = 1 << 4
 } DonnellFontOptions;
 
-typedef enum
-{
+typedef enum {
     DONNELL_BUTTON_STATE_NORMAL = 1 << 0,
     DONNELL_BUTTON_STATE_HOVER = 1 << 1,
     DONNELL_BUTTON_STATE_PRESSED = 1 << 2,
     DONNELL_BUTTON_STATE_SELECTED = 1 << 3
 } DonnellButtonState;
 
-typedef enum
-{
+typedef enum {
     DONNELL_TITLEBAR_BUTTON_MINIMIZE,
     DONNELL_TITLEBAR_BUTTON_MAXIMIZE,
     DONNELL_TITLEBAR_BUTTON_CLOSE
 } DonnellTitlebarButton;
 
-typedef enum
-{
+typedef enum {
     DONNELL_SCALING_ALGORITHM_NEAREST_NEIGHBOR,
     DONNELL_SCALING_ALGORITHM_BILINEAR,
 } DonnellScalingAlgorithm;

@@ -57,7 +57,7 @@ void blit_to_window(Bool first_time) {
 void draw_dialog(DonnellButtonState state, Bool first_time) {	
 	if (first_time == True) {
 		Donnell_ImageBuffer_Clear(buffer, bg_color);
-		Donnell_GraphicsPrimitives_DrawTextLine(buffer, text_color, "شخ الجمل roblox" , 55, 24, 14, DONNELL_FONT_OPTIONS_SANS_SERIF);
+		Donnell_GraphicsPrimitives_DrawTextLine(buffer, text_color, "تأثير ليسلي" , 55, 24, 14, DONNELL_FONT_OPTIONS_SANS_SERIF);
 		Donnell_GuiPrimitives_Icon_Draw(buffer, icon, ico_index, DONNELL_ICON_SIZE_32, 13, 13);
 		Donnell_GuiPrimitives_DrawButton(buffer, "OK", &button_rect, text_color, 14, DONNELL_FONT_OPTIONS_SANS_SERIF, state, DONNELL_FALSE);			
 	} else {

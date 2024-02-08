@@ -21,9 +21,16 @@ FT_Int32 hb_flags;
 
 void HarfBuzz_Init(void) {
     char *error;
+    char *env;
 
     error = NULL;
     harfbuzz = NULL;
+
+    env = getenv("LIBDONNELL_DISABLE_HB");
+    if (env && atoi(env)) {
+        puts("LIBDONNELL: Disabling HarfBuzz suppport.");
+        return;
+    }
 
     harfbuzz = malloc(sizeof(HarfBuzzLibrary));
     if (!harfbuzz) {
@@ -44,8 +51,19 @@ void HarfBuzz_Init(void) {
     harfbuzz->buffer_destroy = dlsym(harfbuzz->library, "hb_buffer_destroy");
     harfbuzz->buffer_set_direction = dlsym(harfbuzz->library, "hb_buffer_set_direction");
 
+    harfbuzz->blob_create = dlsym(harfbuzz->library, "hb_blob_create_from_file");
+    harfbuzz->face_create = dlsym(harfbuzz->library, "hb_face_create");
+
+    harfbuzz->font_setup_ot = dlsym(harfbuzz->library, "hb_ot_font_set_funcs");
+    harfbuzz->font_create_from_face = dlsym(harfbuzz->library, "hb_font_create");
     harfbuzz->font_create = dlsym(harfbuzz->library, "hb_ft_font_create");
     harfbuzz->font_setup = dlsym(harfbuzz->library, "hb_ft_font_set_funcs");
+    error = dlerror();
+    if ((error) || (!harfbuzz->font_setup)) {
+        harfbuzz->font_setup = NULL;
+        error = NULL;
+    }
+
     harfbuzz->font_destroy = dlsym(harfbuzz->library, "hb_font_destroy");
 
     harfbuzz->shape = dlsym(harfbuzz->library, "hb_shape");
@@ -92,8 +110,9 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     double w_ratio;
     double h_ratio;
     DonnellBool non_ideal_size;
+    DonnellBool do_not_use_hb_ft;
 
-    non_ideal_size = DONNELL_FALSE;
+    do_not_use_hb_ft = non_ideal_size = DONNELL_FALSE;
     w_ratio = 1;
     h_ratio = 1;
 
@@ -113,7 +132,15 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
 
     if (FT_HAS_COLOR(face)) {
         cflags |= FT_LOAD_COLOR;
+        do_not_use_hb_ft = DONNELL_TRUE;
     }
+
+#if (FREETYPE_MINOR >= 12)
+    if (FT_HAS_SVG(face)) {
+        cflags |= FT_LOAD_COLOR;
+        do_not_use_hb_ft = DONNELL_TRUE;
+    }
+#endif
 
     hb_freetype_error = FT_Set_Pixel_Sizes(face, 0, pixel_size);
     if (hb_freetype_error) {
@@ -156,8 +183,18 @@ int HarfBuzz_MeasureAndRender(DonnellImageBuffer *buffer, DonnellSize *size, Don
     /* Dubious hack, I dont know if this is the correct thing to do */
     harfbuzz->buffer_set_direction(harfbuzz_buffer, HB_DIRECTION_LTR);
 
-    harfbuzz_font = harfbuzz->font_create(face, NULL);
-    harfbuzz->font_setup(harfbuzz_font);
+    if (harfbuzz->font_setup && !do_not_use_hb_ft) {
+        harfbuzz_font = harfbuzz->font_create(face, NULL);
+        harfbuzz->font_setup(harfbuzz_font);
+    } else {
+        HarfBuzzBlob blob;
+        HarfBuzzFace face;
+
+        blob = harfbuzz->blob_create(font_file->font);
+        face = harfbuzz->face_create(blob, font_file->index);
+        harfbuzz_font = harfbuzz->font_create_from_face(face);
+        harfbuzz->font_setup_ot(harfbuzz_font);
+    }
 
     harfbuzz->shape(harfbuzz_font, harfbuzz_buffer, NULL, 0);
 
