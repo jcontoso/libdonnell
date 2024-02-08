@@ -287,7 +287,7 @@ void NanoSVG_Finalize(void *object) {
     NanoSVGRenderer *state;
 	
 	slot = (FT_GlyphSlot)object;
-	state = (NanoSVGRenderer*)slot->generic.data
+	state = (NanoSVGRenderer*)slot->generic.data;
 
 	if (state && (state->cookie == COOKIE)) {
 		free(state);
@@ -329,7 +329,7 @@ FT_Error NanoSVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer
              
 	min_y = min_x = 1;
 	max_x = max_y = 0;
-	memset(&state_dummy, 0 sizeof(NanoSVGRenderer));
+	memset(&state_dummy, 0, sizeof(NanoSVGRenderer));
 	document = (FT_SVG_Document)slot->other;
 	metrics = document->metrics;
 
@@ -404,15 +404,15 @@ FT_Error NanoSVGRenderer_PresetSlot(FT_GlyphSlot slot, FT_Bool cache, FT_Pointer
 	vbearing_y = (slot->metrics.vertAdvance / 64.0f - slot->metrics.height / 64.0f) / 2;
     slot->metrics.width  = roundf(width * 64);
     slot->metrics.height = roundf(height * 64);
-
     slot->metrics.horiBearingX = hbearing_x * 64;
     slot->metrics.horiBearingY = hbearing_y * 64;
     slot->metrics.vertBearingX = vbearing_x * 64;
     slot->metrics.vertBearingY = vbearing_y * 64;
 
-    if (!slot->metrics.vertAdvance)
+    if (!slot->metrics.vertAdvance) {
         slot->metrics.vertAdvance = height * 1.2f * 64;
-
+	}
+	
     if (!cache) {
         nsvgDelete(state->svg);
     }
