@@ -86,6 +86,8 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
     const uc_script_t *iscript;
     const uc_script_t *cscript;
     const uc_script_t *script;
+    bool iemoji;
+    bool emoji;
     unsigned int i;
     unsigned int j;
     unsigned int c;
@@ -104,9 +106,11 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
     }
 
     iscript = uc_script(str->str[0]);
+    iemoji = uc_is_property_emoji(str->str[0]);
     for (i = 0; i < str->len; i++) {
         script = uc_script(str->str[i]);
-        if ((!strcmp(iscript->name, script->name)) || (!strcmp(cscript->name, script->name))) {
+		emoji = uc_is_property_emoji(str->str[i]);
+        if ((!strcmp(iscript->name, script->name)) || (!strcmp(cscript->name, script->name)) || emoji == iemoji) {
             if (!c) {
                 c = 1;
                 runs->str = calloc(c, sizeof(FriBidiString *));
@@ -129,6 +133,7 @@ Runs *TextUtils_Runs_Create(FriBidiString *str) {
             runs->str[c - 1]->len = 1;
         }
         iscript = uc_script(str->str[i]);
+		iemoji = uc_is_property_emoji(str->str[i]);
     }
 
     runs->count = c;
